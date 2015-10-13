@@ -43,6 +43,7 @@ shuffle = function (o) { //v1.0
     return o;
 }
 
+
 //date function - will be used in recording data
 getCurrentDate = function() {
 	var currentDate = new Date();
@@ -129,11 +130,7 @@ var trialImgNums = [
 var quantNums = [1, 1, 2, 2, 3];
 quantNums = shuffle(quantNums); 
 
-//
-
-
-//now shuffle where the books go
-
+//for book positions - you can just shuffle at the beginning of each trial to assign what quantifier goes where
 
 //--other parameters--
 
@@ -145,6 +142,7 @@ var timeafterClick = 1000;
 
 //length of filler (every time fill2 comes up, add 1sec of time)
 var fillerpause = 5000;
+
 
 //-----------------------EXPERIMENT------------------
 showSlide("instructions");
@@ -209,6 +207,94 @@ var experiment = {
     	document.body.style.background = "black";
     },
 
+	next: function() {
+
+		//returns the list of all imgs to use in the study - list dependent
+  		var imgList = allimages[trialImgNums];
+  		var nameList = allimages[trialImgNums];
+  		//returns the list of all images to use in the study - list dependent
+		var imageArray = makeImageArray(experiment.order);
+
+		var objects_html = "";
+		var counter = 1;
+ 			
+   		// Create the object table (tr=table row; td= table data)
+		//objects_html = '<table class = "centered" ><tr><td id=word colspan="2">' + wordList[0] + '</td></tr><tr>';;
+	    
+	   	//HTML for the first object on the left
+		leftname = "tabletobjects/" + imageArray[0] + ".jpg";
+		objects_html += '<table align = "center" cellpadding="30"><tr></tr><tr><td align="center"><img class="pic" src="' + leftname +  '"alt="' + leftname + '" id= "leftPic"/></td>';
+	
+		//HTML for the first object on the right
+		rightname = "tabletobjects/" + imageArray[1] + ".jpg";
+	   	objects_html += '<td align="center"><img class="pic" src="' + rightname +  '"alt="' + rightname + '" id= "rightPic"/></td>';
+		
+    	objects_html += '</tr></table>';
+	    $("#objects").html(objects_html); 
+
+	    $("#stage").fadeIn();
+
+	    var startTime = (new Date()).getTime();
+	    playPrompt(wordList[0]);
+		
+		//click disable for the first slide
+		var clickDisabled = true;
+		setTimeout(function() {clickDisabled = false;}, (spriteData[wordList[0]].onset - spriteData[wordList[0]].start)*1000 + 300);
+
+	    $('.pic').bind('click touchstart', function(event) {
+
+	    	if (clickDisabled) return;
+	    	
+	    	//disable subsequent clicks once the participant has made their choice
+			clickDisabled = true; 
+
+	    	//time the participant clicked - the time the audio began - the amount of time between the beginning of the audio and the 
+	    	//onset of the word 
+	    	experiment.reactiontime = (new Date()).getTime() - startTime - (spriteData[wordList[0]].onset-spriteData[wordList[0]].start)*1000; 
+
+	    	experiment.trialnum = counter;
+	    	experiment.word = wordList[0];
+	    	experiment.pic1 = imageArray[0];
+	    	experiment.pic2 = imageArray[1];
+
+	    	//get whether the left and right pictures were familiar or novel
+	    	if (novelWords.indexOf(imageArray[0]) === -1) {
+	    		experiment.pic1type = "familiar";
+	    	} else {
+	    		experiment.pic1type = "novel";
+	    	}
+	    	if (novelWords.indexOf(imageArray[1]) === -1) {
+	    		experiment.pic2type = "familiar";
+	    	} else {
+	    		experiment.pic2type = "novel";
+	    	}
+
+	    	//Was the picture clicked on the right or the left?
+	    	var picID = $(event.currentTarget).attr('id');
+	    	if (picID === "leftPic") {
+				experiment.side = "L";
+				experiment.chosenpic = imageArray[0];
+	    	} else {
+				experiment.side = "R";
+				experiment.chosenpic = imageArray[1];
+			}
+			
+			//If the child picked the picture that matched with the word, then they were correct. If they did not, they were not correct.
+			if (experiment.chosenpic === experiment.word) {
+				experiment.response = "Y";
+			} else {
+				experiment.response = "N"
+			}
+
+			//what kind of trial was this?
+			experiment.trialtype = getTrialType(experiment.word, imageArray[0], imageArray[1]);
+
+			//Add one to the counter and process the data to be saved; the child completed another "round" of the experiment
+			experiment.processOneRow();
+	    	counter++;
+
+	    	$(document.getElementById(picID)).css('margin', "-8px");
+			$(document.getElementById(picID)).css('border', "solid 8px red");
 
 
 
