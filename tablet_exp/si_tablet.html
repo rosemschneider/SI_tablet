@@ -1,0 +1,72 @@
+<html>
+<head>
+  <title>What does this mean?</title>
+  <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+  <script src="spriteData.js"></script>
+  <script src="mmturkey.js"></script>
+
+  <link rel="stylesheet" href="stylecentered.css" />-->
+  <meta name="viewport" content="initial-scale=1.0" />
+  <!--<meta name="viewport" content="width=device-width">  -->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+</head>
+
+<body>
+
+<p>Click the button to display an alert box.</p>
+
+<button onclick="order()">Try it</button>
+<button onclick="index()">index</button>
+<button onclick="show()">show</button>
+
+<script>
+
+shuffle = function (o) { //v1.0
+    for (var j, x, i = o.length; i; j = parseInt(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
+    return o;
+}
+
+var allimages = ["donut", "peach", "pear", "popcorn", 
+				"popsicle", "strawberry", "mitten", "sock", "zipper",
+				"chicken", "duck", "goat", "penguin", "pig", "tiger"];
+var itemNums = [];
+for (var i = 0; i <= (allimages.length-1); i++) {
+    itemNums.push(i);
+}
+
+function order () {
+
+    alert(itemNums);
+}
+
+itemNums = shuffle(itemNums);
+
+var imgNums = [
+	itemNums[0],
+	itemNums[1],
+	itemNums[2]];
+
+function index () {
+
+    alert(imgNums);
+}
+
+img1 = imgNums[0];
+
+var trial1 = [
+	allimages[itemNums[0]],
+	allimages[itemNums[1]],
+	allimages[itemNums[2]]
+];
+
+function show () {
+
+    alert(trial1);
+}
+
+
+
+
+</script>
+</body>	

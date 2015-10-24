@@ -25,17 +25,18 @@ playPrompt = function(word) {
 	audioSprite.addEventListener('timeupdate', handler, false);
 }
 
+//removes file names
 trim = function(item) {
 	var tmp = item;
 	return tmp.slice(tmp.lastIndexOf("/")+1,tmp.lastIndexOf("."));
 };
 
 //for critical trials and fillers
-var images = new Array();
-for (i = 0; i < allimages.length; i++) {
-	images[i] = new Image();
-	images[i].src = "imgs/" + allimages[i] + ".png";
-};
+// var images = new Array();
+// for (i = 0; i < allimages.length; i++) {
+// images[i] = new Image();
+// images[i].src = "imgs/" + allimages[i] + ".png";
+// };
 
 //array shuffle function
 shuffle = function (o) { //v1.0
@@ -63,6 +64,7 @@ getCurrentTime = function() {
 	return (hours + ":" + minutes);
 }
 
+
 //--------------PARAMETERS----------------
 //Basics of the experiment go here
 
@@ -71,30 +73,38 @@ var audioSprite = $("#sound_player")[0];
 var handler;
 
 //--first, practice trials--
-var practiceCounter = 0;
+// var practiceCounter = 0;
 
-var numPractice = 2;
+// var numPractice = 2;
 
-var practiceImgs = ["tv", "couch", "fridge"];
-var practiceNames = ["tv", "couch", "fridge"];
+// var practiceImgs = ["tv", "couch", "fridge"];
+// var practiceNames = ["tv", "couch", "fridge"];
 
 //--now, experiment trials--
 //keeps track of trial you're on
 var trialCounter = 0;
-
 var numTrials = 3;
 
 //number of images and words in each trial
-var numTrialImgs = 15;
-var numTrialWords = 1;
+// var numTrialImgs = 15;
+// var numTrialWords = 1;
 
-//an array of all the quantifiers used in the study
-var quantifiers = ["some", "all", "none"];
+//------randomize trial types---------
+//first, create an array of the number of quantifiers used in the study
+//note: this will be much larger (eventually 33 quantifiers)
+var trialQuants = ["some", "all", "none"];
+//shuffle these quantifiers
+//We will index this array based on our trial number: this will determine the trial type
+trialQuants = shuffle(trialQuants);
 
-//book covers 
-var books = ["some", "all", "none"];
 
-//arrays of the all different items
+//-----book covers------
+//books are bookL, bookC, bookR (left, center, right); 
+//these will be empty variables, and this array of quantifiers will be shuffled at the start of every trial to determine book type
+var bookQuants = ["some", "all", "none"];
+
+//-----items and names -----
+//first, load all the images and names in the same order
 var allimages = ["donut", "peach", "pear", "popcorn", 
 				"popsicle", "strawberry", "mitten", "sock", "zipper",
 				"chicken", "duck", "goat", "penguin", "pig", "tiger"];
@@ -102,35 +112,41 @@ var allnames = ["donut", "peach", "pear", "popcorn",
 				"popsicle", "strawberry", "mitten", "sock", "zipper",
 				"chicken", "duck", "goat", "penguin", "pig", "tiger"];
 
-
-//selecting three random images from the array of images would be easier - then you can assign them to the book covers in different quantities
-//selecting the items that get assigned to books
-
-//here I'm creating an array of numbers that I will then shuffle; these will be used to index the names and the images used
-//this generates an array based on the length of the image list
-var imgNums = [];
-for (var i = 0; i <= allimages.length; i++) {
-    imgNums.push(i);
+//then make an array of numbers from 0 to the length of the images-1 (for indexing)
+var itemNums = [];
+for (var i = 0; i <= (allimages.length-1); i++) {
+    itemNums.push(i);
 }
-//now shuffle those numbers
-imgNums = shuffle(imgNums);
 
-//slice those numbers
-//this is taking 3 random images for each trial
-var trialImgNums = [
-	imgNums.slice(0, 3),
-	imgNums.slice(3, 6),
-	imgNums.slice(6, 9),
-	imgNums.slice(9, 12),
-	imgNums.slice(12, 15)
+//now shuffle that array 
+itemNums = shuffle(itemNums);
+
+//using this array of numbers to index both the names and the images
+//here is what needs to be done - however it should be looped through, and I'm not sure how to do that
+
+var trialImgs = [
+	allimages[itemNums[0]],
+	allimages[itemNums[1]],
+	allimages[itemNums[2]]
 ];
 
-//Now create an array of 1, 2, and 3 - this will be used to index the quantifier
-//This is hardcoded for now but will be softcoded later to adapt to trial nums
-var quantNums = [1, 1, 2, 2, 3];
-quantNums = shuffle(quantNums); 
+var trialNames = [
+	allnames[itemNums[0]],
+	allnames[itemNums[1]],
+	allnames[itemNums[2]]
+];
 
-//for book positions - you can just shuffle at the beginning of each trial to assign what quantifier goes where
+
+// //slice those numbers
+// //this is taking 3 random images for each trial
+// var trialImgNums = [
+// 	imgNums.slice(0, 3),
+// 	imgNums.slice(3, 6),
+// 	imgNums.slice(6, 9),
+// 	imgNums.slice(9, 12),
+// 	imgNums.slice(12, 15)
+// ];
+
 
 //--other parameters--
 
@@ -150,34 +166,34 @@ showSlide("instructions");
 var experiment = {
 	subid: "",
 		//input at beginning of experiment
-	trialnum: 0,
-		//trial number
-	word: "",
+	trialNum: 0,
+		//trial number - this is important because the trial number will be used to index array of trial type
+	item: "",
 		//name of the item that child is queried on
-	quant: ""
+	trialType: ""
 		//quantifier name that child is queried on	
-	book1: "",
+	bookL: "",
 		//quantifier of book 1 - left
-	book2: "",
+	bookC: "",
 		//quantifier of book 2 - middle
-	book3: "",
+	bookR: "",
 		//quantifier of book 3 - right
-	book1imgs: "",
+	bookLimgs: [],
 		//items on book 1 - left
-	book2imgs: "",
+	bookCimgs: [],
 		//items on book 2 - middle
-	book3imgs: "", 
+	bookRimgs: [], 
 		//items on book 3 - right
 	side: "",
-		//whether the child picked the left (L), middle (M), or the right (R) picture
-	chosenbook: "",
-		//the number of the book the child picked
+		//whether the child picked the left (L), center (C), or the right (R) picture
+	selectionType: "",
+		//the quantifier selection child made
 	response: "",
 		//whether the response was the correct response (Y) or the incorrect response (N)
 	date: getCurrentDate(),
 		//the date of the experiment
 	timestamp: getCurrentTime(),
-		//the time that the trial was completed at 
+		//the time that the trial was completed 
 	reactiontime: 0,
 	//TODO : add reaction time variable ***** 
 
@@ -206,14 +222,33 @@ var experiment = {
     	showSlide("finish");
     	document.body.style.background = "black";
     },
+   
 
-	next: function() {
+    getBooks: function() {
+    	shuffle(bookQuants);
+    	bookL = bookQuants[0];
+    	bookC = bookQuants[1];
+    	bookR = bookQuants[2];
+    },
 
-		//returns the list of all imgs to use in the study - list dependent
-  		var imgList = allimages[trialImgNums];
-  		var nameList = allimages[trialImgNums];
-  		//returns the list of all images to use in the study - list dependent
-		var imageArray = makeImageArray(experiment.order);
+	test: function() {
+
+		//determines the trial type of this trial
+		//this is indexing the quantifier with the trial number
+		var trialType = trialQuants[trialNum];
+
+		//determines which quantifier is assigned to which book
+		//this happens in every trial
+		bookQuants = shuffle(bookQuants);
+		bookL = bookQuants[0];
+    	bookC = bookQuants[1];
+    	bookR = bookQuants[2];
+
+		//returns the list of ordered items in study
+  		var imgList = trialImgs;
+  		var nameList = trialNames;
+
+
 
 		var objects_html = "";
 		var counter = 1;
@@ -221,7 +256,7 @@ var experiment = {
    		// Create the object table (tr=table row; td= table data)
 		//objects_html = '<table class = "centered" ><tr><td id=word colspan="2">' + wordList[0] + '</td></tr><tr>';;
 	    
-	   	//HTML for the first object on the left
+	   	//HTML for the first object on fthe left
 		leftname = "tabletobjects/" + imageArray[0] + ".jpg";
 		objects_html += '<table align = "center" cellpadding="30"><tr></tr><tr><td align="center"><img class="pic" src="' + leftname +  '"alt="' + leftname + '" id= "leftPic"/></td>';
 	
