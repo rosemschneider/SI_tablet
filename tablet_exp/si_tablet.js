@@ -8,28 +8,28 @@ function showSlide(id) {
 }
 
 //Handles audio; indexes into the sprite to play the prompt associated with a critical word
-playPrompt = function(word) {
-	audioSprite.removeEventListener('timeupdate', handler);
-	audioSprite.currentTime = spriteData[word].start;
-	audioSprite.play();
-
-	endTime = spriteData[word].end;
-	if(word.substring(0,4) == "look")
-		endTime = endTime - 1.2;
-
-	handler = function() {
-		if (this.currentTime >= (endTime)) {
-			this.pause();
-		}
-	};
-	audioSprite.addEventListener('timeupdate', handler, false);
-}
+////playPrompt = function(word) {
+////	audioSprite.removeEventListener('timeupdate', handler);
+////	audioSprite.currentTime = spriteData[word].start;
+////	audioSprite.play();
+//
+//	endTime = spriteData[word].end;
+//	if(word.substring(0,4) == "look")
+//		endTime = endTime - 1.2;
+//
+//	handler = function() {
+//		if (this.currentTime >= (endTime)) {
+//			this.pause();
+//		}
+//	};
+//	audioSprite.addEventListener('timeupdate', handler, false);
+//}
 
 //removes file names
-trim = function(item) {
-	var tmp = item;
-	return tmp.slice(tmp.lastIndexOf("/")+1,tmp.lastIndexOf("."));
-};
+//trim = function(item) {
+//	var tmp = item;
+//	return tmp.slice(tmp.lastIndexOf("/")+1,tmp.lastIndexOf("."));
+//};
 
 //for critical trials and fillers
 // var images = new Array();
@@ -65,12 +65,63 @@ getCurrentTime = function() {
 }
 
 
+//-------DOT GAME-----
+//createDot = function(dotx, doty, i, tag) {
+//	var dots;
+//	if (tag === "smiley") {
+//		dots = ["smiley1", "smiley2", "smiley3", "smiley4", "smiley5"];
+//	} else {
+//		dots = [1, 2, 3, 4, 5];
+//	}
+//
+//	var dot = document.createElement("img");
+//	dot.setAttribute("class", "dot");
+//	dot.id = "dot_" + dots[i];
+//	if (tag === "smiley") {
+//		dot.src = "dots/dot_" + "smiley" + ".jpg";
+//	} else {
+//		dot.src = "dots/dot_" + dots[i] + ".jpg";
+//	}
+//
+//	var x = Math.floor(Math.random()*950);
+//	var y = Math.floor(Math.random()*540);
+//
+//	var invalid = "true";
+//
+//	//make sure dots do not overlap
+//	while (true) {
+//		invalid = "true";
+//		for (j = 0; j < dotx.length ; j++) {
+//			if (Math.abs(dotx[j] - x) + Math.abs(doty[j] - y) < 250) {
+//				var invalid = "false";
+//				break;
+//			}
+//		}
+//		if (invalid === "true") {
+//			dotx.push(x);
+//			doty.push(y);
+//			break;
+//		}
+//		x = Math.floor(Math.random()*400);
+//		y = Math.floor(Math.random()*400);
+//	}
+//
+//	dot.setAttribute("style","position:absolute;left:"+x+"px;top:"+y+"px;");
+//	training.appendChild(dot);
+//}
+//
+//var dots = ["dot_1", "dot_2", "dot_3", "dot_4", "dot_5", "x", "dot_smiley"];
+//for (i = 0; i<dots.length; i++) {
+//	images[i] = new Image();
+//	images[i].src = "dots/" + dots[i] + ".jpg";
+//}
+
 //--------------PARAMETERS----------------
 //Basics of the experiment go here
 
 //******for handling sound; see helper function playPrompt(word)
-var audioSprite = $("#sound_player")[0];
-var handler;
+//var audioSprite = $("#sound_player")[0];
+//var handler;
 
 //--first, practice trials--
 // var practiceCounter = 0;
@@ -105,7 +156,7 @@ var bookQuants = ["some", "all", "none"];
 
 //-----items and names -----
 //first, load all the images and names in the same order
-var allimages = ["donut", "peach", "pear", "popcorn", 
+var allimages = ["donut", "peach", "pear", "popcorn",
 				"popsicle", "strawberry", "mitten", "sock", "zipper",
 				"chicken", "duck", "goat", "penguin", "pig", "tiger"];
 var allnames = ["donut", "peach", "pear", "popcorn", 
@@ -121,31 +172,33 @@ for (var i = 0; i <= (allimages.length-1); i++) {
 //now shuffle that array 
 itemNums = shuffle(itemNums);
 
+//create empty arrays for the trial images and trial names
+var trialImgs = [];
+var trialNames = [];
+
 //using this array of numbers to index both the names and the images
-//here is what needs to be done - however it should be looped through, and I'm not sure how to do that
+//build up the trials with their 3 items and names,
+// maintaining random order in itemNums
+for (var i = 0; i <= allimages.length-1; i += 3) {
+	trialImgs.push(allimages[itemNums[i]]);
+	trialImgs.push(allimages[itemNums[i+1]]);
+	trialImgs.push(allimages[itemNums[i+2]]);
 
-var trialImgs = [
-	allimages[itemNums[0]],
-	allimages[itemNums[1]],
-	allimages[itemNums[2]]
-];
-
-var trialNames = [
-	allnames[itemNums[0]],
-	allnames[itemNums[1]],
-	allnames[itemNums[2]]
-];
-
+	trialNames.push(allnames[itemNums[i]]);
+	trialNames.push(allnames[itemNums[i+1]]);
+	trialNames.push(allnames[itemNums[i+2]]);
+}
 
 // //slice those numbers
 // //this is taking 3 random images for each trial
-// var trialImgNums = [
-// 	imgNums.slice(0, 3),
-// 	imgNums.slice(3, 6),
-// 	imgNums.slice(6, 9),
-// 	imgNums.slice(9, 12),
-// 	imgNums.slice(12, 15)
-// ];
+// we will index the trial items by the trial number
+var trialItems = [
+ 	trialImgs.slice(0, 3),
+	trialImgs.slice(3, 6),
+ 	trialImgs.slice(6, 9),
+ 	trialImgs.slice(9, 12),
+ 	trialImgs.slice(12, 15)
+ ];
 
 
 //--other parameters--
@@ -165,39 +218,27 @@ showSlide("instructions");
 
 var experiment = {
 	subid: "",
-		//input at beginning of experiment
+	//input at beginning of experiment
 	trialNum: 0,
-		//trial number - this is important because the trial number will be used to index array of trial type
+	//trial number - this is important because the trial number will be used to index array of trial type
 	item: "",
-		//name of the item that child is queried on
-	trialType: ""
-		//quantifier name that child is queried on	
-	bookL: "",
-		//quantifier of book 1 - left
-	bookC: "",
-		//quantifier of book 2 - middle
-	bookR: "",
-		//quantifier of book 3 - right
-	bookLimgs: [],
-		//items on book 1 - left
-	bookCimgs: [],
-		//items on book 2 - middle
-	bookRimgs: [], 
-		//items on book 3 - right
+	//name of the item that child is queried on
+	trialType: "",
+	//quantifier name that child is queried on
 	side: "",
-		//whether the child picked the left (L), center (C), or the right (R) picture
+	////whether the child picked the left (L), center (C), or the right (R) picture
 	selectionType: "",
-		//the quantifier selection child made
+	//the quantifier selection child made
 	response: "",
-		//whether the response was the correct response (Y) or the incorrect response (N)
+	//whether the response was the correct response (Y) or the incorrect response (N)
 	date: getCurrentDate(),
-		//the date of the experiment
+	//the date of the experiment
 	timestamp: getCurrentTime(),
-		//the time that the trial was completed 
+	//the time that the trial was completed
 	reactiontime: 0,
 	//TODO : add reaction time variable ***** 
 
-	preStudy: function() {
+	preStudy: function () {
 		document.body.style.background = "white";
 		$("#prestudy").hide();
 		setTimeout(function () {
@@ -205,151 +246,226 @@ var experiment = {
 		}, normalpause);
 	},
 
+	startGame: function() {
+		document.body.style.background = "white";
+		showSlide("startGame");
+	},
+
 	//checks the input information to make sure it's accurate
-	checkInput: function() {
+	checkInput: function () {
 		//subject ID
-  		if (document.getElementById("subjectID").value.length < 1) {
+		if (document.getElementById("subjectID").value.length < 1) {
 			$("#checkMessage").html('<font color="red">You must input a subject ID</font>');
 			return;
 		}
-  		experiment.subid = document.getElementById("subjectID").value;
+		experiment.subid = document.getElementById("subjectID").value;
 	},
 	//the end of the experiment, where the background becomes completely black
 	end: function () {
-    	setTimeout(function () {
-    		$("#stage").fadeOut();
-    	}, normalpause);
-    	showSlide("finish");
-    	document.body.style.background = "black";
-    },
-   
+		setTimeout(function () {
+			$("#stage").fadeOut();
+		}, normalpause);
+		showSlide("finish");
+		document.body.style.background = "black";
+	},
 
-    getBooks: function() {
-    	shuffle(bookQuants);
-    	bookL = bookQuants[0];
-    	bookC = bookQuants[1];
-    	bookR = bookQuants[2];
-    },
+	//determines which quantifier is assigned to book in each trial
+	//getBooks: function() {
+	//shuffle(bookQuants);
+	//bookL = bookQuants[0];
+	//bookC = bookQuants[1];
+	//bookR = bookQuants[2];
+	//},
 
-	test: function() {
-
+	test: function () {
+		$("#stage").hide();
+		document.body.style.background = "black";
 		//determines the trial type of this trial
 		//this is indexing the quantifier with the trial number
-		var trialType = trialQuants[trialNum];
+		//var trialType = trialQuants[trialNum];
+
+			bookL = "";
+			//quantifier of book 1 - left
+			bookC = "";
+			//quantifier of book 2 - middle
+			bookR = "";
+			//quantifier of book 3 - right
+			bookLImgs = [];
+			//items on book 1 - left
+			bookCImgs = [];
+			//items on book 2 - middle
+			bookRimgs = [];
+			//items on book 3 - right
+			bookLitem = [];
+			//actual file names of the images displayed on left book
+			bookCitem = [];
+			//files names of the images displayed on center book
+			bookRitem = [];
+			//file names of images displayed on right book
+			itemList = [];
+			//the 3 items that appear in this trial
+			allItems = [];
+			//the name of the images for quantifier "all"
+			someItems = [];
+			//the name of the images for quantifier "some"
+			noneItems = [];
+			//the name of the images for quantifier "none"
+			trialNum = 0;
 
 		//determines which quantifier is assigned to which book
 		//this happens in every trial
 		bookQuants = shuffle(bookQuants);
 		bookL = bookQuants[0];
-    	bookC = bookQuants[1];
-    	bookR = bookQuants[2];
+		bookC = bookQuants[1];
+		bookR = bookQuants[2];
 
-		//returns the list of ordered items in study
-  		var imgList = trialImgs;
-  		var nameList = trialNames;
+		//determine the trial type - the is indexing the shuffled list of trial quantifiers with the number of the trial
+		trialType = trialQuants[trialNum];
 
+		//get the trial names for this trial - we are referencing this with the number of the trial we're on
+		itemList = trialItems[trialNum];
 
+		//This is assigning the books the particular images based on their quantifiers
+		if (bookL == "all") {
+			bookLImgs = [itemList[0]];
+		} else if (bookL == "some") {
+			bookLImgs = [itemList[0], itemList[1]];
+		} else {
+			bookLImgs = [itemList[2]];
+		}
+
+		if (bookC == "all") {
+			bookCImgs = [itemList[0]];
+		} else if (bookC == "some") {
+			bookCImgs = [itemList[0], itemList[1]];
+		} else {
+			bookCImgs = [itemList[2]];
+		}
+
+		if (bookR == "all") {
+			bookRImgs = [itemList[0]];
+		} else if (bookR == "some") {
+			bookRImgs = [itemList[0], itemList[1]];
+		} else {
+			bookRImgs = [itemList[2]];
+		}
+
+		//This is getting the file names for the actual images
+		for (i = 0; i < bookLImgs.length; i++) {
+			bookLitem.push("images/" + bookLImgs[i] + ".png");
+		}
+		for (i = 0; i < bookCImgs.length; i++) {
+			bookCitem.push("images/" + bookCImgs[i] + ".png");
+		}
+		for (i = 0; i < bookRImgs.length; i++) {
+			bookRitem.push("images/" + bookRImgs[i] + ".png");
+		}
+
+		//now we are going to build the table in HTML
+		//this part takes the item names above, and, writes HTML script to show the images
 
 		var objects_html = "";
-		var counter = 1;
- 			
-   		// Create the object table (tr=table row; td= table data)
-		//objects_html = '<table class = "centered" ><tr><td id=word colspan="2">' + wordList[0] + '</td></tr><tr>';;
-	    
-	   	//HTML for the first object on fthe left
-		leftname = "tabletobjects/" + imageArray[0] + ".jpg";
-		objects_html += '<table align = "center" cellpadding="30"><tr></tr><tr><td align="center"><img class="pic" src="' + leftname +  '"alt="' + leftname + '" id= "leftPic"/></td>';
-	
-		//HTML for the first object on the right
-		rightname = "tabletobjects/" + imageArray[1] + ".jpg";
-	   	objects_html += '<td align="center"><img class="pic" src="' + rightname +  '"alt="' + rightname + '" id= "rightPic"/></td>';
-		
-    	objects_html += '</tr></table>';
-	    $("#objects").html(objects_html); 
+		objects_html += '<table align = "center" cellpadding="30"><tr></tr><tr>';
+		objects_html += '<td align="center"><img class="pic" id= "leftPic"/></td>';
+		objects_html += '<td align="center"><img class="pic" id= "centerPic"/></td>';
+		objects_html += '<td align="center"><img class="pic" id= "rightPic"/></td>';
+		objects_html += '</tr></table>';
+		$("#objects").html(objects_html);
 
-	    $("#stage").fadeIn();
+		//set names
+		$("#leftPic").attr("name", bookLitem);
+		$("#leftPic").attr("name", bookCitem);
+		$("#rightPic").attr("name", bookRitem);
 
-	    var startTime = (new Date()).getTime();
-	    playPrompt(wordList[0]);
-		
-		//click disable for the first slide
-		var clickDisabled = true;
-		setTimeout(function() {clickDisabled = false;}, (spriteData[wordList[0]].onset - spriteData[wordList[0]].start)*1000 + 300);
+		//show the images
+		$("[name='bookLitem']").attr("src", bookLitem);
+		$("[name='bookCitem']").attr("src", bookCitem);
+		$("[name='bookRitem']").attr("src", bookRitem);
 
-	    $('.pic').bind('click touchstart', function(event) {
-
-	    	if (clickDisabled) return;
-	    	
-	    	//disable subsequent clicks once the participant has made their choice
-			clickDisabled = true; 
-
-	    	//time the participant clicked - the time the audio began - the amount of time between the beginning of the audio and the 
-	    	//onset of the word 
-	    	experiment.reactiontime = (new Date()).getTime() - startTime - (spriteData[wordList[0]].onset-spriteData[wordList[0]].start)*1000; 
-
-	    	experiment.trialnum = counter;
-	    	experiment.word = wordList[0];
-	    	experiment.pic1 = imageArray[0];
-	    	experiment.pic2 = imageArray[1];
-
-	    	//get whether the left and right pictures were familiar or novel
-	    	if (novelWords.indexOf(imageArray[0]) === -1) {
-	    		experiment.pic1type = "familiar";
-	    	} else {
-	    		experiment.pic1type = "novel";
-	    	}
-	    	if (novelWords.indexOf(imageArray[1]) === -1) {
-	    		experiment.pic2type = "familiar";
-	    	} else {
-	    		experiment.pic2type = "novel";
-	    	}
-
-	    	//Was the picture clicked on the right or the left?
-	    	var picID = $(event.currentTarget).attr('id');
-	    	if (picID === "leftPic") {
-				experiment.side = "L";
-				experiment.chosenpic = imageArray[0];
-	    	} else {
-				experiment.side = "R";
-				experiment.chosenpic = imageArray[1];
-			}
-			
-			//If the child picked the picture that matched with the word, then they were correct. If they did not, they were not correct.
-			if (experiment.chosenpic === experiment.word) {
-				experiment.response = "Y";
-			} else {
-				experiment.response = "N"
-			}
-
-			//what kind of trial was this?
-			experiment.trialtype = getTrialType(experiment.word, imageArray[0], imageArray[1]);
-
-			//Add one to the counter and process the data to be saved; the child completed another "round" of the experiment
-			experiment.processOneRow();
-	    	counter++;
-
-	    	$(document.getElementById(picID)).css('margin', "-8px");
-			$(document.getElementById(picID)).css('border', "solid 8px red");
+		$("#stage").fadeIn();
 
 
+		//  		// Create the object table (tr=table row; td= table data)
+		// //objects_html = '<table class = "centered" ><tr><td id=word colspan="2">' + wordList[0] + '</td></tr><tr>';;
+
+		//   	//HTML for the first object on fthe left
+		// leftname = "tabletobjects/" + imageArray[0] + ".jpg";
+		// objects_html += '<table align = "center" cellpadding="30"><tr></tr><tr><td align="center"><img class="pic" src="' + leftname +  '"alt="' + leftname + '" id= "leftPic"/></td>';
+
+		// //HTML for the first object on the right
+		// rightname = "tabletobjects/" + imageArray[1] + ".jpg";
+		//   	objects_html += '<td align="center"><img class="pic" src="' + rightname +  '"alt="' + rightname + '" id= "rightPic"/></td>';
+
+		//   	objects_html += '</tr></table>';
+		//    $("#objects").html(objects_html);
+
+		//    $("#stage").fadeIn();
+
+		//    var startTime = (new Date()).getTime();
+		//    playPrompt(wordList[0]);
+
+		// //click disable for the first slide
+		// var clickDisabled = true;
+		// setTimeout(function() {clickDisabled = false;}, (spriteData[wordList[0]].onset - spriteData[wordList[0]].start)*1000 + 300);
+
+		//    $('.pic').bind('click touchstart', function(event) {
+
+		//    	if (clickDisabled) return;
+
+		//    	//disable subsequent clicks once the participant has made their choice
+		// 	clickDisabled = true; 
+
+		//    	//time the participant clicked - the time the audio began - the amount of time between the beginning of the audio and the
+		//    	//onset of the word
+		//    	experiment.reactiontime = (new Date()).getTime() - startTime - (spriteData[wordList[0]].onset-spriteData[wordList[0]].start)*1000;
+
+		//    	experiment.trialnum = counter;
+		//    	experiment.word = wordList[0];
+		//    	experiment.pic1 = imageArray[0];
+		//    	experiment.pic2 = imageArray[1];
+
+		//    	//get whether the left and right pictures were familiar or novel
+		//    	if (novelWords.indexOf(imageArray[0]) === -1) {
+		//    		experiment.pic1type = "familiar";
+		//    	} else {
+		//    		experiment.pic1type = "novel";
+		//    	}
+		//    	if (novelWords.indexOf(imageArray[1]) === -1) {
+		//    		experiment.pic2type = "familiar";
+		//    	} else {
+		//    		experiment.pic2type = "novel";
+		//    	}
+
+		//    	//Was the picture clicked on the right or the left?
+		//    	var picID = $(event.currentTarget).attr('id');
+		//    	if (picID === "leftPic") {
+		// 		experiment.side = "L";
+		// 		experiment.chosenpic = imageArray[0];
+		//    	} else {
+		// 		experiment.side = "R";
+		// 		experiment.chosenpic = imageArray[1];
+		// 	}
+
+		// 	//If the child picked the picture that matched with the word, then they were correct. If they did not, they were not correct.
+		// 	if (experiment.chosenpic === experiment.word) {
+		// 		experiment.response = "Y";
+		// 	} else {
+		// 		experiment.response = "N"
+		// 	}
+
+		// 	//what kind of trial was this?
+		// 	experiment.trialtype = getTrialType(experiment.word, imageArray[0], imageArray[1]);
+
+		// 	//Add one to the counter and process the data to be saved; the child completed another "round" of the experiment
+		// 	experiment.processOneRow();
+		//    	counter++;
+
+		//    	$(document.getElementById(picID)).css('margin', "-8px");
+		// 	$(document.getElementById(picID)).css('border', "solid 8px red");
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	}
 }
-
 
 
 //Deal with the audio

@@ -1,72 +1,171 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <title>What does this mean?</title>
-  <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-
-  <script src="spriteData.js"></script>
-  <script src="mmturkey.js"></script>
-
-  <link rel="stylesheet" href="stylecentered.css" />-->
-  <meta name="viewport" content="initial-scale=1.0" />
-  <!--<meta name="viewport" content="width=device-width">  -->
-  <meta name="apple-mobile-web-app-capable" content="yes" />
+    <title>Which book is mine?</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <!--Audio source
+    <script src="spriteData.js"></script>
+    <link rel="stylesheet" href="stylecentered.css" />-->
+    <meta charset="UTF-8">
 </head>
-
 <body>
+<!--<button id="show" onclick="quants()">quants</button>
+<button id="show" onclick="bookleft()">Book L</button>
+<button id="show" onclick="bookcenter()">C</button>
+<button id="show" onclick="bookright()">R</button>
+<button id="show" onclick="imgl()">imgl</button>
+<button id="show" onclick="imgc()">imgc</button>
+<button id="show" onclick="imgr()">imgr</button>-->
 
-<p>Click the button to display an alert box.</p>
-
-<button onclick="order()">Try it</button>
-<button onclick="index()">index</button>
-<button onclick="show()">show</button>
-
-<script>
-
-shuffle = function (o) { //v1.0
-    for (var j, x, i = o.length; i; j = parseInt(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
-    return o;
-}
-
-var allimages = ["donut", "peach", "pear", "popcorn", 
-				"popsicle", "strawberry", "mitten", "sock", "zipper",
-				"chicken", "duck", "goat", "penguin", "pig", "tiger"];
-var itemNums = [];
-for (var i = 0; i <= (allimages.length-1); i++) {
-    itemNums.push(i);
-}
-
-function order () {
-
-    alert(itemNums);
-}
-
-itemNums = shuffle(itemNums);
-
-var imgNums = [
-	itemNums[0],
-	itemNums[1],
-	itemNums[2]];
-
-function index () {
-
-    alert(imgNums);
-}
-
-img1 = imgNums[0];
-
-var trial1 = [
-	allimages[itemNums[0]],
-	allimages[itemNums[1]],
-	allimages[itemNums[2]]
-];
-
-function show () {
-
-    alert(trial1);
-}
+    <div class="slide" id="instructions">
+        <p id='logo-text'>Stanford Language and Cognition Lab</p>
+        <button id="startButton" type="button"
+                onClick="this.blur(); experiment.test()">Start Practice</button>
+        </center>
+    </div>
+    <div class="slide" id="stage">
+        <div id="objects">
+    </div>
 
 
+    <!--
+    <div class="slide" id="stage">
+        <div id="objects">
+    </div>-->
+
+<script src="si_tablet.js"></script>
+
+</body>
+</html>
+
+<!--<script>-->
+    <!--shuffle = function (o) { //v1.0-->
+        <!--for (var j, x, i = o.length; i; j = parseInt(Math.random() * i), x = o[&#45;&#45;i], o[i] = o[j], o[j] = x);-->
+        <!--return o;-->
+    <!--}-->
+
+    <!--bookQuants = ["some", "none", "all"];-->
+    <!--bookQuants = shuffle(bookQuants);-->
+    <!--bookL = bookQuants[0];-->
+    <!--bookC = bookQuants[1];-->
+    <!--bookR = bookQuants[2];-->
 
 
-</script>
-</body>	
+    <!--function quants() {-->
+        <!--alert(bookQuants);-->
+    <!--}-->
+
+    <!--function bookleft() {-->
+        <!--alert(bookL);-->
+    <!--}-->
+
+    <!--function bookcenter() {-->
+        <!--alert(bookC);-->
+    <!--}-->
+
+    <!--function bookright() {-->
+        <!--alert(bookR);-->
+    <!--}-->
+<!--//-->
+    <!--allItems = [];-->
+    <!--someItems = [];-->
+    <!--noneItems = [];-->
+<!--//-->
+    <!--var allimages = ["donut", "peach", "pear", "popcorn",-->
+        <!--"popsicle", "strawberry", "mitten", "sock", "zipper",-->
+        <!--"chicken", "duck", "goat", "penguin", "pig", "tiger"];-->
+    <!--var allnames = ["donut", "peach", "pear", "popcorn",-->
+        <!--"popsicle", "strawberry", "mitten", "sock", "zipper",-->
+        <!--"chicken", "duck", "goat", "penguin", "pig", "tiger"];-->
+<!--//-->
+<!--//    //then make an array of numbers from 0 to the length of the images-1 (for indexing)-->
+    <!--var itemNums = [];-->
+    <!--for (var i = 0; i <= (allimages.length-1); i++) {-->
+        <!--itemNums.push(i);-->
+    <!--}-->
+<!--//-->
+<!--//    //now shuffle that array-->
+    <!--itemNums = shuffle(itemNums);-->
+<!--//-->
+<!--//    //create empty arrays for the trial images and trial names-->
+    <!--var trialImgs = [];-->
+    <!--var trialNames = [];-->
+<!--//-->
+<!--//    //using this array of numbers to index both the names and the images-->
+<!--//    //build up the trials with their 3 items and names,-->
+<!--//    // maintaining random order in itemNums-->
+    <!--for (var i = 0; i <= allimages.length-1; i += 3) {-->
+        <!--trialImgs.push(allimages[itemNums[i]]);-->
+        <!--trialImgs.push(allimages[itemNums[i+1]]);-->
+        <!--trialImgs.push(allimages[itemNums[i+2]]);-->
+
+        <!--trialNames.push(allnames[itemNums[i]]);-->
+        <!--trialNames.push(allnames[itemNums[i+1]]);-->
+        <!--trialNames.push(allnames[itemNums[i+2]]);-->
+    <!--}-->
+<!--//-->
+<!--//    // //slice those numbers-->
+<!--//    // //this is taking 3 random images for each trial-->
+<!--//    // we will index the trial items by the trial number-->
+    <!--var trialItems = [-->
+        <!--trialImgs.slice(0, 3),-->
+        <!--trialImgs.slice(3, 6),-->
+        <!--trialImgs.slice(6, 9),-->
+        <!--trialImgs.slice(9, 12),-->
+        <!--trialImgs.slice(12, 15)-->
+    <!--];-->
+<!--//-->
+    <!--itemList = trialItems[0];-->
+
+    <!--bookLImgs = [];-->
+    <!--bookCImgs = [];-->
+    <!--bookRImgs = [];-->
+<!--//-->
+    <!--if (bookL == "all") {-->
+        <!--bookLImgs = [itemList[0]];-->
+    <!--} else if (bookL == "some") {-->
+        <!--bookLImgs = [itemList[0], itemList[1]];-->
+    <!--} else {-->
+        <!--bookLImgs = [itemList[2]];-->
+    <!--}-->
+<!--//-->
+    <!--if (bookC == "all") {-->
+        <!--bookCImgs = [itemList[0]];-->
+    <!--} else if (bookC == "some") {-->
+        <!--bookCImgs = [itemList[0], itemList[1]];-->
+    <!--} else {-->
+        <!--bookCImgs = [itemList[2]];-->
+    <!--}-->
+<!--//-->
+    <!--if (bookR == "all") {-->
+        <!--bookRImgs = [itemList[0]];-->
+    <!--} else if (bookR == "some") {-->
+        <!--bookRImgs = [itemList[0], itemList[1]];-->
+    <!--} else {-->
+        <!--bookRImgs = [itemList[2]];-->
+    <!--}-->
+<!--//-->
+    <!--bookLitem = [];-->
+    <!--for (i = 0;  i<bookLImgs.length; i++) {-->
+        <!--bookLitem.push("images/" + bookLImgs[i] + ".png");-->
+    <!--}-->
+<!--//-->
+    <!--function imgl() {-->
+        <!--alert(bookLitem);-->
+        <!--alert(bookLitem[0]);-->
+        <!--alert(bookLitem[1]);-->
+    <!--}-->
+    <!--function imgc() {-->
+        <!--alert(bookLitem);-->
+    <!--}-->
+<!--//    function imgr() {-->
+<!--//        alert(bookRImgs);-->
+<!--//    }-->
+<!--//-->
+<!--////    }-->
+<!--////-->
+<!--//    function some() {-->
+<!--//        alert(bookLImgs);-->
+<!--//////        alert(bookCImgs);-->
+<!--//////        alert(bookRImgs);-->
+<!--//    }-->
