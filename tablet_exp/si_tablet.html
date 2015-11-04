@@ -145,27 +145,27 @@
     bookRImgs = [];
 //
     if (bookL == "all") {
-        bookLImgs = [itemList[0]];
+        bookLImgs = [itemList[0], itemList[0], itemList[0], itemList[0]];
     } else if (bookL == "some") {
-        bookLImgs = [itemList[0], itemList[1]];
+        bookLImgs = shuffle([itemList[0], itemList[0], itemList[1], itemList[1]]);
     } else {
-        bookLImgs = [itemList[2]];
+        bookLImgs = [itemList[2], itemList[2], itemList[2], itemList[2]];
     }
 //
     if (bookC == "all") {
-        bookCImgs = [itemList[0]];
+        bookCImgs = [itemList[0], itemList[0], itemList[0], itemList[0]];
     } else if (bookC == "some") {
-        bookCImgs = [itemList[0], itemList[1]];
+        bookCImgs = shuffle([itemList[0], itemList[0], itemList[1], itemList[1]]);
     } else {
-        bookCImgs = [itemList[2]];
+        bookCImgs = [itemList[2], itemList[2], itemList[2], itemList[2]];
     }
 //
     if (bookR == "all") {
-        bookRImgs = [itemList[0]];
+        bookRImgs = [itemList[0], itemList[0], itemList[0], itemList[0]];
     } else if (bookR == "some") {
-        bookRImgs = [itemList[0], itemList[1]];
+        bookRImgs = shuffle([itemList[0], itemList[0], itemList[1], itemList[1]]);
     } else {
-        bookRImgs = [itemList[2]];
+        bookRImgs = [itemList[2], itemList[2], itemList[2], itemList[2]];
     }
 //
     bookLitem = [];
@@ -184,42 +184,42 @@
 
     //this is really bad, but it's to make it work for the moment
     //what I want to do here is create an array with four items on each cover that my jQuery will index
-    bookLarray = [];
-    count = 0;
-    for (i = 0;  count<4; i++) {
-        bookLarray.push("images/" + bookLImgs[i] + ".png");
-        count++
-        if (i > bookLImgs.length-1 ) {
-            i += 0;
-        }
-        if (count == 4) {
-            break;
-        }
-    }
-    bookCarray = [];
-    count = 0;
-    for (i = 0;  count1<4; i++) {
-        bookCarray.push("images/" + bookCImgs[i] + ".png");
-        count1++;
-        if (i > bookCImgs.length-1 ) {
-            i += 0;
-        }
-        if (count1 == 4) {
-            break;
-        }
-    }
-    bookRarray = [];
-    count = 0;
-    for (i = 0;  count2<4; i++) {
-        bookRarray.push("images/" + bookRImgs[i] + ".png");
-        count2++;
-        if (i > bookCImgs.length-1 ) {
-            i += 0;
-        }
-        if (count2 == 4) {
-            break;
-        }
-    }
+//    bookLarray = [];
+//    count = 0;
+//    for (i = 0;  count<4; i++) {
+//        bookLarray.push("images/" + bookLImgs[i] + ".png");
+//        count++
+//        if (i > bookLImgs.length-1 ) {
+//            i += 0;
+//        }
+//        if (count == 4) {
+//            break;
+//        }
+//    }
+//    bookCarray = [];
+//    count = 0;
+//    for (i = 0;  count1<4; i++) {
+//        bookCarray.push("images/" + bookCImgs[i] + ".png");
+//        count1++;
+//        if (i > bookCImgs.length-1 ) {
+//            i += 0;
+//        }
+//        if (count1 == 4) {
+//            break;
+//        }
+//    }
+//    bookRarray = [];
+//    count = 0;
+//    for (i = 0;  count2<4; i++) {
+//        bookRarray.push("images/" + bookRImgs[i] + ".png");
+//        count2++;
+//        if (i > bookCImgs.length-1 ) {
+//            i += 0;
+//        }
+//        if (count2 == 4) {
+//            break;
+//        }
+//    }
 //
     function imgl() {
         alert(bookLitem);
@@ -234,52 +234,52 @@
     //left book 1
     $("#leftbook1").attr("name", bookLImgs);
     $("[name='bookLitem']").attr("src", bookLitem);
-    $('img[src="src"]').attr('src', bookLarray[0]);
+    $('img[src="src"]').attr('src', bookLitem[0]);
     //left book 2
     $("#leftbook2").attr("name", bookLImgs);
     $("[name='bookLitem']").attr("src", bookLitem);
-    $('img[src="src2"]').attr('src', bookLarray[1]);
+    $('img[src="src2"]').attr('src', bookLitem[1]);
     //center book 1
     $("#centerbook1").attr("name", bookCImgs);
     $("[name='bookCitem']").attr("src", bookCitem);
-    $('img[src="src3"]').attr('src', bookCarray[0]);
+    $('img[src="src3"]').attr('src', bookCitem[0]);
     //center book 2
     $("#centerbook2").attr("name", bookCImgs);
     $("[name='bookCitem']").attr("src", bookCitem);
-    $('img[src="src4"]').attr('src', bookCarray[1]);
+    $('img[src="src4"]').attr('src', bookCitem[1]);
     //right book 1
     $("#rightbook1").attr("name", bookRImgs);
     $("[name='bookRitem']").attr("src", bookRitem);
-    $('img[src="src5"]').attr('src', bookRarray[0]);
+    $('img[src="src5"]').attr('src', bookRitem[0]);
     //right book 2
     $("#rightbook2").attr("name", bookRImgs);
     $("[name='bookRitem']").attr("src", bookRitem);
-    $('img[src="src6"]').attr('src', bookRarray[1]);
+    $('img[src="src6"]').attr('src', bookRitem[1]);
 
     //left book 1
     $("#leftbook3").attr("name", bookLImgs);
     $("[name='bookLitem']").attr("src", bookLitem);
-    $('img[src="src7"]').attr('src', bookLarray[2]);
+    $('img[src="src7"]').attr('src', bookLitem[2]);
     //left book 2
     $("#leftbook2").attr("name", bookLImgs);
     $("[name='bookLitem']").attr("src", bookLitem);
-    $('img[src="src8"]').attr('src', bookLarray[3]);
+    $('img[src="src8"]').attr('src', bookLitem[3]);
     //center book 1
     $("#centerbook1").attr("name", bookCImgs);
     $("[name='bookCitem']").attr("src", bookCitem);
-    $('img[src="src9"]').attr('src', bookCarray[2]);
+    $('img[src="src9"]').attr('src', bookCitem[2]);
     //center book 2
     $("#centerbook2").attr("name", bookCImgs);
     $("[name='bookCitem']").attr("src", bookCitem);
-    $('img[src="src10"]').attr('src', bookCarray[3]);
+    $('img[src="src10"]').attr('src', bookCitem[3]);
     //right book 1
     $("#rightbook1").attr("name", bookRImgs);
     $("[name='bookRitem']").attr("src", bookRitem);
-    $('img[src="src11"]').attr('src', bookRarray[2]);
+    $('img[src="src11"]').attr('src', bookRitem[2]);
     //right book 2
     $("#rightbook2").attr("name", bookRImgs);
     $("[name='bookRitem']").attr("src", bookRitem);
-    $('img[src="src12"]').attr('src', bookRarray[3]);
+    $('img[src="src12"]').attr('src', bookRitem[3]);
 
 
     </script>

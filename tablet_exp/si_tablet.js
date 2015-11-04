@@ -326,31 +326,34 @@ var experiment = {
 		itemList = trialItems[trialNum];
 
 		//This is assigning the books the particular images based on their quantifiers
+		//this creates an array of four items
+		//book left
 		if (bookL == "all") {
-			bookLImgs = [itemList[0]];
+			bookLImgs = [itemList[0], itemList[0], itemList[0], itemList[0]];
 		} else if (bookL == "some") {
-			bookLImgs = [itemList[0], itemList[1]];
+			bookLImgs = shuffle([itemList[0], itemList[0], itemList[1], itemList[1]]);
 		} else {
-			bookLImgs = [itemList[2]];
+			bookLImgs = [itemList[2], itemList[2], itemList[2], itemList[2]];
 		}
-
+		//book center
 		if (bookC == "all") {
-			bookCImgs = [itemList[0]];
+			bookCImgs = [itemList[0], itemList[0], itemList[0], itemList[0]];
 		} else if (bookC == "some") {
-			bookCImgs = [itemList[0], itemList[1]];
+			bookCImgs = shuffle([itemList[0], itemList[0], itemList[1], itemList[1]]);
 		} else {
-			bookCImgs = [itemList[2]];
+			bookCImgs = [itemList[2], itemList[2], itemList[2], itemList[2]];
 		}
-
+		//book right
 		if (bookR == "all") {
-			bookRImgs = [itemList[0]];
+			bookRImgs = [itemList[0], itemList[0], itemList[0], itemList[0]];
 		} else if (bookR == "some") {
-			bookRImgs = [itemList[0], itemList[1]];
+			bookRImgs = shuffle([itemList[0], itemList[0], itemList[1], itemList[1]]);
 		} else {
-			bookRImgs = [itemList[2]];
+			bookRImgs = [itemList[2], itemList[2], itemList[2], itemList[2]];
 		}
 
 		//This is getting the file names for the actual images
+		//this results in an array of four image paths
 		for (i = 0; i < bookLImgs.length; i++) {
 			bookLitem.push("images/" + bookLImgs[i] + ".png");
 		}
@@ -363,24 +366,75 @@ var experiment = {
 
 		//now we are going to build the table in HTML
 		//this part takes the item names above, and, writes HTML script to show the images
-
 		var objects_html = "";
 		objects_html += '<table align = "center" cellpadding="30"><tr></tr><tr>';
-		objects_html += '<td align="center"><img class="pic" id= "leftPic"/></td>';
-		objects_html += '<td align="center"><img class="pic" id= "centerPic"/></td>';
-		objects_html += '<td align="center"><img class="pic" id= "rightPic"/></td>';
+		objects_html += '<td align="center"><img class="pic" id= "leftbook1" img src="src"/>';
+		objects_html += '<td align="center"><img class="pic" id="leftbook2" img src="src2"/>';
+		objects_html += '<td align="center"><img class="pic" id="centerbook1" img src="src3"/>';
+		objects_html +=	'<td align="center"><img class="pic" id="centerbook2" img src="src4">';
+		objects_html +=	'<td align="center"><img class="pic" id="rightbook1" img src="src5"/>';
+		objects_html += '<td align="center"><img class="pic" id="rightbook2" img src="src6"/>';
+		objects_html += '</td>';
+		objects_html += '</tr><tr>';
+		objects_html += '<td align="center"><img class="pic" id= "leftbook3" img src="src7"/>';
+		objects_html +=	'<td align="center"><img class="pic" id="leftbook4" img src="src8"/>';
+		objects_html += '<td align="center"><img class="pic" id="centerbook3" img src="src9"/>';
+		objects_html += '<td align="center"><img class="pic" id="centerbook4" img src="src10">';
+		objects_html +=	'<td align="center"><img class="pic" id="rightbook3" img src="src11"/>';
+		objects_html +=	'<td align="center"><img class="pic" id="rightbook4" img src="src12"/>;
 		objects_html += '</tr></table>';
 		$("#objects").html(objects_html);
 
-		//set names
-		$("#leftPic").attr("name", bookLitem);
-		$("#leftPic").attr("name", bookCitem);
-		$("#rightPic").attr("name", bookRitem);
-
-		//show the images
+		//show the correct images
+		//left book 1
+		$("#leftbook1").attr("name", bookLImgs);
 		$("[name='bookLitem']").attr("src", bookLitem);
+		$('img[src="src"]').attr('src', bookLitem[0]);
+		//left book 2
+		$("#leftbook2").attr("name", bookLImgs);
+		$("[name='bookLitem']").attr("src", bookLitem);
+		$('img[src="src2"]').attr('src', bookLitem[1]);
+		//center book 1
+		$("#centerbook1").attr("name", bookCImgs);
 		$("[name='bookCitem']").attr("src", bookCitem);
+		$('img[src="src3"]').attr('src', bookCitem[0]);
+		//center book 2
+		$("#centerbook2").attr("name", bookCImgs);
+		$("[name='bookCitem']").attr("src", bookCitem);
+		$('img[src="src4"]').attr('src', bookCitem[1]);
+		//right book 1
+		$("#rightbook1").attr("name", bookRImgs);
 		$("[name='bookRitem']").attr("src", bookRitem);
+		$('img[src="src5"]').attr('src', bookRitem[0]);
+		//right book 2
+		$("#rightbook2").attr("name", bookRImgs);
+		$("[name='bookRitem']").attr("src", bookRitem);
+		$('img[src="src6"]').attr('src', bookRitem[1]);
+
+		//left book 1
+		$("#leftbook3").attr("name", bookLImgs);
+		$("[name='bookLitem']").attr("src", bookLitem);
+		$('img[src="src7"]').attr('src', bookLitem[2]);
+		//left book 2
+		$("#leftbook2").attr("name", bookLImgs);
+		$("[name='bookLitem']").attr("src", bookLitem);
+		$('img[src="src8"]').attr('src', bookLitem[3]);
+		//center book 1
+		$("#centerbook1").attr("name", bookCImgs);
+		$("[name='bookCitem']").attr("src", bookCitem);
+		$('img[src="src9"]').attr('src', bookCitem[2]);
+		//center book 2
+		$("#centerbook2").attr("name", bookCImgs);
+		$("[name='bookCitem']").attr("src", bookCitem);
+		$('img[src="src10"]').attr('src', bookCitem[3]);
+		//right book 1
+		$("#rightbook1").attr("name", bookRImgs);
+		$("[name='bookRitem']").attr("src", bookRitem);
+		$('img[src="src11"]').attr('src', bookRitem[2]);
+		//right book 2
+		$("#rightbook2").attr("name", bookRImgs);
+		$("[name='bookRitem']").attr("src", bookRitem);
+		$('img[src="src12"]').attr('src', bookRitem[3]);
 
 		$("#stage").fadeIn();
 
