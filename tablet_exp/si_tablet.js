@@ -246,7 +246,7 @@ var experiment = {
 		}, normalpause);
 	},
 
-	startGame: function() {
+	startGame: function () {
 		document.body.style.background = "white";
 		showSlide("startGame");
 	},
@@ -284,33 +284,33 @@ var experiment = {
 		//this is indexing the quantifier with the trial number
 		//var trialType = trialQuants[trialNum];
 
-			bookL = "";
-			//quantifier of book 1 - left
-			bookC = "";
-			//quantifier of book 2 - middle
-			bookR = "";
-			//quantifier of book 3 - right
-			bookLImgs = [];
-			//items on book 1 - left
-			bookCImgs = [];
-			//items on book 2 - middle
-			bookRimgs = [];
-			//items on book 3 - right
-			bookLitem = [];
-			//actual file names of the images displayed on left book
-			bookCitem = [];
-			//files names of the images displayed on center book
-			bookRitem = [];
-			//file names of images displayed on right book
-			itemList = [];
-			//the 3 items that appear in this trial
-			allItems = [];
-			//the name of the images for quantifier "all"
-			someItems = [];
-			//the name of the images for quantifier "some"
-			noneItems = [];
-			//the name of the images for quantifier "none"
-			trialNum = 0;
+		bookL = "";
+		//quantifier of book 1 - left
+		bookC = "";
+		//quantifier of book 2 - middle
+		bookR = "";
+		//quantifier of book 3 - right
+		bookLImgs = [];
+		//items on book 1 - left
+		bookCImgs = [];
+		//items on book 2 - middle
+		bookRimgs = [];
+		//items on book 3 - right
+		bookLitem = [];
+		//actual file names of the images displayed on left book
+		bookCitem = [];
+		//files names of the images displayed on center book
+		bookRitem = [];
+		//file names of images displayed on right book
+		itemList = [];
+		//the 3 items that appear in this trial
+		allItems = [];
+		//the name of the images for quantifier "all"
+		someItems = [];
+		//the name of the images for quantifier "some"
+		noneItems = [];
+		//the name of the images for quantifier "none"
+		trialNum = 0;
 
 		//determines which quantifier is assigned to which book
 		//this happens in every trial
