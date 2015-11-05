@@ -66,55 +66,56 @@ getCurrentTime = function() {
 
 
 //-------DOT GAME-----
-//createDot = function(dotx, doty, i, tag) {
-//	var dots;
-//	if (tag === "smiley") {
-//		dots = ["smiley1", "smiley2", "smiley3", "smiley4", "smiley5"];
-//	} else {
-//		dots = [1, 2, 3, 4, 5];
-//	}
-//
-//	var dot = document.createElement("img");
-//	dot.setAttribute("class", "dot");
-//	dot.id = "dot_" + dots[i];
-//	if (tag === "smiley") {
-//		dot.src = "dots/dot_" + "smiley" + ".jpg";
-//	} else {
-//		dot.src = "dots/dot_" + dots[i] + ".jpg";
-//	}
-//
-//	var x = Math.floor(Math.random()*950);
-//	var y = Math.floor(Math.random()*540);
-//
-//	var invalid = "true";
-//
-//	//make sure dots do not overlap
-//	while (true) {
-//		invalid = "true";
-//		for (j = 0; j < dotx.length ; j++) {
-//			if (Math.abs(dotx[j] - x) + Math.abs(doty[j] - y) < 250) {
-//				var invalid = "false";
-//				break;
-//			}
-//		}
-//		if (invalid === "true") {
-//			dotx.push(x);
-//			doty.push(y);
-//			break;
-//		}
-//		x = Math.floor(Math.random()*400);
-//		y = Math.floor(Math.random()*400);
-//	}
-//
-//	dot.setAttribute("style","position:absolute;left:"+x+"px;top:"+y+"px;");
-//	training.appendChild(dot);
-//}
-//
-//var dots = ["dot_1", "dot_2", "dot_3", "dot_4", "dot_5", "x", "dot_smiley"];
-//for (i = 0; i<dots.length; i++) {
-//	images[i] = new Image();
-//	images[i].src = "dots/" + dots[i] + ".jpg";
-//}
+createDot = function(dotx, doty, i, tag) {
+	var dots;
+	if (tag === "smiley") {
+		dots = ["smiley1", "smiley2", "smiley3", "smiley4", "smiley5"];
+	} else {
+		dots = [1, 2, 3, 4, 5];
+	}
+
+	var dot = document.createElement("img");
+	dot.setAttribute("class", "dot");
+	dot.id = "dot_" + dots[i];
+	if (tag === "smiley") {
+		dot.src = "dots/dot_" + "smiley" + ".jpg";
+	} else {
+		dot.src = "dots/dot_" + dots[i] + ".jpg";
+	}
+
+	var x = Math.floor(Math.random()*950);
+	var y = Math.floor(Math.random()*540);
+
+	var invalid = "true";
+
+	//make sure dots do not overlap
+	while (true) {
+		invalid = "true";
+		for (j = 0; j < dotx.length ; j++) {
+			if (Math.abs(dotx[j] - x) + Math.abs(doty[j] - y) < 250) {
+				var invalid = "false";
+				break;
+			}
+		}
+		if (invalid === "true") {
+			dotx.push(x);
+			doty.push(y);
+			break;
+		}
+		x = Math.floor(Math.random()*400);
+		y = Math.floor(Math.random()*400);
+	}
+
+	dot.setAttribute("style","position:absolute;left:"+x+"px;top:"+y+"px;");
+	training.appendChild(dot);
+}
+
+var images=[];
+var dots = ["dot_1", "dot_2", "dot_3", "dot_4", "dot_5", "x", "dot_smiley"];
+for (i = 0; i<dots.length; i++) {
+	images[i] = new Image();
+	images[i].src = "dots/" + dots[i] + ".jpg";
+}
 
 //--------------PARAMETERS----------------
 //Basics of the experiment go here
@@ -156,7 +157,7 @@ var bookQuants = ["some", "all", "none"];
 
 //-----items and names -----
 //first, load all the images and names in the same order
-var foods = ["carrot", "cake", "cookie", "pizza", "apple", "banana",
+var food = ["carrot", "cake", "cookie", "pizza", "apple", "banana",
 			"orange", "pears", "strawberries","pretzel", "popsicle", "donut"];
 var animals = ["dog", "cat", "bird", "horse", "cow", "sheep", "tiger", "lion",
 			"bear", "frog", "turtle", "fish", "giraffe", "elephant", "monkey", "pig",
@@ -214,7 +215,7 @@ var trialItems = [
 ];
 
 //now shuffle that list to randomize trials
-itemList = shuffle(itemList);
+trialItems = shuffle(trialItems);
 
 //
 //var allimages = ["donut", "peach", "pear", "popcorn",
@@ -286,21 +287,106 @@ var experiment = {
 	date: getCurrentDate(),
 	//the date of the experiment
 	timestamp: getCurrentTime(),
+	prompt: "",
+	//name of the item that child is queried on
+	trialType: "",
+	//quantifier name that child is queried on
+	bookL: "",
+	//quantifier of book 1 - left
+	bookC: "",
+	//quantifier of book 2 - middle
+	bookR: "",
+	//quantifier of book 3 - right
+	bookLImgs: [],
+	//items on book 1 - left
+	bookCImgs: [],
+	//items on book 2 - middle
+	bookRImgs: [],
+	//items on book 3 - right
+	itemList: [],
+	//the 3 items that appear in this trial
+	allItems: [],
+	//the name of the images for quantifier "all"
+	someItems: [],
+	//the name of the images for quantifier "some"
+	noneItems: [],
+	//the name of the images for quantifier "none"
+	side: "",
+	//whether the child picked the left (L), center (C), or the right (R) picture
+	selectionType: "",
+	//the quantifier selection child made
+	response: "",
+	//whether the response was the correct response (Y) or the incorrect response (N)
 	//the time that the trial was completed
 	reactiontime: 0,
-	//TODO : add reaction time variable ***** 
+	//TODO : add reaction time variable *****
 
 	preStudy: function () {
 		document.body.style.background = "white";
 		$("#prestudy").hide();
 		setTimeout(function () {
-			experiment.next();
+			experiment.test();
 		}, normalpause);
 	},
 
-	startGame: function () {
-		document.body.style.background = "white";
-		showSlide("startGame");
+	training: function (dotgame) {
+		var allDots = ["dot_1", "dot_2", "dot_3", "dot_4", "dot_5",
+			"dot_smiley1", "dot_smiley2", "dot_smiley3",
+			"dot_smiley4", "dot_smiley5"];
+		var xcounter = 0;
+		var dotCount = 5;
+
+		//preload sound
+		//if (dotgame === 0) {
+		//	audioSprite.play();
+		//	audioSprite.pause();
+		//}
+
+		var dotx = [];
+		var doty = [];
+
+		if (dotgame === 0) {
+			for (i = 0; i < dotCount; i++) {
+				createDot(dotx, doty, i, "");
+			}
+		} else {
+			for (i = 0; i < dotCount; i++) {
+				createDot(dotx, doty, i, "smiley");
+			}
+		}
+		showSlide("training");
+		$('.dot').bind('click touchstart', function (event) {
+			var dotID = $(event.currentTarget).attr('id');
+
+			//only count towards completion clicks on dots that have not yet been clicked
+			if (allDots.indexOf(dotID) === -1) {
+				return;
+			}
+			allDots.splice(allDots.indexOf(dotID), 1);
+			document.getElementById(dotID).src = "dots/x.jpg";
+			xcounter++
+			if (xcounter === dotCount) {
+				setTimeout(function () {
+					$("#training").hide();
+					if (dotgame === 0) {
+						//hide old x marks before game begins again
+						var dotID;
+						for (i = 1; i <= dotCount; i++) {
+							dotID = "dot_" + i;
+							training.removeChild(document.getElementById(dotID));
+						}
+						experiment.training();
+						dotgame++;
+					} else {
+						//document.body.style.background = "black";
+						setTimeout(function () {
+							showSlide("prestudy");
+							//experiment.test();
+						}, normalpause * 2);
+					}
+				}, normalpause * 2);
+			}
+		});
 	},
 
 	//checks the input information to make sure it's accurate
@@ -311,7 +397,9 @@ var experiment = {
 			return;
 		}
 		experiment.subid = document.getElementById("subjectID").value;
+		experiment.training(0);
 	},
+
 	//the end of the experiment, where the background becomes completely black
 	end: function () {
 		setTimeout(function () {
@@ -321,58 +409,19 @@ var experiment = {
 		document.body.style.background = "black";
 	},
 
-	//determines which quantifier is assigned to book in each trial
-	//getBooks: function() {
-	//shuffle(bookQuants);
-	//bookL = bookQuants[0];
-	//bookC = bookQuants[1];
-	//bookR = bookQuants[2];
-	//},
-
 	test: function () {
-		prompt = "";
-		//name of the item that child is queried on
-		trialType = "";
-		//quantifier name that child is queried on
-		bookL = "";
-		//quantifier of book 1 - left
-		bookC = "";
-		//quantifier of book 2 - middle
-		bookR = "";
-		//quantifier of book 3 - right
-		bookLImgs = [];
-		//items on book 1 - left
-		bookCImgs = [];
-		//items on book 2 - middle
-		bookRimgs = [];
-		//items on book 3 - right
-		bookLitem = [];
-		//actual file names of the images displayed on left book
-		bookCitem = [];
-		//files names of the images displayed on center book
-		bookRitem = [];
-		//file names of images displayed on right book
-		itemList = [];
-		//the 3 items that appear in this trial
-		allItems = [];
-		//the name of the images for quantifier "all"
-		someItems = [];
-		//the name of the images for quantifier "some"
-		noneItems = [];
-		//the name of the images for quantifier "none"
-		side = "";
-		//whether the child picked the left (L), center (C), or the right (R) picture
-		selectionType = "";
-		//the quantifier selection child made
-		response = "";
-		//whether the response was the correct response (Y) or the incorrect response (N)
-
 		$("#stage").hide();
-		document.body.style.background = "white";
+		//$('body').css('background-image', 'images/background.png')
+		//document.body.style.backgroundImage = "images/background.png";
+		$(document).ready(function() {
+			$('body').css('background-image', 'images/background.png');
+		});
+
+		var counter = 0;
 
 		//determines the trial type of this trial
 		//this is indexing the quantifier with the trial number
-		var trialType = trialQuants[trialNum];
+		var trialType = trialQuants[counter];
 
 		//determines which quantifier is assigned to which book
 		//this happens in every trial
@@ -382,10 +431,10 @@ var experiment = {
 		bookR = bookQuants[2];
 
 		//determine the trial type - the is indexing the shuffled list of trial quantifiers with the number of the trial
-		trialType = trialQuants[trialNum];
+		trialType = trialQuants[counter];
 
 		//get the trial names for this trial - we are referencing this with the number of the trial we're on
-		itemList = trialItems[trialNum];
+		itemList = trialItems[counter];
 
 		//This is assigning the books the particular images based on their quantifiers
 		//this creates an array of four items
@@ -423,6 +472,13 @@ var experiment = {
 			bookRImgs = [itemList[2], itemList[2], itemList[2], itemList[2]];
 			noneItems = bookRImgs;
 		}
+
+		bookLitem = [];
+		//actual file names of the images displayed on left book
+		bookCitem = [];
+		//files names of the images displayed on center book
+		bookRitem = [];
+		//file names of images displayed on right book
 
 		//This is getting the file names for the actual images
 		//this results in an array of four image paths
@@ -463,10 +519,9 @@ var experiment = {
 		objects_html += '<td align="center"><img class="pic" id="centerbook3" img src="src9"/>';
 		objects_html += '<td align="center"><img class="pic" id="centerbook4" img src="src10">';
 		objects_html += '<td align="center"><img class="pic" id="rightbook3" img src="src11"/>';
-		objects_html += '<td align="center"><img class="pic" id="rightbook4" img src="src12"/>;
+		objects_html += '<td align="center"><img class="pic" id="rightbook4" img src="src12"/>';
 		objects_html += '</tr></table>';
 		$("#objects").html(objects_html);
-
 		//show the correct images
 		//left book 1
 		$("#leftbook1").attr("name", bookLImgs);
@@ -520,100 +575,67 @@ var experiment = {
 
 		$("#stage").fadeIn();
 
-		//audio goes here
 
-		//get response goes here
+		//get the response
+		clickDisabled = false; //is false now until the audio is done
+		//this will be enabled after the audio is done playing
+		$('.pic').bind('click touchstart', function(event) {
+			if (clickDisabled) return;
 
-		//incrementing the trial number
-		trialNum++;
+			//disable subsequent clicks once the participant has made their choice
+			clickDisabled = true;
 
+			experiment.trialNum = counter;
+			//time the participant clicked - the time the audio began - the amount of time between the beginning of the audio and the
+			//onset of the word
+			//commented now until the audio data is ready
+			//experiment.reactiontime = (new Date()).getTime() - startTime - (spriteData[wordList[0]].onset-spriteData[wordList[0]].start)*1000;
 
-		//  		// Create the object table (tr=table row; td= table data)
-		// //objects_html = '<table class = "centered" ><tr><td id=word colspan="2">' + wordList[0] + '</td></tr><tr>';;
+			//which book was selected?
+			var picID = $(event.currentTarget).attr('id');
+			if (picID === "leftbook1" || picID === "leftbook2" || picID === "leftbook3" || picID === "leftbook4") {
+				experiment.side = "L";
+				experiment.selectionType += bookL;
+			} else if (picID === "centerbook1" || picID === "centerbook2" || picID === "centerbook3" || picID === "centerbook4") {
+				experiment.side = "C";
+				experiment.selectionType += bookC;
+			} else {
+				experiment.side = "R";
+				experiment.selectionType += bookR;
+			}
 
-		//   	//HTML for the first object on fthe left
-		// leftname = "tabletobjects/" + imageArray[0] + ".jpg";
-		// objects_html += '<table align = "center" cellpadding="30"><tr></tr><tr><td align="center"><img class="pic" src="' + leftname +  '"alt="' + leftname + '" id= "leftPic"/></td>';
+			//check if the child got the trial correct
+			if (experiment.selectionType === experiment.trialType) {
+				experiment.response = "Y";
+			} else {
+				experiment.response = "N";
+			}
 
-		// //HTML for the first object on the right
-		// rightname = "tabletobjects/" + imageArray[1] + ".jpg";
-		//   	objects_html += '<td align="center"><img class="pic" src="' + rightname +  '"alt="' + rightname + '" id= "rightPic"/></td>';
+			//experiment.processOneRow();
 
-		//   	objects_html += '</tr></table>';
-		//    $("#objects").html(objects_html);
+			//incrementing the trial number
+			counter++;
 
-		//    $("#stage").fadeIn();
+			//set the timeout
+			setTimeout(function () {
+				$("#stage").fadeOut();
 
-		//    var startTime = (new Date()).getTime();
-		//    playPrompt(wordList[0]);
-
-		// //click disable for the first slide
-		// var clickDisabled = true;
-		// setTimeout(function() {clickDisabled = false;}, (spriteData[wordList[0]].onset - spriteData[wordList[0]].start)*1000 + 300);
-
-		//    $('.pic').bind('click touchstart', function(event) {
-
-		//    	if (clickDisabled) return;
-
-		//    	//disable subsequent clicks once the participant has made their choice
-		// 	clickDisabled = true; 
-
-		//    	//time the participant clicked - the time the audio began - the amount of time between the beginning of the audio and the
-		//    	//onset of the word
-		//    	experiment.reactiontime = (new Date()).getTime() - startTime - (spriteData[wordList[0]].onset-spriteData[wordList[0]].start)*1000;
-
-		//    	experiment.trialnum = counter;
-		//    	experiment.word = wordList[0];
-		//    	experiment.pic1 = imageArray[0];
-		//    	experiment.pic2 = imageArray[1];
-
-		//    	//get whether the left and right pictures were familiar or novel
-		//    	if (novelWords.indexOf(imageArray[0]) === -1) {
-		//    		experiment.pic1type = "familiar";
-		//    	} else {
-		//    		experiment.pic1type = "novel";
-		//    	}
-		//    	if (novelWords.indexOf(imageArray[1]) === -1) {
-		//    		experiment.pic2type = "familiar";
-		//    	} else {
-		//    		experiment.pic2type = "novel";
-		//    	}
-
-		//    	//Was the picture clicked on the right or the left?
-		//    	var picID = $(event.currentTarget).attr('id');
-		//    	if (picID === "leftPic") {
-		// 		experiment.side = "L";
-		// 		experiment.chosenpic = imageArray[0];
-		//    	} else {
-		// 		experiment.side = "R";
-		// 		experiment.chosenpic = imageArray[1];
-		// 	}
-
-		// 	//If the child picked the picture that matched with the word, then they were correct. If they did not, they were not correct.
-		// 	if (experiment.chosenpic === experiment.word) {
-		// 		experiment.response = "Y";
-		// 	} else {
-		// 		experiment.response = "N"
-		// 	}
-
-		// 	//what kind of trial was this?
-		// 	experiment.trialtype = getTrialType(experiment.word, imageArray[0], imageArray[1]);
-
-		// 	//Add one to the counter and process the data to be saved; the child completed another "round" of the experiment
-		// 	experiment.processOneRow();
-		//    	counter++;
-
-		//    	$(document.getElementById(picID)).css('margin', "-8px");
-		// 	$(document.getElementById(picID)).css('border', "solid 8px red");
-
-
+				//there are no more trials for the experiment to run
+				if (counter === numTrials + 1) {
+					experiment.end();
+					return;
+				}
+			});
+		});
 	},
+
+	//concatenates all experimental variables into a string which represents one "row" of data in the eventual csv
+	//processOneRow: function() {
+	//	var dataForTrial = experiment.subid;
+	//	dataForTrial += "," + experiment.trialNum + "," + experiment.date + "," + experiment.timestamp + experiment.prompt + "," + experiment.trialType + "," + experiment.reactiontime;
+	//	dataForTrial += "," + experiment.bookL + "," + experiment.bookC + "," + experiment.bookR + "," + experiment.bookLImgs + "," + experiment.bookCImgs;
+	//	dataForTrial += "," + experiment.bookRImgs + "," + experiment.bookLitem + "," + experiment.bookCitem + "," + experiment.bookRitem + "," + experiment.allItems;
+	//	dataForTrial += "," + experiment.someItems + "," + experiment.noneItems + "," + experiment.itemList + "," + experiment.side + "," + experiment.response + "," + experiment.selectionType + "\n";
+	//	$.post("http://langcog.stanford.edu/cgi-bin/TABLET/tabletstudysave.php", {postresult_string : dataForTrial});
+	//},
 }
-
-
-//Deal with the audio
-//Sprite stuff goes here
-
-//Images go here
-
-//

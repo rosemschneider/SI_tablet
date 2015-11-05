@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Which book is mine?</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <!--Audio source
+    <script src="spriteData.js"></script>
+    <link rel="stylesheet" href="stylecentered.css" />-->
+    <meta charset="UTF-8">
+</head>
+<body>
+<button id="show" onclick="quants()">quants</button>
+<button id="show" onclick="bookleft()">Book L</button>
+<button id="show" onclick="bookcenter()">C</button>
+<button id="show" onclick="bookright()">R</button>
+<button id="show" onclick="imgl()">imgl</button>
+<button id="show" onclick="imgc()">imgc</button>
+<button id="show" onclick="imgr()">imgr</button>
+
+<!--<div class="slide" id="instructions">-->
+<!--<p id='logo-text'>Stanford Language and Cognition Lab</p>-->
+<!--<button id="startButton" type="button"-->
+<!--onClick="this.blur(); experiment.test()">Start Practice</button>-->
+<!--</center>-->
+<!--</div>-->
+<!--<div class="slide" id="stage">-->
+<!--<div id="objects">-->
+<!--</div>-->
+
+
+<!--
+<div class="slide" id="stage">
+    <div id="objects">
+</div>-->
+
+<!--<script src="si_tablet.js"></script>-->
+
+<!--</body>-->
+
+
+<!--<table align = "center" cellpadding="30">-->
+<!--<tr>-->
+<!--</tr>-->
+<!--<tr>-->
+<!--<td align="center"><img class="pic" id= "leftbook1" img src="src"/>-->
+<!--<td align="center"><img class="pic" id="leftbook2" img src="src2"/>-->
+<!--<td align="center"><img class="pic" id="centerbook1" img src="src3"/>-->
+<!--<td align="center"><img class="pic" id="centerbook2" img src="src4">-->
+<!--<td align="center"><img class="pic" id="rightbook1" img src="src5"/>-->
+<!--<td align="center"><img class="pic" id="rightbook2" img src="src6"/>-->
+<!--</td>-->
+<!--</tr>-->
+<!--<tr>-->
+<!--<td align="center"><img class="pic" id= "leftbook3" img src="src7"/>-->
+<!--<td align="center"><img class="pic" id="leftbook4" img src="src8"/>-->
+<!--<td align="center"><img class="pic" id="centerbook3" img src="src9"/>-->
+<!--<td align="center"><img class="pic" id="centerbook4" img src="src10">-->
+<!--<td align="center"><img class="pic" id="rightbook3" img src="src11"/>-->
+<!--<td align="center"><img class="pic" id="rightbook4" img src="src12"/>-->
+<!--</tr>-->
+<!--</table>-->
+<!--</html>-->
+
+<!--<script>-->
+<!--shuffle = function (o) { //v1.0-->
+<!--for (var j, x, i = o.length; i; j = parseInt(Math.random() * i), x = o[&#45;&#45;i], o[i] = o[j], o[j] = x);-->
+<!--return o;-->
+<!--}-->
+
+<!--bookQuants = ["some", "none", "all"];-->
+<!--bookQuants = shuffle(bookQuants);-->
+<!--bookL = bookQuants[0];-->
+<!--bookC = bookQuants[1];-->
+<!--bookR = bookQuants[2];-->
+
+
+<!--function quants() {-->
+<!--alert(bookQuants);-->
+<!--}-->
+
+<!--function bookleft() {-->
+<!--alert(bookL);-->
+<!--}-->
+
+<!--function bookcenter() {-->
+<!--alert(bookC);-->
+<!--}-->
+
+<!--function bookright() {-->
+<!--alert(bookR);-->
+<!--}-->
+//
+//    allItems = [];
+//    someItems = [];
+//    noneItems = [];
+//
+//    var allimages = ["donut", "peach", "pear", "popcorn",
+//        "popsicle", "strawberry", "mitten", "sock", "zipper",
+//        "chicken", "duck", "goat", "penguin", "pig", "tiger"];
+//    var allnames = ["donut", "peach", "pear", "popcorn",
+//        "popsicle", "strawberry", "mitten", "sock", "zipper",
+//        "chicken", "duck", "goat", "penguin", "pig", "tiger"];
+//
+//    //then make an array of numbers from 0 to the length of the images-1 (for indexing)
+//    var itemNums = [];
+//    for (var i = 0; i <= (allimages.length-1); i++) {
+//        itemNums.push(i);
+//    }
+//
+//    //now shuffle that array
+//    itemNums = shuffle(itemNums);
+//
+//    //create empty arrays for the trial images and trial names
+//    var trialImgs = [];
+//    var trialNames = [];
+//
+//    //using this array of numbers to index both the names and the images
+//    //build up the trials with their 3 items and names,
+//    // maintaining random order in itemNums
+//    for (var i = 0; i <= allimages.length-1; i += 3) {
+//        trialImgs.push(allimages[itemNums[i]]);
+//        trialImgs.push(allimages[itemNums[i+1]]);
+//        trialImgs.push(allimages[itemNums[i+2]]);
+//
+//        trialNames.push(allnames[itemNums[i]]);
+//        trialNames.push(allnames[itemNums[i+1]]);
+//        trialNames.push(allnames[itemNums[i+2]]);
+//    }
+//
+//    // //slice those numbers
+//    // //this is taking 3 random images for each trial
+//    // we will index the trial items by the trial number
+//    var trialItems = [
+//        trialImgs.slice(0, 3),
+//        trialImgs.slice(3, 6),
+//        trialImgs.slice(6, 9),
+//        trialImgs.slice(9, 12),
+//        trialImgs.slice(12, 15)
+//    ];
+////
+//    itemList = trialItems[0];
+//
+//    bookLImgs = [];
+//    bookCImgs = [];
+//    bookRImgs = [];
+////
+//    if (bookL == "all") {
+//        bookLImgs = [itemList[0], itemList[0], itemList[0], itemList[0]];
+//    } else if (bookL == "some") {
+//        bookLImgs = shuffle([itemList[0], itemList[0], itemList[1], itemList[1]]);
+//    } else {
+//        bookLImgs = [itemList[2], itemList[2], itemList[2], itemList[2]];
+//    }
+////
+//    if (bookC == "all") {
+//        bookCImgs = [itemList[0], itemList[0], itemList[0], itemList[0]];
+//    } else if (bookC == "some") {
+//        bookCImgs = shuffle([itemList[0], itemList[0], itemList[1], itemList[1]]);
+//    } else {
+//        bookCImgs = [itemList[2], itemList[2], itemList[2], itemList[2]];
+//    }
+////
+//    if (bookR == "all") {
+//        bookRImgs = [itemList[0], itemList[0], itemList[0], itemList[0]];
+//    } else if (bookR == "some") {
+//        bookRImgs = shuffle([itemList[0], itemList[0], itemList[1], itemList[1]]);
+//    } else {
+//        bookRImgs = [itemList[2], itemList[2], itemList[2], itemList[2]];
+//    }
+////
+//    bookLitem = [];
+//    for (i = 0;  i<bookLImgs.length; i++) {
+//        bookLitem.push("images/" + bookLImgs[i] + ".png");
+//    }
+//    bookCitem = [];
+//    for (i = 0;  i<bookCImgs.length; i++) {
+//        bookCitem.push("images/" + bookCImgs[i] + ".png");
+//    }
+//
+//    bookRitem = [];
+//    for (i = 0;  i<bookRImgs.length; i++) {
+//        bookRitem.push("images/" + bookRImgs[i] + ".png");
+//    }
+
+//this is really bad, but it's to make it work for the moment
+//what I want to do here is create an array with four items on each cover that my jQuery will index
+//    bookLarray = [];
+//    count = 0;
+//    for (i = 0;  count<4; i++) {
+//        bookLarray.push("images/" + bookLImgs[i] + ".png");
+//        count++
+//        if (i > bookLImgs.length-1 ) {
+//            i += 0;
+//        }
+//        if (count == 4) {
+//            break;
+//        }
+//    }
+//    bookCarray = [];
+//    count = 0;
+//    for (i = 0;  count1<4; i++) {
+//        bookCarray.push("images/" + bookCImgs[i] + ".png");
+//        count1++;
+//        if (i > bookCImgs.length-1 ) {
+//            i += 0;
+//        }
+//        if (count1 == 4) {
+//            break;
+//        }
+//    }
+//    bookRarray = [];
+//    count = 0;
+//    for (i = 0;  count2<4; i++) {
+//        bookRarray.push("images/" + bookRImgs[i] + ".png");
+//        count2++;
+//        if (i > bookCImgs.length-1 ) {
+//            i += 0;
+//        }
+//        if (count2 == 4) {
+//            break;
+//        }
+//    }
+//
+<!--function imgl() {-->
+<!--alert(bookLitem);-->
+<!--}-->
+<!--function imgc() {-->
+<!--alert(bookCitem);-->
+<!--}-->
+<!--function imgr() {-->
+<!--alert(bookLarray);-->
+<!--}-->
+
+<!--//left book 1-->
+<!--$("#leftbook1").attr("name", bookLImgs);-->
+<!--$("[name='bookLitem']").attr("src", bookLitem);-->
+<!--$('img[src="src"]').attr('src', bookLitem[0]);-->
+<!--//left book 2-->
+<!--$("#leftbook2").attr("name", bookLImgs);-->
+<!--$("[name='bookLitem']").attr("src", bookLitem);-->
+<!--$('img[src="src2"]').attr('src', bookLitem[1]);-->
+<!--//center book 1-->
+<!--$("#centerbook1").attr("name", bookCImgs);-->
+<!--$("[name='bookCitem']").attr("src", bookCitem);-->
+<!--$('img[src="src3"]').attr('src', bookCitem[0]);-->
+<!--//center book 2-->
+<!--$("#centerbook2").attr("name", bookCImgs);-->
+<!--$("[name='bookCitem']").attr("src", bookCitem);-->
+<!--$('img[src="src4"]').attr('src', bookCitem[1]);-->
+<!--//right book 1-->
+<!--$("#rightbook1").attr("name", bookRImgs);-->
+<!--$("[name='bookRitem']").attr("src", bookRitem);-->
+<!--$('img[src="src5"]').attr('src', bookRitem[0]);-->
+<!--//right book 2-->
+<!--$("#rightbook2").attr("name", bookRImgs);-->
+<!--$("[name='bookRitem']").attr("src", bookRitem);-->
+<!--$('img[src="src6"]').attr('src', bookRitem[1]);-->
+
+<!--//left book 1-->
+<!--$("#leftbook3").attr("name", bookLImgs);-->
+<!--$("[name='bookLitem']").attr("src", bookLitem);-->
+<!--$('img[src="src7"]').attr('src', bookLitem[2]);-->
+<!--//left book 2-->
+<!--$("#leftbook2").attr("name", bookLImgs);-->
+<!--$("[name='bookLitem']").attr("src", bookLitem);-->
+<!--$('img[src="src8"]').attr('src', bookLitem[3]);-->
+<!--//center book 1-->
+<!--$("#centerbook1").attr("name", bookCImgs);-->
+<!--$("[name='bookCitem']").attr("src", bookCitem);-->
+<!--$('img[src="src9"]').attr('src', bookCitem[2]);-->
+<!--//center book 2-->
+<!--$("#centerbook2").attr("name", bookCImgs);-->
+<!--$("[name='bookCitem']").attr("src", bookCitem);-->
+<!--$('img[src="src10"]').attr('src', bookCitem[3]);-->
+<!--//right book 1-->
+<!--$("#rightbook1").attr("name", bookRImgs);-->
+<!--$("[name='bookRitem']").attr("src", bookRitem);-->
+<!--$('img[src="src11"]').attr('src', bookRitem[2]);-->
+<!--//right book 2-->
+<!--$("#rightbook2").attr("name", bookRImgs);-->
+<!--$("[name='bookRitem']").attr("src", bookRitem);-->
+<!--$('img[src="src12"]').attr('src', bookRitem[3]);-->
+
+
+<!--</script>-->
