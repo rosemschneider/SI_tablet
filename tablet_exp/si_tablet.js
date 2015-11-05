@@ -156,49 +156,110 @@ var bookQuants = ["some", "all", "none"];
 
 //-----items and names -----
 //first, load all the images and names in the same order
-var allimages = ["donut", "peach", "pear", "popcorn",
-				"popsicle", "strawberry", "mitten", "sock", "zipper",
-				"chicken", "duck", "goat", "penguin", "pig", "tiger"];
-var allnames = ["donut", "peach", "pear", "popcorn", 
-				"popsicle", "strawberry", "mitten", "sock", "zipper",
-				"chicken", "duck", "goat", "penguin", "pig", "tiger"];
+var foods = ["carrot", "cake", "cookie", "pizza", "apple", "banana",
+			"orange", "pears", "strawberries","pretzel", "popsicle", "donut"];
+var animals = ["dog", "cat", "bird", "horse", "cow", "sheep", "tiger", "lion",
+			"bear", "frog", "turtle", "fish", "giraffe", "elephant", "monkey", "pig",
+			"goat", "duck", "penguin", "tiger", "chicken"];
+var clothing = ["hat", "shoe", "necklace", "watch", "glasses", "purse", "dress", "shirt",
+			"shorts", "sock", "mitten", "zipper"];
+var toys = ["ballon", "book", "ball", "pencil", "scissor", "paintbrush", "bell", "drum", "guitar",
+			"boat", "bucket", "bike", "crayon", "teddybear", "block"];
+var misc = ["car", "train", "firetruck", "toothbrush", "key", "comb", "plate", "cup", "spoon",
+			"clock", "lamp", "phone", "flower", "butterfly", "bee", "map", "bus", "traffic",
+			"present", "cupcake", "party_hat", "tree", "barn", "fence", "chair", "house",
+			"table", "plane", "stroller", "fork"];
+
+//shuffle these arrays
+food = shuffle(food);
+animals = shuffle(animals);
+clothing = shuffle(clothing);
+toys = shuffle(toys);
+misc = shuffle(misc);
+
+//now slice them into 3 per trial
+//note that this contains ALL the items in the study - 90 total
+//this is done this way to make sure that all the images stay in the same category
+var trialItems = [
+	food.slice(0, 3),
+	food.slice(3, 6),
+	food.slice(6, 9),
+	food.slice(9, 12),
+	animals.slice(0, 3),
+	animals.slice(3, 6),
+	animals.slice(6, 9),
+	animals.slice(9, 12),
+	animals.slice(12, 15),
+	animals.slice(15, 18),
+	animals.slice(18, 21),
+	clothing.slice(0, 3),
+	clothing.slice(3, 6),
+	clothing.slice(6, 9),
+	clothing.slice(9, 12),
+	toys.slice(0, 3),
+	toys.slice(3, 6),
+	toys.slice(6, 9),
+	toys.slice(9, 12),
+	toys.slice(12, 15),
+	misc.slice(0, 3),
+	misc.slice(3, 6),
+	misc.slice(6, 9),
+	misc.slice(9, 12),
+	misc.slice(12, 15),
+	misc.slice(15, 18),
+	misc.slice(18, 21),
+	misc.slice(21, 24),
+	misc.slice(24, 27),
+	misc.slice(27, 30)
+];
+
+//now shuffle that list to randomize trials
+itemList = shuffle(itemList);
+
+//
+//var allimages = ["donut", "peach", "pear", "popcorn",
+//				"popsicle", "strawberry", "mitten", "sock", "zipper",
+//				"chicken", "duck", "goat", "penguin", "pig", "tiger"];
+//var allnames = ["donut", "peach", "pear", "popcorn",
+//				"popsicle", "strawberry", "mitten", "sock", "zipper",
+//				"chicken", "duck", "goat", "penguin", "pig", "tiger"];
 
 //then make an array of numbers from 0 to the length of the images-1 (for indexing)
-var itemNums = [];
-for (var i = 0; i <= (allimages.length-1); i++) {
-    itemNums.push(i);
-}
+//var itemNums = [];
+//for (var i = 0; i <= (allimages.length-1); i++) {
+//    itemNums.push(i);
+//}
 
 //now shuffle that array 
-itemNums = shuffle(itemNums);
+//itemNums = shuffle(itemNums);
 
 //create empty arrays for the trial images and trial names
-var trialImgs = [];
-var trialNames = [];
+//var trialImgs = [];
+//var trialNames = [];
 
 //using this array of numbers to index both the names and the images
 //build up the trials with their 3 items and names,
 // maintaining random order in itemNums
-for (var i = 0; i <= allimages.length-1; i += 3) {
-	trialImgs.push(allimages[itemNums[i]]);
-	trialImgs.push(allimages[itemNums[i+1]]);
-	trialImgs.push(allimages[itemNums[i+2]]);
-
-	trialNames.push(allnames[itemNums[i]]);
-	trialNames.push(allnames[itemNums[i+1]]);
-	trialNames.push(allnames[itemNums[i+2]]);
-}
+//for (var i = 0; i <= allimages.length-1; i += 3) {
+//	trialImgs.push(allimages[itemNums[i]]);
+//	trialImgs.push(allimages[itemNums[i+1]]);
+//	trialImgs.push(allimages[itemNums[i+2]]);
+//
+//	trialNames.push(allnames[itemNums[i]]);
+//	trialNames.push(allnames[itemNums[i+1]]);
+//	trialNames.push(allnames[itemNums[i+2]]);
+//}
 
 // //slice those numbers
 // //this is taking 3 random images for each trial
 // we will index the trial items by the trial number
-var trialItems = [
- 	trialImgs.slice(0, 3),
-	trialImgs.slice(3, 6),
- 	trialImgs.slice(6, 9),
- 	trialImgs.slice(9, 12),
- 	trialImgs.slice(12, 15)
- ];
+//var trialItems = [
+// 	trialImgs.slice(0, 3),
+//	trialImgs.slice(3, 6),
+// 	trialImgs.slice(6, 9),
+// 	trialImgs.slice(9, 12),
+// 	trialImgs.slice(12, 15)
+// ];
 
 
 //--other parameters--
@@ -221,16 +282,7 @@ var experiment = {
 	//input at beginning of experiment
 	trialNum: 0,
 	//trial number - this is important because the trial number will be used to index array of trial type
-	item: "",
-	//name of the item that child is queried on
-	trialType: "",
-	//quantifier name that child is queried on
-	side: "",
-	////whether the child picked the left (L), center (C), or the right (R) picture
-	selectionType: "",
-	//the quantifier selection child made
-	response: "",
-	//whether the response was the correct response (Y) or the incorrect response (N)
+	//what number trial you're one
 	date: getCurrentDate(),
 	//the date of the experiment
 	timestamp: getCurrentTime(),
@@ -278,12 +330,10 @@ var experiment = {
 	//},
 
 	test: function () {
-		$("#stage").hide();
-		document.body.style.background = "black";
-		//determines the trial type of this trial
-		//this is indexing the quantifier with the trial number
-		//var trialType = trialQuants[trialNum];
-
+		prompt = "";
+		//name of the item that child is queried on
+		trialType = "";
+		//quantifier name that child is queried on
 		bookL = "";
 		//quantifier of book 1 - left
 		bookC = "";
@@ -310,7 +360,19 @@ var experiment = {
 		//the name of the images for quantifier "some"
 		noneItems = [];
 		//the name of the images for quantifier "none"
-		trialNum = 0;
+		side = "";
+		//whether the child picked the left (L), center (C), or the right (R) picture
+		selectionType = "";
+		//the quantifier selection child made
+		response = "";
+		//whether the response was the correct response (Y) or the incorrect response (N)
+
+		$("#stage").hide();
+		document.body.style.background = "white";
+
+		//determines the trial type of this trial
+		//this is indexing the quantifier with the trial number
+		var trialType = trialQuants[trialNum];
 
 		//determines which quantifier is assigned to which book
 		//this happens in every trial
@@ -327,29 +389,39 @@ var experiment = {
 
 		//This is assigning the books the particular images based on their quantifiers
 		//this creates an array of four items
+
 		//book left
 		if (bookL == "all") {
 			bookLImgs = [itemList[0], itemList[0], itemList[0], itemList[0]];
+			allItems = bookLImgs;
 		} else if (bookL == "some") {
 			bookLImgs = shuffle([itemList[0], itemList[0], itemList[1], itemList[1]]);
+			someItems = bookLImgs;
 		} else {
 			bookLImgs = [itemList[2], itemList[2], itemList[2], itemList[2]];
+			noneItems = bookLImgs;
 		}
 		//book center
 		if (bookC == "all") {
 			bookCImgs = [itemList[0], itemList[0], itemList[0], itemList[0]];
+			allItems = bookCImgs;
 		} else if (bookC == "some") {
 			bookCImgs = shuffle([itemList[0], itemList[0], itemList[1], itemList[1]]);
+			someItems = bookCImgs;
 		} else {
 			bookCImgs = [itemList[2], itemList[2], itemList[2], itemList[2]];
+			noneItems = bookCImgs;
 		}
 		//book right
 		if (bookR == "all") {
 			bookRImgs = [itemList[0], itemList[0], itemList[0], itemList[0]];
+			allItems = bookRImgs;
 		} else if (bookR == "some") {
 			bookRImgs = shuffle([itemList[0], itemList[0], itemList[1], itemList[1]]);
+			someItems = bookRImgs;
 		} else {
 			bookRImgs = [itemList[2], itemList[2], itemList[2], itemList[2]];
+			noneItems = bookRImgs;
 		}
 
 		//This is getting the file names for the actual images
@@ -364,6 +436,16 @@ var experiment = {
 			bookRitem.push("images/" + bookRImgs[i] + ".png");
 		}
 
+		//here we are determining the item queried (prompt) in each trial
+		//this is dependent on the quantifier
+		//note that this is for only all, none, and ambig. 'some' trials
+		if (trialType == "all" || trialType == "some") {
+			prompt = itemList[0];
+		}
+		else {
+			prompt = itemList[2];
+		}
+
 		//now we are going to build the table in HTML
 		//this part takes the item names above, and, writes HTML script to show the images
 		var objects_html = "";
@@ -371,17 +453,17 @@ var experiment = {
 		objects_html += '<td align="center"><img class="pic" id= "leftbook1" img src="src"/>';
 		objects_html += '<td align="center"><img class="pic" id="leftbook2" img src="src2"/>';
 		objects_html += '<td align="center"><img class="pic" id="centerbook1" img src="src3"/>';
-		objects_html +=	'<td align="center"><img class="pic" id="centerbook2" img src="src4">';
-		objects_html +=	'<td align="center"><img class="pic" id="rightbook1" img src="src5"/>';
+		objects_html += '<td align="center"><img class="pic" id="centerbook2" img src="src4">';
+		objects_html += '<td align="center"><img class="pic" id="rightbook1" img src="src5"/>';
 		objects_html += '<td align="center"><img class="pic" id="rightbook2" img src="src6"/>';
 		objects_html += '</td>';
 		objects_html += '</tr><tr>';
 		objects_html += '<td align="center"><img class="pic" id= "leftbook3" img src="src7"/>';
-		objects_html +=	'<td align="center"><img class="pic" id="leftbook4" img src="src8"/>';
+		objects_html += '<td align="center"><img class="pic" id="leftbook4" img src="src8"/>';
 		objects_html += '<td align="center"><img class="pic" id="centerbook3" img src="src9"/>';
 		objects_html += '<td align="center"><img class="pic" id="centerbook4" img src="src10">';
-		objects_html +=	'<td align="center"><img class="pic" id="rightbook3" img src="src11"/>';
-		objects_html +=	'<td align="center"><img class="pic" id="rightbook4" img src="src12"/>;
+		objects_html += '<td align="center"><img class="pic" id="rightbook3" img src="src11"/>';
+		objects_html += '<td align="center"><img class="pic" id="rightbook4" img src="src12"/>;
 		objects_html += '</tr></table>';
 		$("#objects").html(objects_html);
 
@@ -411,32 +493,39 @@ var experiment = {
 		$("[name='bookRitem']").attr("src", bookRitem);
 		$('img[src="src6"]').attr('src', bookRitem[1]);
 
-		//left book 1
+		//left book 3
 		$("#leftbook3").attr("name", bookLImgs);
 		$("[name='bookLitem']").attr("src", bookLitem);
 		$('img[src="src7"]').attr('src', bookLitem[2]);
-		//left book 2
+		//left book 4
 		$("#leftbook2").attr("name", bookLImgs);
 		$("[name='bookLitem']").attr("src", bookLitem);
 		$('img[src="src8"]').attr('src', bookLitem[3]);
-		//center book 1
+		//center book 3
 		$("#centerbook1").attr("name", bookCImgs);
 		$("[name='bookCitem']").attr("src", bookCitem);
 		$('img[src="src9"]').attr('src', bookCitem[2]);
-		//center book 2
+		//center book 4
 		$("#centerbook2").attr("name", bookCImgs);
 		$("[name='bookCitem']").attr("src", bookCitem);
 		$('img[src="src10"]').attr('src', bookCitem[3]);
-		//right book 1
+		//right book 3
 		$("#rightbook1").attr("name", bookRImgs);
 		$("[name='bookRitem']").attr("src", bookRitem);
 		$('img[src="src11"]').attr('src', bookRitem[2]);
-		//right book 2
+		//right book 4
 		$("#rightbook2").attr("name", bookRImgs);
 		$("[name='bookRitem']").attr("src", bookRitem);
 		$('img[src="src12"]').attr('src', bookRitem[3]);
 
 		$("#stage").fadeIn();
+
+		//audio goes here
+
+		//get response goes here
+
+		//incrementing the trial number
+		trialNum++;
 
 
 		//  		// Create the object table (tr=table row; td= table data)
@@ -518,7 +607,7 @@ var experiment = {
 		// 	$(document.getElementById(picID)).css('border', "solid 8px red");
 
 
-	}
+	},
 }
 
 
