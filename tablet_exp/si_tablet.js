@@ -158,13 +158,13 @@ var bookQuants = ["some", "all", "none"];
 //-----items and names -----
 //first, load all the images and names in the same order
 var food = ["carrot", "cake", "cookie", "pizza", "apple", "banana",
-			"orange", "pears", "strawberries","pretzel", "popsicle", "donut"];
+			"orange", "pear", "strawberry","pretzel", "popsicle", "donut"];
 var animals = ["dog", "cat", "bird", "horse", "cow", "sheep", "tiger", "lion",
 			"bear", "frog", "turtle", "fish", "giraffe", "elephant", "monkey", "pig",
 			"goat", "duck", "penguin", "tiger", "chicken"];
 var clothing = ["hat", "shoe", "necklace", "watch", "glasses", "purse", "dress", "shirt",
 			"shorts", "sock", "mitten", "zipper"];
-var toys = ["ballon", "book", "ball", "pencil", "scissor", "paintbrush", "bell", "drum", "guitar",
+var toys = ["balloon", "book", "soccer", "pencil", "scissors", "paintbrush", "bell", "drum", "guitar",
 			"boat", "bucket", "bike", "crayon", "teddybear", "block"];
 var misc = ["car", "train", "firetruck", "toothbrush", "key", "comb", "plate", "cup", "spoon",
 			"clock", "lamp", "phone", "flower", "butterfly", "bee", "map", "bus", "traffic",
@@ -264,6 +264,9 @@ trialItems = shuffle(trialItems);
 
 
 //--other parameters--
+//keeps track of the number of trial you've done
+var trialCounter = 0;
+var counter = 0;
 
 //amount of white space between trials
 var normalpause = 1500;
@@ -396,7 +399,11 @@ var experiment = {
 			$("#checkMessage").html('<font color="red">You must input a subject ID</font>');
 			return;
 		}
+
 		experiment.subid = document.getElementById("subjectID").value;
+		if (experiment.subid == 1) {
+			experiment.test();
+		}
 		experiment.training(0);
 	},
 
@@ -417,8 +424,6 @@ var experiment = {
 			$('body').css('background-image', 'images/background.png');
 		});
 
-		var counter = 0;
-
 		//determines the trial type of this trial
 		//this is indexing the quantifier with the trial number
 		var trialType = trialQuants[counter];
@@ -429,7 +434,7 @@ var experiment = {
 		bookL = bookQuants[0];
 		bookC = bookQuants[1];
 		bookR = bookQuants[2];
-
+		
 		//determine the trial type - the is indexing the shuffled list of trial quantifiers with the number of the trial
 		trialType = trialQuants[counter];
 
@@ -505,23 +510,35 @@ var experiment = {
 		//now we are going to build the table in HTML
 		//this part takes the item names above, and, writes HTML script to show the images
 		var objects_html = "";
-		objects_html += '<table align = "center" cellpadding="30"><tr></tr><tr>';
+		objects_html += '<table align = "center" table id = "leftbook" cellpadding="10"><tr></tr><tr>';
 		objects_html += '<td align="center"><img class="pic" id= "leftbook1" img src="src"/>';
 		objects_html += '<td align="center"><img class="pic" id="leftbook2" img src="src2"/>';
-		objects_html += '<td align="center"><img class="pic" id="centerbook1" img src="src3"/>';
-		objects_html += '<td align="center"><img class="pic" id="centerbook2" img src="src4">';
-		objects_html += '<td align="center"><img class="pic" id="rightbook1" img src="src5"/>';
-		objects_html += '<td align="center"><img class="pic" id="rightbook2" img src="src6"/>';
 		objects_html += '</td>';
 		objects_html += '</tr><tr>';
 		objects_html += '<td align="center"><img class="pic" id= "leftbook3" img src="src7"/>';
 		objects_html += '<td align="center"><img class="pic" id="leftbook4" img src="src8"/>';
+		objects_html += '</tr></table>';
+
+		objects_html += '<table align = "center" table id = "centerbook" cellpadding="10"><tr></tr><tr>';
+		objects_html += '<td align="center"><img class="pic" id="centerbook1" img src="src3"/>';
+		objects_html += '<td align="center"><img class="pic" id="centerbook2" img src="src4">';
+		objects_html += '</td>';
+		objects_html += '</tr><tr>';
 		objects_html += '<td align="center"><img class="pic" id="centerbook3" img src="src9"/>';
 		objects_html += '<td align="center"><img class="pic" id="centerbook4" img src="src10">';
+		objects_html += '</tr></table>';
+
+		objects_html += '<table align = "center" table id = "rightbook" cellpadding="10"><tr></tr><tr>';
+		objects_html += '<td align="center"><img class="pic" id="rightbook1" img src="src5"/>';
+		objects_html += '<td align="center"><img class="pic" id="rightbook2" img src="src6"/>';
+		objects_html += '</td>';
+		objects_html += '</tr><tr>';
 		objects_html += '<td align="center"><img class="pic" id="rightbook3" img src="src11"/>';
 		objects_html += '<td align="center"><img class="pic" id="rightbook4" img src="src12"/>';
 		objects_html += '</tr></table>';
 		$("#objects").html(objects_html);
+
+
 		//show the correct images
 		//left book 1
 		$("#leftbook1").attr("name", bookLImgs);
@@ -585,7 +602,6 @@ var experiment = {
 			//disable subsequent clicks once the participant has made their choice
 			clickDisabled = true;
 
-			experiment.trialNum = counter;
 			//time the participant clicked - the time the audio began - the amount of time between the beginning of the audio and the
 			//onset of the word
 			//commented now until the audio data is ready
@@ -611,31 +627,46 @@ var experiment = {
 				experiment.response = "N";
 			}
 
+			counter++;
+			experiment.trialNum = counter;
+			alert(experiment.trialType);
+			alert(experiment.selectionType);
+			alert(experiment.response);
+
 			//experiment.processOneRow();
 
 			//incrementing the trial number
-			counter++;
+			//experiment.processOneRow();
+
+			//if (type == "practice") {
+			//	practiceCounter++;
+			//} else if (type == "exp") {
+			//	trialCounter++;
+			//}
 
 			//set the timeout
 			setTimeout(function () {
 				$("#stage").fadeOut();
 
 				//there are no more trials for the experiment to run
-				if (counter === numTrials + 1) {
+				if (counter == numTrials) {
 					experiment.end();
-					return;
+				} else {
+					experiment.test();
 				}
 			});
 		});
 	},
 
 	//concatenates all experimental variables into a string which represents one "row" of data in the eventual csv
-	//processOneRow: function() {
-	//	var dataForTrial = experiment.subid;
-	//	dataForTrial += "," + experiment.trialNum + "," + experiment.date + "," + experiment.timestamp + experiment.prompt + "," + experiment.trialType + "," + experiment.reactiontime;
-	//	dataForTrial += "," + experiment.bookL + "," + experiment.bookC + "," + experiment.bookR + "," + experiment.bookLImgs + "," + experiment.bookCImgs;
-	//	dataForTrial += "," + experiment.bookRImgs + "," + experiment.bookLitem + "," + experiment.bookCitem + "," + experiment.bookRitem + "," + experiment.allItems;
-	//	dataForTrial += "," + experiment.someItems + "," + experiment.noneItems + "," + experiment.itemList + "," + experiment.side + "," + experiment.response + "," + experiment.selectionType + "\n";
-	//	$.post("http://langcog.stanford.edu/cgi-bin/TABLET/tabletstudysave.php", {postresult_string : dataForTrial});
-	//},
+	processOneRow: function() {
+		var dataForTrial = experiment.subid;
+		dataForTrial += "," + experiment.trialNum + "," + experiment.date + "," + experiment.timestamp + experiment.prompt + "," + experiment.trialType + "," + experiment.reactiontime;
+		dataForTrial += "," + experiment.bookL + "," + experiment.bookC + "," + experiment.bookR + "," + experiment.bookLImgs + "," + experiment.bookCImgs;
+		dataForTrial += "," + experiment.bookRImgs + "," + experiment.bookLitem + "," + experiment.bookCitem + "," + experiment.bookRitem + "," + experiment.allItems;
+		dataForTrial += "," + experiment.someItems + "," + experiment.noneItems + "," + experiment.itemList + "," + experiment.side + "," + experiment.response + "," + experiment.selectionType + "\n";
+		$.post("http://langcog.stanford.edu/cgi-bin/SI_tablet/tabletstudysave.php", {postresult_string : dataForTrial});
+	},
+
+
 }

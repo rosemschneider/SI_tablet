@@ -55,9 +55,87 @@ button:active {
     font-weight: bold;
 }
 
-#bgimg{
-    background-image: url('https://langcog.stanford.edu/expts/SI_tablet/background.png');
-    width: 100%;
+#leftbook1 {
+    width: 85px;
     height: auto;
-    max-width: 1920px;
+}
+
+#leftbook2 {
+    width: 85px;
+    height: auto;
+}
+#leftbook3 {
+    width: 85px;
+    height: auto;
+}
+#leftbook4 {
+    width: 85px;
+    height: auto;
+}
+#centerbook1 {
+    width: 85px;
+    height: auto;
+}
+#centerbook2 {
+    width: 85px;
+    height: auto;
+}
+#centerbook3 {
+    width: 85px;
+    height: auto;
+}
+#centerbook4 {
+    width: 85px;
+    height: auto;
+}
+#rightbook1 {
+    width: 85px;
+    height: auto;
+}
+#rightbook2 {
+    width: 85px;
+    height: auto;
+}
+#rightbook3 {
+    width: 85px;
+    height: auto;
+}
+#rightbook4 {
+    width: 85px;
+    height: auto;
+}
+
+#leftbook {
+    position: absolute;
+    display:inline;
+    left: 30px;
+    top: 155px;
+
+}
+
+#centerbook {
+    position: absolute;
+    display:inline;
+    left: 485px;
+    top: 155px;
+
+}
+
+#rightbook {
+    position: absolute;
+    display:inline;
+    left: 940px;
+    top: 155px;
+}
+
+
+#objects {
+    background-image: url('images/background.png');
+    background-repeat: no-repeat;
+    background-position: right top;
+}
+
+.test {
+    height: 871px;
+    width: 1164px;
 }
