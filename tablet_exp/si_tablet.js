@@ -132,11 +132,6 @@ for (i = 0; i<dots.length; i++) {
 // var practiceImgs = ["tv", "couch", "fridge"];
 // var practiceNames = ["tv", "couch", "fridge"];
 
-//--now, experiment trials--
-//keeps track of trial you're on
-var trialCounter = 0;
-var numTrials = 3;
-
 //number of images and words in each trial
 // var numTrialImgs = 15;
 // var numTrialWords = 1;
@@ -144,10 +139,20 @@ var numTrials = 3;
 //------randomize trial types---------
 //first, create an array of the number of quantifiers used in the study
 //note: this will be much larger (eventually 33 quantifiers)
-var trialQuants = ["some", "all", "none"];
+var trialQuants = ["some", "some", "some", "some", "some",
+					"some", "some", "some", "some", "some",
+					"all", "all", "all", "all", "all",
+					"all", "all", "all", "all", "all",
+					"none", "none", "none", "none", "none",
+					"none", "none", "none", "none", "none"];
 //shuffle these quantifiers
 //We will index this array based on our trial number: this will determine the trial type
 trialQuants = shuffle(trialQuants);
+
+//--now, experiment trials--
+//keeps track of trial you're on
+var numTrials = 30;
+
 
 
 //-----book covers------
@@ -167,7 +172,7 @@ var clothing = ["hat", "shoe", "necklace", "watch", "glasses", "purse", "dress",
 var toys = ["balloon", "book", "soccer", "pencil", "scissors", "paintbrush", "bell", "drum", "guitar",
 			"boat", "bucket", "bike", "crayon", "teddybear", "block"];
 var misc = ["car", "train", "firetruck", "toothbrush", "key", "comb", "plate", "cup", "spoon",
-			"clock", "lamp", "phone", "flower", "butterfly", "bee", "map", "bus", "traffic",
+			"clock", "lamp", "phone", "flower", "butterfly", "bee", "map", "bus", "trafficlight",
 			"present", "cupcake", "party_hat", "tree", "barn", "fence", "chair", "house",
 			"table", "plane", "stroller", "fork"];
 
@@ -292,8 +297,6 @@ var experiment = {
 	timestamp: getCurrentTime(),
 	prompt: "",
 	//name of the item that child is queried on
-	trialType: "",
-	//quantifier name that child is queried on
 	bookL: "",
 	//quantifier of book 1 - left
 	bookC: "",
@@ -424,9 +427,13 @@ var experiment = {
 			$('body').css('background-image', 'images/background.png');
 		});
 
+		//reset selection type
+		experiment.selectionType = "";
+
 		//determines the trial type of this trial
 		//this is indexing the quantifier with the trial number
-		var trialType = trialQuants[counter];
+		trialType = trialQuants[experiment.trialNum];
+		alert(trialType);
 
 		//determines which quantifier is assigned to which book
 		//this happens in every trial
@@ -434,12 +441,9 @@ var experiment = {
 		bookL = bookQuants[0];
 		bookC = bookQuants[1];
 		bookR = bookQuants[2];
-		
-		//determine the trial type - the is indexing the shuffled list of trial quantifiers with the number of the trial
-		trialType = trialQuants[counter];
 
 		//get the trial names for this trial - we are referencing this with the number of the trial we're on
-		itemList = trialItems[counter];
+		itemList = trialItems[experiment.trialNum];
 
 		//This is assigning the books the particular images based on their quantifiers
 		//this creates an array of four items
@@ -501,10 +505,10 @@ var experiment = {
 		//this is dependent on the quantifier
 		//note that this is for only all, none, and ambig. 'some' trials
 		if (trialType == "all" || trialType == "some") {
-			prompt = itemList[0];
+			experiment.prompt = itemList[0];
 		}
 		else {
-			prompt = itemList[2];
+			experiment.prompt = itemList[2];
 		}
 
 		//now we are going to build the table in HTML
@@ -621,7 +625,7 @@ var experiment = {
 			}
 
 			//check if the child got the trial correct
-			if (experiment.selectionType === experiment.trialType) {
+			if (experiment.selectionType === trialType) {
 				experiment.response = "Y";
 			} else {
 				experiment.response = "N";
@@ -629,11 +633,8 @@ var experiment = {
 
 			counter++;
 			experiment.trialNum = counter;
-			alert(experiment.trialType);
-			alert(experiment.selectionType);
-			alert(experiment.response);
 
-			//experiment.processOneRow();
+			experiment.processOneRow();
 
 			//incrementing the trial number
 			//experiment.processOneRow();
@@ -661,12 +662,10 @@ var experiment = {
 	//concatenates all experimental variables into a string which represents one "row" of data in the eventual csv
 	processOneRow: function() {
 		var dataForTrial = experiment.subid;
-		dataForTrial += "," + experiment.trialNum + "," + experiment.date + "," + experiment.timestamp + experiment.prompt + "," + experiment.trialType + "," + experiment.reactiontime;
-		dataForTrial += "," + experiment.bookL + "," + experiment.bookC + "," + experiment.bookR + "," + experiment.bookLImgs + "," + experiment.bookCImgs;
-		dataForTrial += "," + experiment.bookRImgs + "," + experiment.bookLitem + "," + experiment.bookCitem + "," + experiment.bookRitem + "," + experiment.allItems;
-		dataForTrial += "," + experiment.someItems + "," + experiment.noneItems + "," + experiment.itemList + "," + experiment.side + "," + experiment.response + "," + experiment.selectionType + "\n";
+		dataForTrial += "," + experiment.trialNum + "," + experiment.date + "," + experiment.timestamp + ","+ experiment.prompt + "," + trialType + "," + experiment.reactiontime;
+		dataForTrial += "," + bookL + "," + bookC + "," + bookR;
+		dataForTrial += "," + bookLitem + "," + bookCitem + "," + bookRitem + "," + allItems;
+		dataForTrial += "," + someItems + "," + noneItems + "," + itemList + "," + experiment.side + "," + experiment.response + "," + experiment.selectionType + "\n";
 		$.post("http://langcog.stanford.edu/cgi-bin/SI_tablet/tabletstudysave.php", {postresult_string : dataForTrial});
 	},
-
-
 }
