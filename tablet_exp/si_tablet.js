@@ -7,36 +7,18 @@ function showSlide(id) {
   $("#"+id).show(); //jquery - element with given id - show
 }
 
-//Handles audio; indexes into the sprite to play the prompt associated with a critical word
-////playPrompt = function(word) {
-////	audioSprite.removeEventListener('timeupdate', handler);
-////	audioSprite.currentTime = spriteData[word].start;
-////	audioSprite.play();
-//
-//	endTime = spriteData[word].end;
-//	if(word.substring(0,4) == "look")
-//		endTime = endTime - 1.2;
-//
-//	handler = function() {
-//		if (this.currentTime >= (endTime)) {
-//			this.pause();
-//		}
-//	};
-//	audioSprite.addEventListener('timeupdate', handler, false);
-//}
+playPrompt = function(word) {
+	audioSprite.removeEventListener('timeupdate',handler);
+	audioSprite.currentTime = spriteData[word].begin;
+	audioSprite.play();
 
-//removes file names
-//trim = function(item) {
-//	var tmp = item;
-//	return tmp.slice(tmp.lastIndexOf("/")+1,tmp.lastIndexOf("."));
-//};
-
-//for critical trials and fillers
-// var images = new Array();
-// for (i = 0; i < allimages.length; i++) {
-// images[i] = new Image();
-// images[i].src = "imgs/" + allimages[i] + ".png";
-// };
+	handler = function() {
+		if (this.currentTime >= spriteData[word].begin + spriteData[word].length) {
+			this.pause();
+		}
+	};
+	audioSprite.addEventListener('timeupdate', handler, false);
+}
 
 //array shuffle function
 shuffle = function (o) { //v1.0
@@ -121,8 +103,8 @@ for (i = 0; i<dots.length; i++) {
 //Basics of the experiment go here
 
 //******for handling sound; see helper function playPrompt(word)
-//var audioSprite = $("#sound_player")[0];
-//var handler;
+var audioSprite = $("#sound_player")[0];
+var handler;
 
 //--first, practice trials--
 // var practiceCounter = 0;
@@ -153,8 +135,6 @@ trialQuants = shuffle(trialQuants);
 //keeps track of trial you're on
 var numTrials = 30;
 
-
-
 //-----book covers------
 //books are bookL, bookC, bookR (left, center, right); 
 //these will be empty variables, and this array of quantifiers will be shuffled at the start of every trial to determine book type
@@ -166,14 +146,14 @@ var food = ["carrot", "cake", "cookie", "pizza", "apple", "banana",
 			"orange", "pear", "strawberry","pretzel", "popsicle", "donut"];
 var animals = ["dog", "cat", "bird", "horse", "cow", "sheep", "tiger", "lion",
 			"bear", "frog", "turtle", "fish", "giraffe", "elephant", "monkey", "pig",
-			"goat", "duck", "penguin", "tiger", "chicken"];
+			"goat", "duck", "penguin", "owl", "chicken"];
 var clothing = ["hat", "shoe", "necklace", "watch", "glasses", "purse", "dress", "shirt",
 			"shorts", "sock", "mitten", "zipper"];
 var toys = ["balloon", "book", "soccer", "pencil", "scissors", "paintbrush", "bell", "drum", "guitar",
 			"boat", "bucket", "bike", "crayon", "teddybear", "block"];
 var misc = ["car", "train", "firetruck", "toothbrush", "key", "comb", "plate", "cup", "spoon",
 			"clock", "lamp", "phone", "flower", "butterfly", "bee", "map", "bus", "trafficlight",
-			"present", "cupcake", "party_hat", "tree", "barn", "fence", "chair", "house",
+			"present", "cupcake", "partyhat", "tree", "barn", "fence", "chair", "house",
 			"table", "plane", "stroller", "fork"];
 
 //shuffle these arrays
@@ -182,6 +162,7 @@ animals = shuffle(animals);
 clothing = shuffle(clothing);
 toys = shuffle(toys);
 misc = shuffle(misc);
+
 
 //now slice them into 3 per trial
 //note that this contains ALL the items in the study - 90 total
@@ -221,51 +202,25 @@ var trialItems = [
 
 //now shuffle that list to randomize trials
 trialItems = shuffle(trialItems);
-
 //
-//var allimages = ["donut", "peach", "pear", "popcorn",
-//				"popsicle", "strawberry", "mitten", "sock", "zipper",
-//				"chicken", "duck", "goat", "penguin", "pig", "tiger"];
-//var allnames = ["donut", "peach", "pear", "popcorn",
-//				"popsicle", "strawberry", "mitten", "sock", "zipper",
-//				"chicken", "duck", "goat", "penguin", "pig", "tiger"];
-
-//then make an array of numbers from 0 to the length of the images-1 (for indexing)
-//var itemNums = [];
-//for (var i = 0; i <= (allimages.length-1); i++) {
-//    itemNums.push(i);
+//makeWordList = function() {
+//	var wordList = [];
+//	for (i = 0; i <= numTrials; i++) {
+//		imgArray = trialItems[i];
+//			wordList.push(trialQuants[i] + imgArray[0]);
+//	}
+//	alert(wordList);
+//	return wordList;
 //}
 
-//now shuffle that array 
-//itemNums = shuffle(itemNums);
 
-//create empty arrays for the trial images and trial names
-//var trialImgs = [];
-//var trialNames = [];
+//get the order of everything in this trial so that we can get the list of words for sprite
+//first, get trial types
+//then match with the correct image name based on that quantifier
+//types is breaking out the three images associated with each trial
 
-//using this array of numbers to index both the names and the images
-//build up the trials with their 3 items and names,
-// maintaining random order in itemNums
-//for (var i = 0; i <= allimages.length-1; i += 3) {
-//	trialImgs.push(allimages[itemNums[i]]);
-//	trialImgs.push(allimages[itemNums[i+1]]);
-//	trialImgs.push(allimages[itemNums[i+2]]);
-//
-//	trialNames.push(allnames[itemNums[i]]);
-//	trialNames.push(allnames[itemNums[i+1]]);
-//	trialNames.push(allnames[itemNums[i+2]]);
-//}
 
-// //slice those numbers
-// //this is taking 3 random images for each trial
-// we will index the trial items by the trial number
-//var trialItems = [
-// 	trialImgs.slice(0, 3),
-//	trialImgs.slice(3, 6),
-// 	trialImgs.slice(6, 9),
-// 	trialImgs.slice(9, 12),
-// 	trialImgs.slice(12, 15)
-// ];
+//now I need to create an array that has each quantifier listed with the appropriate image
 
 
 //--other parameters--
@@ -276,12 +231,9 @@ var counter = 0;
 //amount of white space between trials
 var normalpause = 1500;
 
-//pause after picture chosen, to display red border around picture selected
-var timeafterClick = 1000;
 
-//length of filler (every time fill2 comes up, add 1sec of time)
-var fillerpause = 5000;
 
+//Handles audio; indexes into the sprite to play the prompt associated with a critical word
 
 //-----------------------EXPERIMENT------------------
 showSlide("instructions");
@@ -335,6 +287,7 @@ var experiment = {
 		}, normalpause);
 	},
 
+
 	training: function (dotgame) {
 		var allDots = ["dot_1", "dot_2", "dot_3", "dot_4", "dot_5",
 			"dot_smiley1", "dot_smiley2", "dot_smiley3",
@@ -343,10 +296,14 @@ var experiment = {
 		var dotCount = 5;
 
 		//preload sound
-		//if (dotgame === 0) {
-		//	audioSprite.play();
-		//	audioSprite.pause();
-		//}
+		if (dotgame === 0) {
+			//audioSprite.play();
+			//audioSprite.pause();
+			//audioSprite.currentTime = 200;
+			//alert(audioSprite.currentTime);
+			//audioSprite.play();
+
+		}
 
 		var dotx = [];
 		var doty = [];
@@ -404,10 +361,12 @@ var experiment = {
 		}
 
 		experiment.subid = document.getElementById("subjectID").value;
-		if (experiment.subid == 1) {
+		if (experiment.subid === 1) {
 			experiment.test();
 		}
-		experiment.training(0);
+		else {
+			experiment.training(0);
+		}
 	},
 
 	//the end of the experiment, where the background becomes completely black
@@ -433,7 +392,6 @@ var experiment = {
 		//determines the trial type of this trial
 		//this is indexing the quantifier with the trial number
 		trialType = trialQuants[experiment.trialNum];
-		alert(trialType);
 
 		//determines which quantifier is assigned to which book
 		//this happens in every trial
@@ -444,6 +402,19 @@ var experiment = {
 
 		//get the trial names for this trial - we are referencing this with the number of the trial we're on
 		itemList = trialItems[experiment.trialNum];
+
+		//here we are determining the item queried (prompt) in each trial
+		//note that this is for only all, none, and ambig. 'some' trials
+		experiment.prompt = itemList[0];
+		audioSprite.play();
+		audioSprite.pause();
+
+		//get the words to play in this trial
+		wordList = "";
+		wordList = (trialType + experiment.prompt);
+		alert(itemList, itemList[0]);
+		alert(wordList);
+		alert(spriteData[wordList].begin);
 
 		//This is assigning the books the particular images based on their quantifiers
 		//this creates an array of four items
@@ -501,15 +472,6 @@ var experiment = {
 			bookRitem.push("images/" + bookRImgs[i] + ".png");
 		}
 
-		//here we are determining the item queried (prompt) in each trial
-		//this is dependent on the quantifier
-		//note that this is for only all, none, and ambig. 'some' trials
-		if (trialType == "all" || trialType == "some") {
-			experiment.prompt = itemList[0];
-		}
-		else {
-			experiment.prompt = itemList[2];
-		}
 
 		//now we are going to build the table in HTML
 		//this part takes the item names above, and, writes HTML script to show the images
@@ -596,9 +558,13 @@ var experiment = {
 
 		$("#stage").fadeIn();
 
+		var startTime = (new Date()).getTime();
+		//play the word associated with the trial
+		playPrompt(wordList);
 
-		//get the response
-		clickDisabled = false; //is false now until the audio is done
+
+		var clickDisabled = false;
+		//setTimeout(function() {clickDisabled = false;}, (spriteData[wordList].onset - spriteData[wordList].start)*1000 + 300);
 		//this will be enabled after the audio is done playing
 		$('.pic').bind('click touchstart', function(event) {
 			if (clickDisabled) return;
@@ -609,7 +575,7 @@ var experiment = {
 			//time the participant clicked - the time the audio began - the amount of time between the beginning of the audio and the
 			//onset of the word
 			//commented now until the audio data is ready
-			//experiment.reactiontime = (new Date()).getTime() - startTime - (spriteData[wordList[0]].onset-spriteData[wordList[0]].start)*1000;
+			experiment.reactiontime = (new Date()).getTime() - startTime - (spriteData[wordList].onset - spriteData[wordList].begin)*1000;
 
 			//which book was selected?
 			var picID = $(event.currentTarget).attr('id');
@@ -663,9 +629,9 @@ var experiment = {
 	processOneRow: function() {
 		var dataForTrial = experiment.subid;
 		dataForTrial += "," + experiment.trialNum + "," + experiment.date + "," + experiment.timestamp + ","+ experiment.prompt + "," + trialType + "," + experiment.reactiontime;
-		dataForTrial += "," + bookL + "," + bookC + "," + bookR;
+		dataForTrial += "," + bookL + "," + bookC + "," + bookR + "," + wordList;
 		dataForTrial += "," + bookLitem + "," + bookCitem + "," + bookRitem + "," + allItems;
 		dataForTrial += "," + someItems + "," + noneItems + "," + itemList + "," + experiment.side + "," + experiment.response + "," + experiment.selectionType + "\n";
-		$.post("http://langcog.stanford.edu/cgi-bin/SI_tablet/tabletstudysave.php", {postresult_string : dataForTrial});
+		$.post("https://langcog.stanford.edu/cgi-bin/SI_tablet/tabletstudysave.php", {postresult_string : dataForTrial});
 	},
 }
