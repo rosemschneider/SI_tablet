@@ -1,4 +1,4 @@
-var SpriteData = {
+var spriteData = {
 	someapple: {
 		begin: 0.000,
 		onset: 4.224,
@@ -40,7 +40,7 @@ var SpriteData = {
 		length: 5.500
 	},
 	allcake: {
-		begin: 51.000.
+		begin: 51.000,
 		onset: 55.695,
 		length: 5.500
 	},
@@ -177,8 +177,6 @@ var SpriteData = {
 	allstrawberry: {
 		begin: 214.000,
 		onset: 218.300,
-		length: 5.500,
-	},
-
-
+		length: 5.500
+	}
 };
