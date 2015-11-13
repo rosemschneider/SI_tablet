@@ -359,14 +359,14 @@ var experiment = {
 			$("#checkMessage").html('<font color="red">You must input a subject ID</font>');
 			return;
 		}
-
-		experiment.subid = document.getElementById("subjectID").value;
-		if (experiment.subid === 1) {
-			experiment.test();
-		}
-		else {
-			experiment.training(0);
-		}
+		experiment.test();
+		//experiment.subid = document.getElementById("subjectID").value;
+		//if (experiment.subid === 1) {
+		//	experiment.test();
+		//}
+		//else {
+		//	experiment.training(0);
+		//}
 	},
 
 	//the end of the experiment, where the background becomes completely black
@@ -410,8 +410,8 @@ var experiment = {
 		audioSprite.pause();
 
 		//get the words to play in this trial
-		wordList = "";
-		wordList = (trialType + experiment.prompt);
+		wordList = ("some"+"cake");
+		//wordList = (trialType + experiment.prompt);
 		alert(itemList, itemList[0]);
 		alert(wordList);
 		alert(spriteData[wordList].begin);
