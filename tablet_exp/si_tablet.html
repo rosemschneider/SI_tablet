@@ -3,7 +3,7 @@
     <title>Which book is mine?</title>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
 
-    <script src="sprite_whole.js"></script>
+    <script src="howler.js"></script>
 
     <link rel="stylesheet" href="si_tablet.css" />
     <meta name="viewport" content="initial-scale=1.0" />
@@ -38,15 +38,28 @@
     <center><button type="button" onClick="this.blur(); experiment.preStudy()">Begin</button></center>
 </div>
 
+<!----training trial--->
+<div class="slide" id="stage1">
+    <div id="practice" class = "test">
+        <table align = "center" cellpadding="10"><tr></tr><tr>
+        <td align="center"><img class="pic" id= "leftbookpractice" img src="images/fridge.png"/>
+            <td align="center"><img class="pic" id="centerbookpractice" img src="images/tv.png"/>
+            <td align="center"><img class="pic" id="rightbookpractice" img src="images/sofa.png"/>
+            </tr>
+        </table>
+        <input type="image" id = "continue1" src="images/greenbutton.png" onClick="this.blur(); experiment.test()">
+    </div>
+</div>
+
 <!--main test trials-->
 <div class="slide" id="stage">
 
-
     <div id="objects" class = "test">
     </div> <!--dynamically built in javascript-->
-    <audio id="sound_player">
-        <source src="sprite_foods.mp3" type="audio/mp3">
-    </audio>
+    <input type="image" id = "continue" src="images/greenbutton.png" onClick="this.blur(); experiment.test()">
+    <!--<audio id="sound_player">-->
+        <!--<source src="sprite_whole.mp3" type="audio/mp3">-->
+    <!--</audio>-->
 </div>
 
 <!--practice-->

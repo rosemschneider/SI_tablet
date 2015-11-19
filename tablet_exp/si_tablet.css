@@ -110,7 +110,6 @@ button:active {
     display:inline;
     left: 30px;
     top: 155px;
-
 }
 
 #centerbook {
@@ -118,7 +117,6 @@ button:active {
     display:inline;
     left: 485px;
     top: 155px;
-
 }
 
 #rightbook {
@@ -128,6 +126,27 @@ button:active {
     top: 155px;
 }
 
+#leftbookpractice {
+    position: absolute;
+    width: 200px;
+    height: auto;
+    left: 30px;
+    top: 155px;
+}
+#centerbookpractice {
+    position: absolute;
+    width: 200px;
+    height: auto;
+    left: 490px;
+    top: 155px;
+}
+#rightbookpractice {
+    position: absolute;
+    width: 200px;
+    heigh: auto;
+    left: 945px;
+    top: 155px;
+}
 
 #objects {
     background-image: url('images/background.png');
@@ -135,7 +154,29 @@ button:active {
     background-position: right top;
 }
 
+#practice {
+    background-image: url('images/background.png');
+    background-repeat: no-repeat;
+    background-position: right top;
+}
+
+#continue {
+    position: absolute;
+    width: 100px;
+    height: auto;
+    left: 550px;
+    top: 480px;
+}
+#continue1 {
+    position: absolute;
+    width: 100px;
+    height: auto;
+    left: 550px;
+    top: 480px;
+}
+
 .test {
     height: 871px;
     width: 1164px;
 }
+
