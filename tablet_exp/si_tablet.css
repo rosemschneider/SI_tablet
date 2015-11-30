@@ -56,52 +56,52 @@ button:active {
 }
 
 #leftbook1 {
-    width: 85px;
+    width: 90px;
     height: auto;
 }
 
 #leftbook2 {
-    width: 85px;
+    width: 90px;
     height: auto;
 }
 #leftbook3 {
-    width: 85px;
+    width: 90px;
     height: auto;
 }
 #leftbook4 {
-    width: 85px;
+    width: 90px;
     height: auto;
 }
 #centerbook1 {
-    width: 85px;
+    width: 90px;
     height: auto;
 }
 #centerbook2 {
-    width: 85px;
+    width: 90px;
     height: auto;
 }
 #centerbook3 {
-    width: 85px;
+    width: 90px;
     height: auto;
 }
 #centerbook4 {
-    width: 85px;
+    width: 90px;
     height: auto;
 }
 #rightbook1 {
-    width: 85px;
+    width: 90px;
     height: auto;
 }
 #rightbook2 {
-    width: 85px;
+    width: 90px;
     height: auto;
 }
 #rightbook3 {
-    width: 85px;
+    width: 90px;
     height: auto;
 }
 #rightbook4 {
-    width: 85px;
+    width: 90px;
     height: auto;
 }
 
@@ -109,74 +109,120 @@ button:active {
     position: absolute;
     display:inline;
     left: 30px;
-    top: 155px;
+    top: 115px;
 }
 
 #centerbook {
     position: absolute;
     display:inline;
-    left: 485px;
-    top: 155px;
+    left: 380px;
+    top: 115px;
 }
 
 #rightbook {
     position: absolute;
     display:inline;
-    left: 940px;
-    top: 155px;
+    left:739px;
+    top: 109px;
 }
 
 #leftbookpractice {
     position: absolute;
     width: 200px;
     height: auto;
-    left: 30px;
-    top: 155px;
+    left: 40px;
+    top: 120px;
 }
 #centerbookpractice {
     position: absolute;
     width: 200px;
     height: auto;
-    left: 490px;
-    top: 155px;
+    left: 380px;
+    top: 120px;
 }
 #rightbookpractice {
     position: absolute;
     width: 200px;
     heigh: auto;
-    left: 945px;
-    top: 155px;
+    left: 740px;
+    top: 120px;
 }
 
 #objects {
     background-image: url('images/background.png');
     background-repeat: no-repeat;
-    background-position: right top;
+    background-position: left top;
+    background-size: 960px auto;
 }
 
 #practice {
     background-image: url('images/background.png');
     background-repeat: no-repeat;
-    background-position: right top;
+    background-position: left top;
+    background-size: 960px auto;
+
 }
 
 #continue {
     position: absolute;
     width: 100px;
     height: auto;
-    left: 550px;
-    top: 480px;
+    left: 450px;
+    top: 520px;
 }
 #continue1 {
     position: absolute;
     width: 100px;
     height: auto;
-    left: 550px;
-    top: 480px;
+    left: 450px;
+    top: 520px;
 }
 
 .test {
     height: 871px;
     width: 1164px;
+}
+
+#practice_correct {
+    position: absolute;
+    width: auto;
+    height: 340px;
+    left: 340px;
+    top: 40px;
+}
+
+#left_correct {
+    position: absolute;
+    display: inline;
+    width: auto;
+    height: 340px;
+    left: 1px;
+    top: 40px;
+}
+
+#center_correct {
+    position: absolute;
+    display: inline;
+    width: auto;
+    height: 340px;
+    left: 340px;
+    top: 40px;
+}
+
+#right_correct {
+    position: absolute;
+    display: inline;
+    width: auto;
+    height: 340px;
+    left: 695px;
+    top: 40px;
+}
+
+#friendbutton {
+    position: absolute;
+    width: 100px;
+    height: auto;
+    left: 10px;
+    top: 520px;
 }
 

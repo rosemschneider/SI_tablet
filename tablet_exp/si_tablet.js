@@ -7,6 +7,8 @@ function showSlide(id) {
   $("#"+id).show(); //jquery - element with given id - show
 }
 
+//sound sprite
+//this is in ms!
 var sound = new Howl({
 	// location of the files
 	urls: ['sprite_test.mp3'],
@@ -18,7 +20,7 @@ var sound = new Howl({
 		someapple: [0, 5000],
 		noneapple: [6000, 5675],
 		allapple: [ 12000, 6000],
-		somebana: [19000, 5000],
+		somebanana: [19000, 5000],
 		nonebanana: [25000, 6000],
 		allbanana: [32000, 5500],
 		somecake: [38000, 5500],
@@ -143,7 +145,7 @@ var sound = new Howl({
 		allcup: [727339, 5001],
 		somecupcake: [732341,5000],
 		nonecupcake: [737342, 5029],
-		allcupckae: [742372, 5000],
+		allcupcake: [742372, 5000],
 		somefence: [747372, 5010],
 		nonefence: [752383, 5039],
 		allfence: [757423, 5010],
@@ -204,9 +206,9 @@ var sound = new Howl({
 		sometree: [1033613, 5001],
 		nonetree: [1038615, 5030],
 		alltree: [1043646, 5001],
-		someball: [1048648, 5000],
-		noneball: [1053649, 5029],
-		allball: [1058679, 5000],
+		somesoccer: [1048648, 5000],
+		nonesoccer: [1053649, 5029],
+		allsoccer: [1058679, 5000],
 		someballoon: [1063680, 5010],
 		noneballoon: [1068691, 5039],
 		allballoon: [1073731, 5010],
@@ -216,9 +218,288 @@ var sound = new Howl({
 		somebike: [1093777, 5000],
 		nonebike: [1098778, 5029],
 		allbike: [1103778, 5000],
-		someblocks: [1108779, 4998],
-		noneblocks: [1113778, 5027],
-		allblocks: [1118806, 4998],
+		someblock: [1108779, 4998],
+		noneblock: [1113778, 5027],
+		allblock: [1118806, 4998],
+		someboat: [1123805, 5001],
+		noneboat: [1128807, 5030],
+		allboat: [1133838, 5001],
+		somebook: [1138840, 5000],
+		nonebook: [1143841, 5029],
+		allbook: [1148871, 5000],
+		somebucket: [1153872, 5001],
+		nonebucket: [1158874, 5030],
+		allbucket: [1163905, 5001],
+		somecrayon: [1168907, 5001],
+		nonecrayon: [1173909, 5030],
+		allcrayon: [1178940, 5001],
+		somedrum: [1183942, 5001],
+		nonedrum: [1188944, 5030],
+		alldrum: [1193975, 5001],
+		someguitar: [1198977, 5001],
+		noneguitar: [1203979, 5030],
+		allguitar: [1209010, 5001],
+		somepaintbrush: [1214012, 5001],
+		nonepaintbrush: [1219014, 5030],
+		allpaintbrush: [1224045, 5001],
+		somepencil: [1229047, 5000],
+		nonepencil: [1234048, 5029],
+		allpencil: [1239078, 5000],
+		somescissor: [1244079, 5001],
+		nonescissor: [1249081, 5030],
+		allscissor: [1254112, 5001],
+		someteddybear: [1259114, 5001],
+		noneteddybear: [1264116, 5030],
+		allteddybear: [1269147, 5001],
+		somedress: [1274149, 5000],
+		nonedress: [1279150, 5029],
+		alldress: [1284180, 5000],
+		someglasses: [1289181, 5000],
+		noneglasses: [1294182, 5029],
+		allglasses: [1299212, 5000],
+		somehat: [1304213, 5000],
+		nonehat: [1309214, 5029],
+		allhat: [1314244, 5000],
+		somemitten: [1319245, 5001],
+		nonemitten: [1324247, 5030],
+		allmitten: [1329278, 5001],
+		somenecklace: [1334280, 5051],
+		nonenecklace: [1339332, 5080],
+		allnecklace: [1344413, 5051],
+		somepurse: [1349465, 5000],
+		nonepurse: [1354466, 5029],
+		allpurse: [1359496, 5000],
+		someshirt: [1364496, 5000],
+		noneshirt: [1369497, 5029],
+		allshirt: [1374527, 5000],
+		someshoe: [1379528, 5000],
+		noneshoe: [1384529, 5029],
+		allshoe: [1389559, 5000],
+		someshorts: [1394560, 5001],
+		noneshorts: [1399562, 5030],
+		allshorts: [1404593, 5001],
+		somesock: [1409595, 5000],
+		nonesock: [1414596, 5029],
+		allsock: [1419626, 5000],
+		somewatch: [1424627, 5001],
+		nonewatch: [1429629, 5030],
+		allwatch: [1434660, 5001],
+		somezipper: [1439662, 5000],
+		nonezipper: [1444663, 5029],
+		allzipper: [1449663, 5000],
+		practice: [1454694, 3622],
+		silence: [1458317, 1000]
+	}
+});
+
+
+//this is for getting the reaction times - there is probably a better way to do it
+var time = ({
+	clip: {
+		someapple: [0, 5000],
+		noneapple: [6000, 5675],
+		allapple: [ 12000, 6000],
+		somebanana: [19000, 5000],
+		nonebanana: [25000, 6000],
+		allbanana: [32000, 5500],
+		somecake: [38000, 5500],
+		nonecake: [45000, 5500],
+		allcake: [51000, 5500],
+		somecarrot: [57000, 5500],
+		nonecarrot: [63000, 6000],
+		allcarrot: [70000, 5500],
+		somecookie: [76000, 5000],
+		nonecookie: [82000, 5500],
+		allcookie: [88000, 5500],
+		somedonut: [94000, 5000],
+		nonedonut: [100000, 5500],
+		alldonut: [106000, 5000],
+		someorange: [112000, 5000],
+		noneorange: [118000, 5000],
+		allorange: [124000, 5600],
+		somepear: [130000, 5000],
+		nonepear: [136000, 5000],
+		allpear: [142000, 5500],
+		somepizza: [148000, 5000],
+		nonepizza: [154000, 5000],
+		allpizza: [160000, 5500],
+		somepopsicle: [166000, 5000],
+		nonepopsicle: [172000, 5200],
+		allpopsicle: [178000, 5500],
+		somepretzel: [184000, 5000],
+		nonepretzel: [190000, 5000],
+		allpretzel: [196000, 5500],
+		somestrawberry: [202000, 5200],
+		nonestrawberry: [208000, 5300],
+		allstrawberry: [214000, 5500],
+		somebear: [220000, 5000],
+		nonebear: [226000, 5000],
+		allbear: [232000, 5500],
+		somebird: [238000, 5000],
+		nonebird: [244000, 5000],
+		allbird: [250000, 5500],
+		somecat: [256000, 5000],
+		nonecat: [262000, 5000],
+		allcat: [268000, 5000],
+		somechicken: [274000, 5000],
+		nonechicken: [280000, 5000],
+		allchicken: [286000, 5300],
+		somecow: [292000, 5000],
+		nonecow: [298000, 5200],
+		allcow: [304000, 5000],
+		somedog: [310000, 5000],
+		nonedog: [316000, 5200],
+		alldog: [322000, 5000],
+		someduck: [328000, 5000],
+		noneduck: [334000, 5000],
+		allduck: [340000, 5200],
+		someelephant: [346000, 5000],
+		noneelephant: [352000, 5300],
+		allelephant: [358000, 5000],
+		somefish: [364000, 5000],
+		nonefish: [370000, 5200],
+		allfish: [376000, 5000],
+		somefrog: [382000, 5000],
+		nonefrog: [388000, 5200],
+		allfrog: [394000, 5000],
+		somegiraffe: [400000, 5000],
+		nonegiraffe: [406000, 5200],
+		allgiraffe: [412000, 5000],
+		somegoat: [418000, 5000],
+		nonegoat: [424000, 5200],
+		allgoat: [430000, 5000],
+		somehorse: [436000, 5000],
+		nonehorse: [442000, 5200],
+		allhorse: [448000, 5000],
+		somelion: [454000, 5000],
+		nonelion: [460000, 5200],
+		alllion: [466000, 5200],
+		somemonkey: [472000, 5000],
+		nonemonkey: [478000, 5200],
+		allmonkey: [478000, 5200],
+		someowl: [490000, 5000],
+		noneowl: [496000, 5200],
+		allowl: [502000, 5000],
+		somepenguin: [508000, 5000],
+		nonepenguin: [514000, 5200],
+		allpenguin: [520000, 5000],
+		somepig: [526000, 5000],
+		nonepig: [532000, 5200],
+		allpig: [538000, 5000],
+		somesheep: [544000, 5000],
+		nonesheep: [550000, 5200],
+		allsheep: [556000, 5000],
+		sometiger: [562000, 5000],
+		nonetiger: [568000, 5200],
+		alltiger: [574000, 5000],
+		someturtle: [580000, 5000],
+		noneturtle: [586000, 5200],
+		allturtle: [592000, 5000],
+		somebarn: [597000, 5004],
+		nonebarn: [602005, 5033],
+		allbarn: [607034, 5004],
+		somebee: [612039, 5001],
+		nonebee: [617041, 5030],
+		allbee: [622072, 5001],
+		somebus: [627074, 5001],
+		nonebus: [632076, 5030],
+		allbus: [637107, 5001],
+		somebutterfly: [642109, 5004],
+		nonebutterfly: [647114, 5033],
+		allbutterfly: [652148, 5004],
+		somecar: [657153, 5002],
+		nonecar: [662156, 5031],
+		allcar: [667188, 5002],
+		somechair: [672201, 5001],
+		nonechair: [677203, 5030],
+		allchair: [682234, 5001],
+		someclock: [687236, 5001],
+		noneclock: [692238, 5030],
+		allclock: [697269, 5001],
+		somecomb: [702271, 5001],
+		nonecomb: [707273, 5030],
+		allcomb: [712304, 5001],
+		somecup: [717306, 5001],
+		nonecup: [722308, 5030],
+		allcup: [727339, 5001],
+		somecupcake: [732341,5000],
+		nonecupcake: [737342, 5029],
+		allcupcake: [742372, 5000],
+		somefence: [747372, 5010],
+		nonefence: [752383, 5039],
+		allfence: [757423, 5010],
+		somefiretruck: [762434, 5100],
+		nonefiretruck: [767535, 5129],
+		allfiretruck: [772665, 5100],
+		someflower: [777766, 5001],
+		noneflower: [782768, 5030],
+		allflower: [787799, 5001],
+		somefork: [792801, 4998],
+		nonefork: [797800, 5027],
+		allfork: [802828, 4998],
+		somehouse: [807827, 4998],
+		nonehouse: [812826, 5027],
+		allhouse: [817854, 4998],
+		somekey: [822853, 5003],
+		nonekey: [827857, 5032],
+		allkey: [832890, 5003],
+		somelamp: [837894, 5001],
+		nonelamp: [842896, 5030],
+		alllamp: [847927, 5001],
+		somemap: [852929, 5001],
+		nonemap: [857931, 5030],
+		allmap: [862962, 5001],
+		somepartyhat: [867964, 5001],
+		nonepartyhat: [872966, 5030],
+		allpartyhat: [877997, 5001],
+		somephone: [882999, 5001],
+		nonephone: [888001, 5030],
+		allphone: [893032, 5001],
+		someplane: [898034, 5001],
+		noneplane: [903036, 5030],
+		allplane: [908067, 5001],
+		someplate: [913069, 5004],
+		noneplate: [918074, 5033],
+		allplate: [923108, 5004],
+		somepresent: [928113, 5001],
+		nonepresent: [933115, 5030],
+		allpresent: [938146, 5001],
+		somespoon: [943148, 5001],
+		nonespoon: [948150, 5030],
+		allspoon: [953181, 5001],
+		somestroller: [958083, 5000],
+		nonestroller: [963084, 5029],
+		allstroller: [968114, 5000],
+		sometable: [973115, 5001],
+		nonetable: [978117, 5030],
+		alltable: [983148, 5001],
+		sometoothbrush: [988150, 5009],
+		nonetoothbrush: [993160, 5038],
+		alltoothbrush: [998199, 5009],
+		sometrafficlight: [1003209, 5114],
+		nonetrafficlight: [1008324, 5138],
+		alltrafficlight: [1013463, 5114],
+		sometrain: [1018578, 5001],
+		nonetrain: [1023580, 5030],
+		alltrain: [1028611, 5001],
+		sometree: [1033613, 5001],
+		nonetree: [1038615, 5030],
+		alltree: [1043646, 5001],
+		somesoccer: [1048648, 5000],
+		nonesoccer: [1053649, 5029],
+		allsoccer: [1058679, 5000],
+		someballoon: [1063680, 5010],
+		noneballoon: [1068691, 5039],
+		allballoon: [1073731, 5010],
+		somebell: [1078742, 5001],
+		nonebell: [1083744, 5030],
+		allbell: [1088775, 5001],
+		somebike: [1093777, 5000],
+		nonebike: [1098778, 5029],
+		allbike: [1103778, 5000],
+		someblock: [1108779, 4998],
+		noneblock: [1113778, 5027],
+		allblock: [1118806, 4998],
 		someboat: [1123805, 5001],
 		noneboat: [1128807, 5030],
 		allboat: [1133838, 5001],
@@ -289,26 +570,6 @@ var sound = new Howl({
 	}
 });
 
-// a javascript function that plays any of the sounds defined above
-//function playSound(name){
-//
-
-//	sound.play(name);
-//
-//}
-
-//playPrompt = function(word) {
-//	audioSprite.removeEventListener('timeupdate',handler);
-//	audioSprite.currentTime = spriteData[word].begin;
-//	audioSprite.play();
-//
-//	handler = function() {
-//		if (this.currentTime >= spriteData[word].begin + spriteData[word].length) {
-//			this.pause();
-//		}
-//	};
-//	audioSprite.addEventListener('timeupdate', handler, false);
-//}
 
 //array shuffle function
 shuffle = function (o) { //v1.0
@@ -390,28 +651,9 @@ for (i = 0; i<dots.length; i++) {
 	images[i].src = "dots/" + dots[i] + ".jpg";
 }
 
-//--------------PARAMETERS----------------
-//Basics of the experiment go here
-
-//******for handling sound; see helper function playPrompt(word)
-//var audioSprite = $("#sound_player")[0];
-//var handler;
-
-//--first, practice trials--
-// var practiceCounter = 0;
-
-// var numPractice = 2;
-
-// var practiceImgs = ["tv", "couch", "fridge"];
-// var practiceNames = ["tv", "couch", "fridge"];
-
-//number of images and words in each trial
-// var numTrialImgs = 15;
-// var numTrialWords = 1;
 
 //------randomize trial types---------
 //first, create an array of the number of quantifiers used in the study
-//note: this will be much larger (eventually 33 quantifiers)
 var trialQuants = ["some", "some", "some", "some", "some",
 					"some", "some", "some", "some", "some",
 					"all", "all", "all", "all", "all",
@@ -426,7 +668,6 @@ trialQuants = shuffle(trialQuants);
 //--now, experiment trials--
 //keeps track of trial you're on
 var numTrials = trialQuants.length;
-var numPractice = 1;
 
 //-----book covers------
 //books are bookL, bookC, bookR (left, center, right); 
@@ -495,7 +736,7 @@ var trialItems = [
 //now shuffle that list to randomize trials
 trialItems = shuffle(trialItems);
 
-//preloading
+//preloading images function
 myimages = [];
 function preloading() {
 	for (x = 0; x < preloading.arguments.length; x++) {
@@ -504,6 +745,7 @@ function preloading() {
 	}
 }
 
+//preload all images
 preloading("images/carrot.png", "images/cake.png", "images/cookie.png", "images/pizza.png", "images/apple.png", "images/banana.png",
 	"images/orange.png", "images/pear.png", "images/strawberry.png","images/pretzel.png", "images/popsicle.png", "images/donut.png",
 	"images/dog.png", "images/cat.png", "images/bird.png", "images/horse.png", "images/cow.png", "images/sheep.png", "images/tiger.png",
@@ -517,39 +759,17 @@ preloading("images/carrot.png", "images/cake.png", "images/cookie.png", "images/
 	"images/key.png", "images/comb.png", "images/plate.png", "images/cup.png", "images/spoon.png", "images/clock.png", "images/lamp.png",
 	"images/phone.png", "images/flower.png", "images/butterfly.png", "images/bee.png", "images/map.png", "images/bus.png", "images/trafficlight.png",
 	"images/present.png", "images/cupcake.png", "images/partyhat.png", "images/tree.png", "images/barn.png", "images/fence.png", "images/chair.png",
-	"images/house.png", "images/table.png", "images/plane.png", "images/stroller.png", "images/fork.png");
-//
-//makeWordList = function() {
-//	var wordList = [];
-//	for (i = 0; i <= numTrials; i++) {
-//		imgArray = trialItems[i];
-//			wordList.push(trialQuants[i] + imgArray[0]);
-//	}
-//	alert(wordList);
-//	return wordList;
-//}
-
-
-//get the order of everything in this trial so that we can get the list of words for sprite
-//first, get trial types
-//then match with the correct image name based on that quantifier
-//types is breaking out the three images associated with each trial
-
-
-//now I need to create an array that has each quantifier listed with the appropriate image
+	"images/house.png", "images/table.png", "images/plane.png", "images/stroller.png", "images/fork.png", "images/background.png");
 
 
 //--other parameters--
 //keeps track of the number of trial you've done
-var trialCounter = 0;
 var counter = 0;
 
 //amount of white space between trials
-var normalpause = 1000;
+var normalpause = 2500;
 
 
-
-//Handles audio; indexes into the sprite to play the prompt associated with a critical word
 
 //-----------------------EXPERIMENT------------------
 showSlide("instructions");
@@ -595,6 +815,7 @@ var experiment = {
 	reactiontime: 0,
 	//TODO : add reaction time variable *****
 
+	//the "begin" button page - moves the experiment along after dot game
 	preStudy: function () {
 		document.body.style.background = "white";
 		$("#prestudy").hide();
@@ -603,23 +824,13 @@ var experiment = {
 		}, normalpause);
 	},
 
-
+	//dotgame
 	training: function (dotgame) {
 		var allDots = ["dot_1", "dot_2", "dot_3", "dot_4", "dot_5",
 			"dot_smiley1", "dot_smiley2", "dot_smiley3",
 			"dot_smiley4", "dot_smiley5"];
 		var xcounter = 0;
 		var dotCount = 5;
-
-		//preload sound
-		if (dotgame === 0) {
-			//audioSprite.play();
-			//audioSprite.pause();
-			//audioSprite.currentTime = 200;
-			//alert(audioSprite.currentTime);
-			//audioSprite.play();
-
-		}
 
 		var dotx = [];
 		var doty = [];
@@ -689,23 +900,49 @@ var experiment = {
 		document.body.style.background = "black";
 	},
 
+	repeat: function() {
+		sound.play(wordList);
+	},
+
+	//one practice trial; if child gets it incorrect, repeat the trial
 	train: function () {
 		$("#stage1").hide();
 		$("#continue1").hide();
+		$("#practice_correct").hide();
 		$(document).ready(function() {
 			$('body').css('background-image', 'images/background.png');
 		});
+
 
 		practiceCounter = 0;
 		practiceSide = "";
 		practiceCorrect = "";
 
-		sound.play('practice');
+		//var currentTime = (new Date()).getTime();
+		//if (currentTime > (practiceTime + 1000)) {
+		//	sound.play('practice');
+		//}
+		//else {
+		//	return;
+		//}
+
+		//sound.play('silence');
+		//sound.play('silence');
+		//sound.play('practice');
+
+		wordList = ('practice');
+		setTimeout(function(){
+			sound.play(wordList);
+		}, 2000);
+
+
 
 		$("#stage1").fadeIn();
 
 		//get the response
-		var clickDisabled = false;
+
+		var clickDisabled = true;
+		setTimeout(function() {clickDisabled = false;}, (time.clip.practice[1]));
 		//setTimeout(function() {clickDisabled = false;}, (spriteData[wordList].onset - spriteData[wordList].start)*1000 + 300);
 		//this will be enabled after the audio is done playing
 		$('.pic').bind('click touchstart', function(event) {
@@ -727,6 +964,8 @@ var experiment = {
 			} else if (picID === "centerbookpractice") {
 				practiceSide = "C";
 				practiceCorrect = "Y";
+				$("#practice_correct").show();
+				$("#continue1").show();
 				practiceCounter++;
 			} else {
 				practiceSide = "R";
@@ -736,23 +975,25 @@ var experiment = {
 
 				setTimeout(function () {
 					//there are no more trials for the experiment to run
-					if (practiceCounter === 1) {
-						$("#continue1").show();
-					} else {
+					if (practiceCounter === 0) {
 						experiment.train();
 					}
+					setTimeout(function() {clickDisabled = false;}, (time.clip.practice[1]));
 
 				}, normalpause);
 		});
 	},
 
+
+	//main test trials - 30 trials
 	test: function() {
 		$("#stage1").hide();
 		$("#stage").hide();
 		$("#continue").hide();
 		$("#continue1").hide();
-		//$('body').css('background-image', 'images/background.png')
-		//document.body.style.backgroundImage = "images/background.png";
+		$("#left_correct").hide();
+		$("#center_correct").hide();
+		$("#right_correct").hide()
 		$(document).ready(function() {
 			$('body').css('background-image', 'images/background.png');
 		});
@@ -783,10 +1024,6 @@ var experiment = {
 		//get the words to play in this trial
 		wordList = (trialType + experiment.prompt);
 
-		//wordList = (trialType + experiment.prompt);
-		//alert(itemList, itemList[0]);
-		//alert(wordList);
-		//alert(spriteData[wordList].begin);
 
 		//This is assigning the books the particular images based on their quantifiers
 		//this creates an array of four items
@@ -843,13 +1080,12 @@ var experiment = {
 		for (i = 0; i < bookRImgs.length; i++) {
 			bookRitem.push("images/" + bookRImgs[i] + ".png");
 		}
-		sound.play(wordList);
-		alert(sound.pos());
+
 
 		//now we are going to build the table in HTML
 		//this part takes the item names above, and, writes HTML script to show the images
 		var objects_html = "";
-		objects_html += '<table align = "center" table id = "leftbook" cellpadding="10"><tr></tr><tr>';
+		objects_html += '<table align = "center" table id = "leftbook" cellpadding="5"><tr></tr><tr>';
 		objects_html += '<td align="center"><img class="pic" id= "leftbook1" img src="src"/>';
 		objects_html += '<td align="center"><img class="pic" id="leftbook2" img src="src2"/>';
 		objects_html += '</td>';
@@ -858,7 +1094,7 @@ var experiment = {
 		objects_html += '<td align="center"><img class="pic" id="leftbook4" img src="src8"/>';
 		objects_html += '</tr></table>';
 
-		objects_html += '<table align = "center" table id = "centerbook" cellpadding="10"><tr></tr><tr>';
+		objects_html += '<table align = "center" table id = "centerbook" cellpadding="5"><tr></tr><tr>';
 		objects_html += '<td align="center"><img class="pic" id="centerbook1" img src="src3"/>';
 		objects_html += '<td align="center"><img class="pic" id="centerbook2" img src="src4">';
 		objects_html += '</td>';
@@ -867,7 +1103,7 @@ var experiment = {
 		objects_html += '<td align="center"><img class="pic" id="centerbook4" img src="src10">';
 		objects_html += '</tr></table>';
 
-		objects_html += '<table align = "center" table id = "rightbook" cellpadding="10"><tr></tr><tr>';
+		objects_html += '<table align = "center" table id = "rightbook" cellpadding="5"><tr></tr><tr>';
 		objects_html += '<td align="center"><img class="pic" id="rightbook1" img src="src5"/>';
 		objects_html += '<td align="center"><img class="pic" id="rightbook2" img src="src6"/>';
 		objects_html += '</td>';
@@ -932,35 +1168,42 @@ var experiment = {
 		$("#stage").fadeIn();
 
 		var startTime = (new Date()).getTime();
-		//play the word associated with the trial
+		word = wordList;
+		setTimeout(function(){
+			sound.play(wordList);
+		}, 2000);
+		duration = [time.clip[word][1]];
 
 
-
-		var clickDisabled = false;
-		//setTimeout(function() {clickDisabled = false;}, (spriteData[wordList].onset - spriteData[wordList].start)*1000 + 300);
+		var clickDisabled = true;
+		setTimeout(function() {clickDisabled = false;}, (duration));
 		//this will be enabled after the audio is done playing
 		$('.pic').bind('click touchstart', function(event) {
 			if (clickDisabled) return;
 
-			//disable subsequent clicks once the participant has made their choice
-			clickDisabled = true;
+			////disable subsequent clicks once the participant has made their choice
+			//clickDisabled = true;
 
-			//time the participant clicked - the time the audio began - the amount of time between the beginning of the audio and the
-			//onset of the word
-			//commented now until the audio data is ready
-		//experiment.reactiontime = (new Date()).getTime() - startTime - (sound[wordList] - spriteData[wordList].begin)*1000;
+			experiment.reactiontime = (new Date()).getTime() - startTime - (duration);
 
 			//which book was selected?
 			var picID = $(event.currentTarget).attr('id');
 			if (picID === "leftbook1" || picID === "leftbook2" || picID === "leftbook3" || picID === "leftbook4") {
+				picname = picID;
 				experiment.side = "L";
 				experiment.selectionType += bookL;
+				$("#left_correct").show();
+				$("#continue").show();
 			} else if (picID === "centerbook1" || picID === "centerbook2" || picID === "centerbook3" || picID === "centerbook4") {
 				experiment.side = "C";
 				experiment.selectionType += bookC;
+				$("#center_correct").show();
+				$("#continue").show();
 			} else {
 				experiment.side = "R";
 				experiment.selectionType += bookR;
+				$("#right_correct").show();
+				$("#continue").show();
 			}
 
 			//check if the child got the trial correct
@@ -970,28 +1213,24 @@ var experiment = {
 				experiment.response = "N";
 			}
 
+
+			if (experiment.response == "Y" || "N") {
+				clickDisabled = true;
+			}
+
 			counter++;
 			experiment.trialNum = counter;
 
 			experiment.processOneRow();
 
-			//incrementing the trial number
-			//experiment.processOneRow();
-
-			//if (type == "practice") {
-			//	practiceCounter++;
-			//} else if (type == "exp") {
-			//	trialCounter++;
-			//}
 
 			//set the timeout
 			setTimeout(function () {
 				//there are no more trials for the experiment to run
 				if (counter == numTrials) {
 					experiment.end();
-				} else {
-					$("#continue").show();
 				}
+				setTimeout(function() {clickDisabled = false;}, (duration));
 			}, normalpause);
 		});
 	},

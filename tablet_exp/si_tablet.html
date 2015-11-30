@@ -1,7 +1,7 @@
 <html>
 <head>
     <title>Which book is mine?</title>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
 
     <script src="howler.js"></script>
 
@@ -31,12 +31,15 @@
 
 <div class="slide" id="training"></div>
 
-<!--move to the study-->
-
-<div class="slide" id="prestudy">
-    <br><br><br><br>
-    <center><button type="button" onClick="this.blur(); experiment.preStudy()">Begin</button></center>
+<!--friend slide-->
+<div class = "slide" id = "prestudy">
+    <center><img src = "images/face.png" id = "introface">
+    <p>This is my friend Anna! Let's play a fun guessing game with her books.</p>
+    <p>Anna will give you one hint about the book she's thinking of. If you need to hear her hint again just press the button with Anna on it!</p>
+    <p>Are you ready? Press the button to start!</p>
+    <button type="button" onClick="this.blur(); experiment.preStudy()">Start!</button></center>
 </div>
+
 
 <!----training trial--->
 <div class="slide" id="stage1">
@@ -47,7 +50,9 @@
             <td align="center"><img class="pic" id="rightbookpractice" img src="images/sofa.png"/>
             </tr>
         </table>
+        <img src="images/green_box.png" id = "practice_correct">
         <input type="image" id = "continue1" src="images/greenbutton.png" onClick="this.blur(); experiment.test()">
+        <input type="image" id = "friendbutton" src="images/friendbutton.png" onClick="this.blur(); experiment.repeat()">
     </div>
 </div>
 
@@ -56,7 +61,11 @@
 
     <div id="objects" class = "test">
     </div> <!--dynamically built in javascript-->
+    <img src="images/green_box.png" id = "left_correct">
+    <img src="images/green_box.png" id = "center_correct">
+    <img src="images/green_box.png" id = "right_correct">
     <input type="image" id = "continue" src="images/greenbutton.png" onClick="this.blur(); experiment.test()">
+    <input type="image" id = "friendbutton" src="images/friendbutton.png" onClick="this.blur(); experiment.repeat()">
     <!--<audio id="sound_player">-->
         <!--<source src="sprite_whole.mp3" type="audio/mp3">-->
     <!--</audio>-->
