@@ -294,6 +294,7 @@ var sound = new Howl({
 
 
 //this is for getting the reaction times - there is probably a better way to do it
+//note, this is [start, onset of target noun, duration]
 var time = ({
 	clip: {
 		someapple: [0, 4224, 5000],
@@ -965,7 +966,7 @@ var experiment = {
 				practiceSide = "C";
 				practiceCorrect = "Y";
 				$("#practice_correct").show();
-				$("#continue1").show();
+				//$("#continue1").show();
 				practiceCounter++;
 			} else {
 				practiceSide = "R";
@@ -977,6 +978,9 @@ var experiment = {
 					//there are no more trials for the experiment to run
 					if (practiceCounter === 0) {
 						experiment.train();
+					}
+					else {
+						experiment.test();
 					}
 					setTimeout(function() {clickDisabled = false;}, (time.clip.practice[1]));
 
@@ -1171,20 +1175,22 @@ var experiment = {
 		word = wordList;
 		setTimeout(function(){
 			sound.play(wordList);
-		}, 2000);
-		duration = [time.clip[word][1]];
+		}, 3000);
+		begin = [time.clip[word][0]];
+		onset = [time.clip[word][1]];
 
 
 		var clickDisabled = true;
-		setTimeout(function() {clickDisabled = false;}, (duration));
+		setTimeout(function() {clickDisabled = false;}, (onset-begin));
 		//this will be enabled after the audio is done playing
 		$('.pic').bind('click touchstart', function(event) {
 			if (clickDisabled) return;
 
 			////disable subsequent clicks once the participant has made their choice
 			//clickDisabled = true;
-
-			experiment.reactiontime = (new Date()).getTime() - startTime - (duration);
+			//reaction time - time elapsed since the beginning on the audio and the onset of the word
+			experiment.reactiontime = (new Date()).getTime() - startTime - (onset-begin);
+			
 
 			//which book was selected?
 			var picID = $(event.currentTarget).attr('id');
@@ -1193,17 +1199,17 @@ var experiment = {
 				experiment.side = "L";
 				experiment.selectionType += bookL;
 				$("#left_correct").show();
-				$("#continue").show();
+				//$("#continue").show();
 			} else if (picID === "centerbook1" || picID === "centerbook2" || picID === "centerbook3" || picID === "centerbook4") {
 				experiment.side = "C";
 				experiment.selectionType += bookC;
 				$("#center_correct").show();
-				$("#continue").show();
+				//$("#continue").show();
 			} else {
 				experiment.side = "R";
 				experiment.selectionType += bookR;
 				$("#right_correct").show();
-				$("#continue").show();
+				//$("#continue").show();
 			}
 
 			//check if the child got the trial correct
@@ -1230,7 +1236,10 @@ var experiment = {
 				if (counter == numTrials) {
 					experiment.end();
 				}
-				setTimeout(function() {clickDisabled = false;}, (duration));
+				else {
+					experiment.test();
+				}
+				setTimeout(function() {clickDisabled = false;}, (onset-begin));
 			}, normalpause);
 		});
 	},
