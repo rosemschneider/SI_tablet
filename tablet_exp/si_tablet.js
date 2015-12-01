@@ -7,6 +7,7 @@ function showSlide(id) {
   $("#"+id).show(); //jquery - element with given id - show
 }
 
+
 //sound sprite
 //this is in ms!
 var sound = new Howl({
@@ -245,9 +246,9 @@ var sound = new Howl({
 		somepencil: [1229047, 5000],
 		nonepencil: [1234048, 5029],
 		allpencil: [1239078, 5000],
-		somescissor: [1244079, 5001],
-		nonescissor: [1249081, 5030],
-		allscissor: [1254112, 5001],
+		somescissors: [1244079, 5001],
+		nonescissors: [1249081, 5030],
+		allscissors: [1254112, 5001],
 		someteddybear: [1259114, 5001],
 		noneteddybear: [1264116, 5030],
 		allteddybear: [1269147, 5001],
@@ -525,9 +526,9 @@ var time = ({
 		somepencil: [1229047, 1233269, 5000],
 		nonepencil: [1234048, 1238293, 5029],
 		allpencil: [1239078, 1243296, 5000],
-		somescissor: [1244079, 1248279, 5001],
-		nonescissor: [1249081, 1253302, 5030],
-		allscissor: [1254112, 1258346, 5001],
+		somescissors: [1244079, 1248279, 5001],
+		nonescissors: [1249081, 1253302, 5030],
+		allscissors: [1254112, 1258346, 5001],
 		someteddybear: [1259114, 1263309, 5001],
 		noneteddybear: [1264116, 1268373, 5030],
 		allteddybear: [1269147, 1273397, 5001],
@@ -905,6 +906,17 @@ var experiment = {
 		sound.play(wordList);
 	},
 
+	disable_left: function() {
+		document.getElementById("rightbook1").onclick = function() { return false; };
+		document.getElementById("rightbook2").onclick = function() { return false; };
+		document.getElementById("rightbook3").onclick = function() { return false; };
+		document.getElementById("rightbook4").onclick = function() { return false; };
+		//$('#rightbook1').click(function(){return false;});
+		//$('#rightbook2').click(function(){return false;});
+		//$('#rightbook3').click(function(){return false;});
+		//$('#rightbook4').click(function(){return false;});
+	},
+
 	//one practice trial; if child gets it incorrect, repeat the trial
 	train: function () {
 		$("#stage1").hide();
@@ -943,7 +955,7 @@ var experiment = {
 		//get the response
 
 		var clickDisabled = true;
-		setTimeout(function() {clickDisabled = false;}, (time.clip.practice[1]));
+		setTimeout(function() {clickDisabled = false;}, (time.clip.practice[1])+1000);
 		//setTimeout(function() {clickDisabled = false;}, (spriteData[wordList].onset - spriteData[wordList].start)*1000 + 300);
 		//this will be enabled after the audio is done playing
 		$('.pic').bind('click touchstart', function(event) {
@@ -966,7 +978,7 @@ var experiment = {
 				practiceSide = "C";
 				practiceCorrect = "Y";
 				$("#practice_correct").show();
-				//$("#continue1").show();
+				$("#continue1").show();
 				practiceCounter++;
 			} else {
 				practiceSide = "R";
@@ -978,9 +990,6 @@ var experiment = {
 					//there are no more trials for the experiment to run
 					if (practiceCounter === 0) {
 						experiment.train();
-					}
-					else {
-						experiment.test();
 					}
 					setTimeout(function() {clickDisabled = false;}, (time.clip.practice[1]));
 
@@ -1175,13 +1184,13 @@ var experiment = {
 		word = wordList;
 		setTimeout(function(){
 			sound.play(wordList);
-		}, 3000);
+		}, 2000);
 		begin = [time.clip[word][0]];
 		onset = [time.clip[word][1]];
 
 
 		var clickDisabled = true;
-		setTimeout(function() {clickDisabled = false;}, (onset-begin));
+		setTimeout(function() {clickDisabled = false;}, (onset-begin)+2000);
 		//this will be enabled after the audio is done playing
 		$('.pic').bind('click touchstart', function(event) {
 			if (clickDisabled) return;
@@ -1199,17 +1208,41 @@ var experiment = {
 				experiment.side = "L";
 				experiment.selectionType += bookL;
 				$("#left_correct").show();
-				//$("#continue").show();
+				$("#continue").show();
+				$('#rightbook1').unbind("click");
+				$('#rightbook2').unbind("click");
+				$('#rightbook3').unbind("click");
+				$('#rightbook4').unbind("click");
+				$('#centerbook1').unbind("click");
+				$('#centerbook2').unbind("click");
+				$('#centerbook3').unbind("click");
+				$('#centerbook4').unbind("click");
 			} else if (picID === "centerbook1" || picID === "centerbook2" || picID === "centerbook3" || picID === "centerbook4") {
 				experiment.side = "C";
 				experiment.selectionType += bookC;
 				$("#center_correct").show();
-				//$("#continue").show();
+				$("#continue").show();
+				$('#rightbook1').unbind("click");
+				$('#rightbook2').unbind("click");
+				$('#rightbook3').unbind("click");
+				$('#rightbook4').unbind("click");
+				$('#leftbook1').unbind("click");
+				$('#leftbook2').unbind("click");
+				$('#leftbook3').unbind("click");
+				$('#leftbook4').unbind("click");
 			} else {
 				experiment.side = "R";
 				experiment.selectionType += bookR;
 				$("#right_correct").show();
-				//$("#continue").show();
+				$("#continue").show();
+				$('#centerbook1').unbind("click");
+				$('#centerbook2').unbind("click");
+				$('#centerbook3').unbind("click");
+				$('#centerbook4').unbind("click");
+				$('#leftbook1').unbind("click");
+				$('#leftbook2').unbind("click");
+				$('#leftbook3').unbind("click");
+				$('#leftbook4').unbind("click");
 			}
 
 			//check if the child got the trial correct
@@ -1219,10 +1252,6 @@ var experiment = {
 				experiment.response = "N";
 			}
 
-
-			if (experiment.response == "Y" || "N") {
-				clickDisabled = true;
-			}
 
 			counter++;
 			experiment.trialNum = counter;
@@ -1235,9 +1264,6 @@ var experiment = {
 				//there are no more trials for the experiment to run
 				if (counter == numTrials) {
 					experiment.end();
-				}
-				else {
-					experiment.test();
 				}
 				setTimeout(function() {clickDisabled = false;}, (onset-begin));
 			}, normalpause);
