@@ -35,7 +35,7 @@
 <div class = "slide" id = "prestudy">
     <center><img src = "images/face.png" id = "introface">
     <p>This is my friend Hannah! Let's play a fun guessing game with her books.</p>
-    <p>Hannah will give you one hint about the book she's thinking of. If you need to hear her hint again just press the button with Hannah on it!</p>
+    <p>Hannah will give you one hint about the book she's thinking of.</p>
     <p>Are you ready? Press the button to start!</p>
     <button type="button" onClick="this.blur(); experiment.preStudy()">Start!</button></center>
 </div>
@@ -52,7 +52,6 @@
         </table>
         <img src="images/green_box.png" id = "practice_correct">
         <input type="image" id = "continue1" src="images/greenbutton.png" onClick="this.blur(); experiment.test()">
-        <input type="image" id = "friendbutton" src="images/friendbutton.png" onClick="this.blur(); experiment.repeat()">
     </div>
 </div>
 
@@ -65,15 +64,16 @@
     <img src="images/green_box.png" id = "center_correct">
     <img src="images/green_box.png" id = "right_correct">
     <input type="image" id = "continue" src="images/greenbutton.png" onClick="this.blur(); experiment.test()">
-    <input type="image" id = "friendbutton" src="images/friendbutton.png" onClick="this.blur(); experiment.repeat()">
     <!--<audio id="sound_player">-->
         <!--<source src="sprite_whole.mp3" type="audio/mp3">-->
     <!--</audio>-->
 </div>
 
-<!--practice-->
-
-<!--test trials-->
+<!--end-->
+<div class = "slide" id = "end">
+    <center><img src = "images/face.png" id = "introface">
+        <p>Thanks for playing my game!</p>
+</div>
 
 
     <script src="si_tablet.js"></script>

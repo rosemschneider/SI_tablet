@@ -4,7 +4,11 @@ body {
     font-family: Palatino Linotype, Bookman Antiqua, Palatino, serif;
     font-size: 16px;
     line-height: 20px;
+    position: fixed;
+    overflow-y: scroll;
+    width: 100%;
 }
+
 
 .slide {
     width: 95%;
