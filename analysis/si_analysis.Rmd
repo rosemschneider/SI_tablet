@@ -1,0 +1,392 @@
+---
+title: "si_analysis"
+output: html_document
+---
+Analysis for Scalar Implicature tablet task (Rose Schneider, Michael Frank). This study is an adaptation of the Scalar Implicature storybook game (Horowitz & Frank, 2015), and is a follow-up to Horowitz, Schneider, & Frank (in prep) to test the relationship between developmental changes in scalar implicature computatio, quantifier comprehension, and processing time. Participants saw 30 test trials with 3 book covers, each containing 4 familiar objects (e.g., book one: 4 cats, book two: 2 cats and 2 birds, book three: 4 dogs). Participants heard an audio prompt ("some/none/all of the pictures are cats"), and made their selection based on that prompt. Response times were recorded from the onset of the target word (i.e., "cats"). The planned sample is 96 3-5-year-olds, with 24 participants in each 6-month age bin. 
+
+<h2>Set up</h2>
+Load required libraries
+```{r}
+library(knitr)
+opts_chunk$set(cache=TRUE, message=FALSE, warning=FALSE)
+```
+
+Preliminaries
+```{r}
+rm(list=ls())
+library(ggplot2)
+library(reshape)
+library(plyr)
+library(dplyr)
+library(stringr)
+library(tidyr)
+library(markdown)
+library(directlabels)
+library(magrittr)
+library(bootstrap)
+library(RCurl)
+library(langcog)
+library(RColorBrewer)
+library(diptest)
+library(RWiener)
+theme_set(theme_bw())
+```
+
+Load data. 
+```{r}
+df <- read.csv("cdm_tablet_sample.csv")
+
+#clean up data for analysis
+df$correct %<>%
+  str_replace("Y", 1)%>%
+  str_replace("N", 0)
+
+#remove pilot 1 and 2 (1 for language, 2 for age range)
+df %<>%
+  mutate(age = as.numeric(age))%>%
+  filter(age <= 5)%>%
+  mutate(correct = as.numeric(correct))%>%
+  mutate(age_round = round(age, digits = 2))%>%
+  mutate(agesplit = cut(age_round, breaks=c(3, 3.5, 4, 4.5, 5)),
+         agesplit = factor(agesplit,
+                           labels=c("3-3.5 years", "3.5-4 years", "4-4.5 years", "4.5-5 years")))
+
+```
+
+```{r}
+wiener.plot <- function (dat) 
+{
+  rt = as.double(dat$q)
+  rc = as.numeric(as.factor(dat$resp))
+  dpos = tryCatch(density(rt[rc == 1], from = 0),error=function(e) NA)
+  dneg = tryCatch(density(rt[rc == 2], from = 0),error=function(e) NA)
+  maxt = max(pretty(max(rt)))
+  
+  maxd <- NA
+  if(is.na(dpos[1])){
+    maxd <- max(dneg$y)
+  } else if(is.na(dneg[1])){
+    maxd <- max(dpos$y)
+  } else {
+    maxd <- max(dpos$y, dneg$y)
+  }
+  
+  par(mar = c(0, 5, 0, 0), mfcol = c(2, 1), ask = FALSE)
+  plot(dpos, xlim = c(0, maxt), ylim = c(0, maxd), las = 2, 
+       lwd = 2, col = "green3", main = "", ylab = "", ask = FALSE)
+  rug(rt[rc == 1], col = "green3")
+  mtext("Density of positive responses", side = 2, line = 4, 
+        cex = 0.8)
+  plot(dneg, xlim = c(0, maxt), ylim = c(maxd, 0), las = 2, 
+       lwd = 2, col = "red", main = "", ylab = "", ask = FALSE)
+  mtext("Density of negative responses", side = 2, line = 4, 
+        cex = 0.8)
+  rug(rt[rc == 2], col = "red", side = 3)
+}
+```
+
+<h1>How many children are in each age bin?</h1>
+```{r}
+num_kids <- df %>%
+  dplyr::select(sub_id, agesplit) %>%
+  dplyr::distinct() %>%
+  dplyr::group_by(agesplit)%>%
+  dplyr::summarize(n=n())%>%
+  dplyr::mutate(total.n = sum(n))
+```
+
+<h1>Overall analysis: Performance by age</h1>
+Mean performance with 95% confidence intervals over all trial types
+```{r}
+ms <- df %>%
+  group_by(trial_type, agesplit)%>%
+  multi_boot_standard("correct", na.rm=T)
+
+ms$trial_type %<>%
+  str_replace("all", "All")%>%
+  str_replace("none", "None")%>%
+  str_replace("some", "Some")
+
+quartz()
+ggplot(data = ms, 
+       aes(x=trial_type, y=mean, fill= agesplit)) +
+  geom_bar(stat="identity", position = position_dodge()) +
+  geom_linerange(aes(ymin = ci_lower,
+                      ymax = ci_upper),
+                  size = .8,
+                  show.legend = FALSE,
+                 position=position_dodge(1)) +
+  ylab("Proportion correct") + 
+  xlab("Trial Type") +
+  theme_bw(base_size = 17) + theme(axis.title.x = element_text(size=18),
+           axis.title.y  = element_text(size=18)) +
+  scale_fill_manual(values = c("#4EB3D3", "#2B8CBE", "#0868AC", "#084081"),
+                    name="Age")
+```
+
+<h2>Proportion correct by sub_id (initial analysis)</h2>
+```{r}
+ms <- df %>%
+  group_by(trial_type, sub_id)%>%
+  multi_boot_standard("correct", na.rm=T)
+
+quartz()
+ggplot(data = ms, 
+       aes(x=trial_type, y=mean)) +
+  geom_bar(stat="identity", position = "dodge") + ylab("Average correct") + xlab("Trial type") + facet_wrap(~sub_id)
+```
+
+
+<h2>Histogram of correct response for trial types</h2>
+```{r}
+#all
+all.hist <- df %>%
+  filter(trial_type == "all")%>%
+  group_by(sub_id)%>%
+  mutate(correct=as.numeric(correct))%>%
+  summarise(mean = mean(correct))
+
+quartz()
+hist(all.hist$mean, main = paste('"All" trials'), xlab = 'Performance on "All" trials', cex.lab=1.5, cex.axis=1.5, cex.main=1.5, cex.sub=1.5)
+
+#some
+some.hist <- df %>%
+  filter(trial_type == "some")%>%
+  group_by(sub_id)%>%
+  mutate(correct=as.numeric(correct))%>%
+  summarise(mean = mean(correct))
+
+quartz()
+hist(some.hist$mean, main = paste('"Some" trials'), xlab = 'Performance on "some" trials', cex.lab=1.5, cex.axis=1.5, cex.main=1.5, cex.sub=1.5)
+
+#none
+none.hist <- df %>%
+  filter(trial_type == "none")%>%
+  group_by(sub_id)%>%
+  mutate(correct=as.numeric(correct))%>%
+  summarise(mean = mean(correct))
+
+quartz()
+hist(none.hist$mean, main = paste('"None" trials'), xlab = 'Performance on "none" trials', cex.lab=1.5, cex.axis=1.5, cex.main=1.5, cex.sub=1.5)
+
+```
+
+<h2>Dip-test analysis</h2>
+In previous versions of this task (Horowitz & Frank, 2014; Horowitz et al., in prep.), we observed a strongly correlated pattern of performance between the quantifiers "some" and "none." Are we still observing this with the iPad study?
+```{r}
+ms <- ddply(df, .(trial_type, sub_id), summarise, 
+	mean = mean(correct),
+	Age = age[1])
+
+cs <- cast(ms, sub_id + Age ~ trial_type, value="mean")
+
+diptest::dip.test(cs$some)
+diptest::dip.test(cs$none)
+diptest::dip.test(cs$all)
+```
+
+<h2>Response time analyses</h2>
+Do children take longer to respond when they get trials correct?
+
+Data cleaning
+Currently trying out a few possibilities, trying to figure out which makes the most sense
+```{r}
+#first, find summary stats of each quantifier type
+df %<>%
+  mutate(rt = as.numeric(rt))
+
+df.rt <- df %>%
+  group_by(trial_type)%>%
+  summarise(mean = mean(rt), sd = sd(rt), max = max(rt), min = min(rt), median=median(rt))%>%
+  group_by(trial_type)
+```
+
+Visual distributions of RTs for each quantifier type
+```{r}
+#visual distribution of response times for each quantifier
+#All
+all_hist <- df %>%
+  filter(trial_type == "all")%>%
+  group_by(sub_id)
+
+quartz()
+hist(all_hist$rt, main = paste('"All" trials'), xlab = 'RTs', cex.lab=1.5, cex.axis=1.5, cex.main=1.5, cex.sub=1.5)
+
+#Some
+some_hist <- df %>%
+  filter(trial_type == "some")%>%
+  group_by(sub_id)
+
+quartz()
+hist(some_hist$rt, main = paste('"Some" trials'), xlab = 'RTs', cex.lab=1.5, cex.axis=1.5, cex.main=1.5, cex.sub=1.5)
+
+#None
+none_hist <- df %>%
+  filter(trial_type == "none")%>%
+  group_by(sub_id)
+
+quartz()
+hist(some_hist$rt, main = paste('"None" trials'), xlab = 'RTs', cex.lab=1.5, cex.axis=1.5, cex.main=1.5, cex.sub=1.5)
+```
+
+This is an option for removing plus and minus one sd - not effective right now, as data is sparse
+```{r}
+hist_all <- df %>%
+  filter(trial_type == "all")
+
+df.all <- df.rt %>%
+  filter(trial_type == "all")
+
+df.some <- df.rt %>%
+  filter(trial_type == "some")
+
+df.none <- df.rt %>%
+  filter(trial_type == "none")
+
+ms.all <- df %>%
+  mutate(half = cut(trial_num, breaks=c(0, 15, 30)),
+          half = factor(half,
+                            labels=c("First", "Second")))%>%
+  mutate(correct = as.factor(correct))%>%
+  group_by(trial_type, agesplit, correct)%>%
+  filter(trial_type == "all")%>%
+  filter(rt >= df.all$lower | rt <= df.all$upper)
+
+ms.some <- df %>%
+  mutate(half = cut(trial_num, breaks=c(0, 15, 30)),
+          half = factor(half,
+                            labels=c("First", "Second")))%>%
+  mutate(correct = as.factor(correct))%>%
+  group_by(trial_type, agesplit, correct)%>%
+  filter(trial_type == "some")%>%
+  filter(rt >= df.some$lower | rt <= df.some$upper)
+
+ms.none <- df %>%
+  mutate(half = cut(trial_num, breaks=c(0, 15, 30)),
+          half = factor(half,
+                            labels=c("First", "Second")))%>%
+  mutate(correct = as.factor(correct))%>%
+  group_by(trial_type, agesplit, correct)%>%
+  filter(trial_type == "none")%>%
+  filter(rt >= df.none$lower | rt <= df.none$upper)
+
+tmp <- rbind(ms.some, ms.all)
+
+#final dataframe with cleaned rts
+ms.rt <- rbind(ms.none, tmp)
+```
+
+RT analysis with plus and minus one sd removed
+```{r}
+df %<>%
+  mutate(correct = as.factor(correct))
+
+mss <- ms.rt %>%
+  group_by(trial_type, correct, agesplit)%>%
+  multi_boot_standard("rt", na.rm=T)
+
+ggplot(data = mss, 
+       aes(x=trial_type, y=mean, fill=correct)) +
+  geom_bar(stat="identity", position = "dodge") +
+  geom_linerange(aes(ymin = ci_lower,
+                      ymax = ci_upper),
+                  size = .8,
+                  show_guide = FALSE,
+                 position=position_dodge(1)) +
+  ylab("Mean RT (ms)") + 
+  xlab("Trial Type") + facet_wrap(~agesplit)
+```
+
+
+This is an option with log-transformed values, and filtering plus/minus 2sd
+```{r}
+df.rt.log <- df %>%
+  mutate(correct = as.factor(correct))%>%
+  filter(log(rt) < mean(log(rt) + 2 * sd(log(rt))), 
+         log(rt) > mean(log(rt) - 2 * sd(log(rt))))
+
+mss <- df.rt.log %>%
+  group_by(trial_type, correct, agesplit)%>%
+  multi_boot_standard("rt", na.rm = T)
+```
+
+RT analysis with log-transformed values
+```{r}
+quartz()
+ggplot(data = mss, 
+       aes(x=trial_type, y=mean, fill=correct)) +
+  geom_bar(stat="identity", position = "dodge") +
+  geom_linerange(aes(ymin = ci_lower,
+                      ymax = ci_upper),
+                  size = .8,
+                  show.legend = FALSE,
+                 position=position_dodge(1)) +
+  ylab("Mean RT (ms)") + 
+  xlab("Trial Type") + facet_wrap(~agesplit)
+```
+
+What about over the course of the study? Kids may be getting faster as they go through the task
+```{r}
+#first, look at the distribution of RTs over trials
+rt.dist <- df.rt.log %>%
+  mutate(correct = as.factor(correct))%>%
+  group_by(trial_num, agesplit, correct)%>%
+  multi_boot_standard("rt", na.rm = T)
+
+#visual
+ggplot(data = rt.dist, 
+       aes(x=trial_num, y=mean, fill=agesplit)) +
+  geom_bar(stat="identity", position = "dodge") +
+  geom_linerange(aes(ymin = ci_lower,
+                      ymax = ci_upper),
+                  size = .8,
+                  show.legend = FALSE,
+                 position=position_dodge(1)) + 
+  ylab("Mean RT (ms)") + 
+  xlab("Trial Number") + facet_grid(correct~agesplit)
+
+#compare the distributions between the first and second half of the study - z test
+```
+
+RT analysis
+```{r}
+#Split by first half and second half of experiment (at least now), because they get much faster as the study goes on
+mss <- ms.rt %>%
+  group_by(trial_type, half, agesplit, correct)%>%
+  multi_boot_standard("rt", na.rm=T)
+
+quartz()
+ggplot(data = mss, 
+       aes(x=trial_type, y=mean, fill=correct)) +
+  geom_bar(stat="identity", position = "dodge") +
+  geom_linerange(aes(ymin = ci_lower,
+                      ymax = ci_upper),
+                  size = .8,
+                  show_guide = FALSE,
+                 position=position_dodge(1)) +
+  ylab("Mean RT (ms)") + 
+  xlab("Trial Type") + scale_fill_manual(values = c("#4EB3D3", "#2B8CBE")) + facet_grid(agesplit~half)
+```
+
+
+<h2>Selections on incorrect trials</h2>
+```{r}
+wrong <- df %>%
+  filter(correct == "0", selection_type != "someall")%>%
+  group_by(trial_type, selection_type)%>%
+  dplyr::summarise(n=n())%>%
+  mutate(n.total = sum(n), prop = n/n.total)
+
+ggplot(data = wrong, 
+       aes(x=selection_type, y=n)) +
+  geom_bar(stat="identity", position = position_dodge())  +
+  ylab("Count of children choosing") + 
+  xlab("Selection Type") + facet_wrap(~trial_type) + theme_bw(base_size=17) + 
+  theme(axis.title.x = element_text(size=18),
+        axis.title.y = element_text(size=18)) + facet_wrap(~trial_type)
+```
+
+Planned analyses: 
+1. Developmental differences in accuracy (replication of previous work)
+2. RTs in general for correct/incorrect choices
+3. Diffusion model analysis: RT as a measure of processing time
