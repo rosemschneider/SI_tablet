@@ -42,6 +42,7 @@ library(langcog)
 # library(RColorBrewer)
 library(diptest)
 library(RWiener)
+# library(ppcor)
 theme_set(theme_bw())
 ```
 
@@ -84,6 +85,12 @@ df$selection_type %<>%
   str_replace("some", "Some")%>%
   str_replace("none", "None")
   
+```
+
+```{r exclusions}
+#Exclusions
+df %<>%
+  dplyr::filter(sub_id != "11716_14" & sub_id != "11316_2") #filter for consent error and for < 50% English 
 ```
 
 ```{r rt exclusion}
@@ -254,15 +261,82 @@ fives_allnone <- t.test(subset(t_tests, agesplit=="5+ years" & trial_type=="None
 fives_allsome <- t.test(subset(t_tests, agesplit=="5+ years" & trial_type=="Some")$correct, subset(t_tests, agesplit=="5+ years" & trial_type=="All")$correct)
 fives_somenone <- t.test(subset(t_tests, agesplit=="5+ years" & trial_type=="None")$correct, subset(t_tests, agesplit=="5+ years" & trial_type=="Some")$correct)
 ```
-In our first planned analysis, we explored children's overall patterns of accuracy for each quantifier type. Figure \ref{fig:overall_acc} shows children's performance for each quantifier type. For each age group, we see significantly lower accuracy for the quantifiers "some" and "none" (t-test stats will go here when sample is complete). In a comparison with previous results using this paradigm [@horowitz2015; @horowitzInPrep], we found lower performance for "some" and "none" trials, indicating that the iPad adaptation of the paradigm was slightly more difficult for preschoolers. 
+In our first planned analysis, we explored children's overall patterns of accuracy for each quantifier type. Figure \ref{fig:overall_acc} shows children's performance for each quantifier type. For each age group, we saw significantly lower accuracy for the quantifiers "some" and  in comparison to "all" in independent t-tests within each age group ($p$ < .03 for all tests). This replication of previous results using this paradigm [@horowitz2015; @horowitzInPrep] indicates that our iPad adaptation of this task is an appropriate measure.
+
+```{r comparison}
+d_si <- read.csv("experiment3.csv") #pull in aggregated data from previous analysis
+
+t_tests %<>%
+  spread(trial_type, correct)
+#only for some and none trials, because we don't find that the all trials are much affected by the transfer to the iPad
+#3-3.5 years
+list <- c(
+t.test(subset(t_tests, agesplit=="3-3.5 years")$None, subset(d_si, Age=="3-3.5 years")$None, var.equal = TRUE),
+t.test(subset(t_tests, agesplit=="3-3.5 years")$Some, subset(d_si, Age=="3-3.5 years")$Some, var.equal = TRUE),
+
+#3.5-4s
+t.test(subset(t_tests, agesplit=="3.5-4 years")$None, subset(d_si, Age=="3.5-4 years")$None, var.equal = TRUE),
+t.test(subset(t_tests, agesplit=="3.5-4 years")$Some, subset(d_si, Age=="3.5-4 years")$Some, var.equal = TRUE),
+
+#4-4.5s
+t.test(subset(t_tests, agesplit=="4-4.5 years")$None, subset(d_si, Age=="4-4.5 years")$None, var.equal = TRUE),
+t.test(subset(t_tests, agesplit=="4-4.5 years")$Some, subset(d_si, Age=="4-4.5 years")$Some, var.equal = TRUE),
+
+#4.5-5s
+t.test(subset(t_tests, agesplit=="4.5-5 years")$None, subset(d_si, Age=="4.5-5 years")$None, var.equal = TRUE),
+t.test(subset(t_tests, agesplit=="4.5-5 years")$Some, subset(d_si, Age=="4.5-5 years")$Some, var.equal = TRUE))
+```
+
+Because our adaptation relies strictly on verbal communication, however, it may prove more difficult for children, resulting in lowered performance across all age groups. We found that children lose some communicative power when relying only on linguistic information in this task. Children aged 3--5 years perform significantly lower on "some" trials in this task in comparison with [@horowitzInPrep] in independent t-tests ($p$ < .05 for all tests). We believe that the lower performance on this task is the result of a more challenging experimental context, rather than developmental pragmatic failures. 
 
 ###Statistical modeling
 
-(Logistic regression model will go here - overall, children do better with age, but worse on some and none trials; however, they do better on these trials as they get older. Data still coming in, and model is not converging yet because it's a bit sparse). 
+```{r accuracy model}
+lm <- summary(glmer(correct ~ age * trial_type + 
+               (trial_type | sub_id), 
+             family = "binomial", data = df))
+```
+
+In exploring children's signficantly lower performance on "some" and "none" trials, we ran a logistic mixed effects model predicting correct response as an interaction of age and trial type, with random effects of trial type and participant. We found that performance was significantly lower on "some" ($\beta$ = `r round(lm$coefficients[4], 2)`, $p$ < .0001) and "none" trials ($\beta$ = `r round(lm$coefficients[3], 2)`, $p$ < .0001). We also found a signficant interaction between age and trial type on "none" trials($\beta$ = `r round(lm$coefficients[5], 2)`, $p$ < .0001).
 
 ###Correlation between "some" and "none"
 
-(Correlation info goes here - again, sparse data in youngest and oldest age bins, but observing a positive correlation between "some" and "none" trials, as we did in previous version of this study. Also address bimodal performance on these trials when data is clearer.)
+```{r diptest}
+ms <- df %>%
+  group_by(sub_id, trial_type) %>%
+  multi_boot_standard("correct", na.rm=TRUE)
+
+diptest_all <- diptest::dip.test(filter(ms, trial_type == "All")$mean)
+diptest_some <- diptest::dip.test(filter(ms, trial_type == "Some")$mean)
+diptest_none <- diptest::dip.test(filter(ms, trial_type == "None")$mean)
+```
+
+```{r correlation}
+ms.acc <- df %>%
+  dplyr::group_by(trial_type, agesplit, sub_id) %>%
+  multi_boot_standard("correct", na.rm = TRUE) %>%
+  dplyr::select(-ci_lower, -ci_upper)%>%
+  spread(trial_type, mean)
+
+# ms.acc.p <- df %>%
+#   dplyr::group_by(trial_type, age, sub_id) %>%
+#   multi_boot_standard("correct", na.rm = TRUE) %>%
+#   dplyr::select(-ci_lower, -ci_upper)%>%
+#   spread(trial_type, mean)%>%
+#   dplyr::filter(Some != "NA" & None != "NA")%>%
+#   dplyr::mutate(age = as.numeric(age))
+
+#ggcorplot(ms.acc %>% filter(complete.cases(ms.acc)) %>% dplyr::select(None, Some, All))
+
+#correlation test
+sn_cor <- cor.test(ms.acc$Some, ms.acc$None)
+
+r_corr <- round(sn_cor$estimate, digits = 2)
+p_corr <- round(sn_cor$p.value, digits = 6)
+# sn_pcor <- pcor.test(ms.acc.p$Some, ms.acc.p$None, ms.acc.p$age)
+```
+
+In previous research, a strong correlation has been found on children's performance with the quantifiers "some" and "none" [@horowitz2015; @horowitzInPrep]. Once again, we found correlated performance between these two quantifiers ($r$ = `r r_corr`, $p$ < .001). In running Hartigan's diptest for bimodality on these two quantifiers, we found significant bimodal distributions for "some" ($D$ = `r round(diptest_some$statistic, 2)`, $p$ < `r round(diptest_some$p.value, 3)`) and "none" trials ($D$ = `r round(diptest_none$statistic, 2)`, $p$ < .00001). These values indicate that children responded consistently either correctly or incorrectly on these trials.
 
 ##Reaction time analyses
 
