@@ -61,22 +61,17 @@ implicatures}
 \begin{abstract}
 Children's trouble with scalar implicatures -- inferences from a weaker
 lexicalized description that a stronger alternative is true -- is a
-puzzle in pragmatic development. Previous research indicates that
-children's failures in processing scalar implicatures may be rooted in
-an unestablished quantifier scale, with children who struggle with the
-quantifier ``some'' being unable to contrast different quantifiers to
-make the implicature. However, the source of this failure is unclear.
-Here, we explore reaction time as a measure of processing for scalar
-implicatures and reasoning about salient alternatives. In our analyses,
-we explore overall performance and reaction time patterns across
-development, finding that increased reaction times and accuracy for the
-quantifiers ``some'' and ``none.'' Motivated by these findings, we use a
-Drift Diffusion Model to explore the relationship between accuracy and
-reaction time in processing both scalar implicatures, and the
-quantifiers ``some'' and ``none'' more broadly. Overall, we find
-evidence that while children's performance in scalar implicature tasks
-seems to requires additional processing when reasoning about the
-quantifier scale.
+puzzle in pragmatic development. Here, we explore reaction time as a
+measure of processing for scalar implicatures and reasoning about
+salient alternatives. In our analyses, we explore overall performance
+and reaction time patterns across development, finding evidence of a
+speed-accuracy tradeoff for the quantifiers ``some'' and ``none.''
+Motivated by these findings, we use a Drift Diffusion Model to explore
+the relationship between accuracy and reaction time in processing both
+scalar implicatures, and the quantifiers ``some'' and ``none'' more
+broadly. Overall, we find evidence that while children's performance in
+scalar implicature tasks seems to requires additional processing when
+reasoning about the quantifier scale.
 
 \textbf{Keywords:}
 Pragmatics; development; language.
@@ -85,97 +80,62 @@ Pragmatics; development; language.
 \section{Introduction}\label{introduction}
 
 As listeners attempting to comprehend language, we have available to us
-not only verbalized linguistic information, but also the knowledge of
-what the speaker \emph{could} have said. In fact, we frequently go
-beyond the literal sense of utterances, and use knowledge of these
-alternatives to infer a speaker's intended meaning. In the case of
-\emph{pragmatic implicatures} (Grice, 1975), a speaker employs a weaker
-literal description to imply that a stronger alternative is true. Thus,
-an adult listener would strongly infer from the statement ``I enjoyed
-\emph{some} of my winter break'' that some (but not \emph{all}) of my
-break was pleasant. This \emph{scalar implicature} (SI) relies heavily
-on a knowledge of the relevant lexical alternatives in the quantifier
-scale \(<\)\emph{none -- some -- all}\(>\), as a listener must be able
-to contrast these alternatives to compute the implicature. While scalar
-implicatures are easily comprehended by adults, they pose a pragmatic
-challenge to children until fairly late in development (Horowitz \&
-Frank, 2015; Katsos \& Bishop, 2011; Papafragou \& Musolino, 2003). What
-is the source of children's difficulties with scalar implicatures?
+not only an utterance, but also the knowledge of what the speaker
+\emph{could} have said. In fact, we frequently go beyond the literal
+sense of utterances, and use our knowledge about these alternatives to
+infer a speaker's intended meaning. In the case of \emph{pragmatic
+implicatures} (Grice, 1975), a speaker employs a weaker literal
+description to imply that a stronger alternative is true. Thus, an adult
+listener would strongly infer from the statement ``I enjoyed \emph{some}
+of my winter break'' that some (but not \emph{all}) of my break was
+pleasant. This \emph{scalar implicature} (SI) relies heavily on a
+knowledge of the relevant lexical alternatives in the quantifier scale
+\(<\)\emph{none -- some -- all}\(>\), as a listener must be able to
+contrast ``some'' with the stronger descriptor ``all'' to compute the
+implicature. While scalar implicatures are easily comprehended by
+adults, they pose a pragmatic challenge to children until surprisingly
+late in development (Horowitz \& Frank, 2015; Katsos \& Bishop, 2011;
+Papafragou \& Musolino, 2003). What is the source of children's
+difficulties with scalar implicatures?
 
 One possibile cause of children's scalar implicature failures is their
 knowledge of the relevant lexical alternatives, as proposed by the
 \emph{Alternatives Hypothesis} (D. Barner \& Bachrach, 2010; David
-Barner, Brooks, \& Bale, 2011). For example, this hypothesis predicts
-that if children do not have access to ``some,'' they are unable to
-directly compare it to ``all'' in making the scalar implicature
-\emph{some, but not all.} Across research on the development of scalar
-implicature processing, however, children exhibit varying performance,
-depending on the paradigm, syntactic construction of the implicature
-prompts, access to visual and lexical alternatives, and age (Guasti et
-al., 2005; Horowitz \& Frank, 2015; Noveck, 2001; Papafragou \&
-Musolino, 2003; Papafragou \& Tantalou, 2004; Stiller, Goodman, \&
-Frank, 2014). Due to these varying measures and methods, making
-comparisons across these datasets, and empirically testing the
-Alternatives Hypothesis was quite difficult.
+Barner, Brooks, \& Bale, 2011). This hypothesis predicts that if
+children do not have access to ``some,'' they are unable to directly
+compare it to ``all'' in making the scalar implicature \emph{some, but
+not all.} Due to varying measures and methods in previous scalar
+implicature research, empirically testing the Alternatives Hypothesis
+was quite difficult. Children displayed varying performance across these
+tasks depending on paradigm, syntactic construction of the implicature
+prompts, access to visual and lexical alternatives, age, and
+supportiveness of the task (Guasti et al., 2005; Horowitz \& Frank,
+2015; Noveck, 2001; Papafragou \& Musolino, 2003; Papafragou \&
+Tantalou, 2004).
 
 In an attempt to reconcile these various accounts and test the
 Alternatives Hypothesis, Horowitz and Frank (2015) designed a simple
 referent selection paradigm that could be used across a broad age range
 (3--5 years) to explore lexicalized (scalar) implicatures. In this task,
 children saw three book covers, each featuring four familiar objects
-(Figure \ref{fig:image}), and the experimenter described a book using
+(Figure \ref{fig:image}), and the experimenter described a book using a
 scalar (quantifier) description (e.g., ``On the cover of my book,
 \emph{none/some/all} of the pictures are cats.''). Importantly, children
 had access to lexical alternatives (over the course of the study), as
 well as visual alternatives (within each trial).
 
-With this supportive paradigm, Horowitz and Frank found children
+With this supportive paradigm, Horowitz and Frank found that children
 struggled with the quantifiers ``some'' and ``none'' in relation to
-``all'', although performance increased across development.
-Intriguingly, they found that performance between these two quantifiers
-was strongly bimodal and correlated: Children who failed on trials with
-the quantifier ``some'' similarly struggled with ``none,'' and vice
-versa. While Horowitz \& Frank's (2015) findings did provide some
-support for the Alternatives Hypothesis (with children's scalar
-implicature performance supported by access to lexical alternatives),
-they observed that children were not able to use these alternatives to
+``all''. Intriguingly, they found that performance between these two
+quantifiers was strongly bimodal and correlated: Children who failed on
+trials with the quantifier ``some'' similarly struggled with ``none,''
+and vice versa. While Horowitz \& Frank's (2015) findings did provide
+some support for the Alternatives Hypothesis (with children's scalar
+implicature performance supported by access to alternatives), they
+observed that children were not able to capitalize on this knowledge to
 improve over the course of the study. Therefore, they hypothesized that
 there was another possible cause for children's poor scalar implicature
 computation.
-
-These early failures in computing scalar implicatures, and the related
-performance processing the quantifiers ``some'' and ``none'' observed in
-(Horowitz \& Frank, 2015) presented two hypotheses for sources of
-developmental difficulty in this task, namely, lack of quantifier
-knowledge and developing inhibitory control (Horowitz, Schneider, \&
-Frank, in prep.). We reasoned that the Alternatives Hypothesis
-necessitates familiarity with and ability to contrast alternatives on
-the quantifier scale \(<\)\emph{none -- some -- all}\(>\); if children's
-quantifier knowledge is absent or unestablished, it might lead to
-failures in making an implicature. Another possible cause of children's
-struggles with scalar implicatures might be that children have complete
-quantifier knowledge, but are unable to inhibit an impulse to choose a
-more salient alternative (e.g., choosing the book with the most cats
-upon hearing ``On the cover of my book, \emph{some} of the pictures are
-cats.'')
-
-We explored these two hypotheses in an individual differences task,
-running our scalar implicature (Horowitz \& Frank, 2015) task in
-conjunction with quantifier-knowledge (D. Barner, Chow, \& Yang, 2009)
-and inhibitory control (Zelazo, 2006) tasks. Overall, we found that
-children's scalar implicature performance was strongly correlated with
-quantifier knowledge, even when controlling for age. While inhibitory
-control was strongly correlated with age, it was not related to
-children's performance on the SI task (Horowitz et al., in prep.).
-
-Although we found a significant realtionship between quantifier
-knowledge and performance on our scalar implicature task, it is likely
-that children's difficulties in this task has more than one source.
-Importantly, in the course of conducting this individual differences
-study, we observed that children who succeeded both in making a scalar
-implicature and comprehending ``none'' seemed to have increased response
-latencies. This increase in reaction time may be an important indicator
-of how children are using and evaluting the salient alternatives.
 
 \begin{CodeChunk}
 \begin{figure}[b]
@@ -187,6 +147,38 @@ of how children are using and evaluting the salient alternatives.
 \caption[Example trial stimuli used in Horowitz and Frank (2015)]{Example trial stimuli used in Horowitz and Frank (2015).}\label{fig:image}
 \end{figure}
 \end{CodeChunk}
+
+Horowitz, Schneider, \& Frank (in prep.) presented two hypotheses for
+children's observed patterns of performance, namely, lack of quantifier
+knowledge and developing inhibitory control (Horowitz et al., in prep.).
+There, we reasoned that the Alternatives Hypothesis necessitates
+familiarity with and ability to contrast alternatives on the quantifier
+scale \(<\)\emph{none -- some -- all}\(>\); if children's quantifier
+knowledge is absent or unestablished, it might lead to failures in
+making an implicature. Another possible cause of children's struggles
+with scalar implicatures might be that they have complete quantifier
+knowledge, but are unable to inhibit an impulse to choose a more salient
+alternative (e.g., choosing the book with the most cats upon hearing
+``On the cover of my book, \emph{some} of the pictures are cats.'')
+
+We explored these two hypotheses in an individual differences task,
+running our scalar implicature (Horowitz \& Frank, 2015) task in
+conjunction with quantifier-knowledge (D. Barner, Chow, \& Yang, 2009)
+and inhibitory control (Zelazo, 2006) tasks. Overall, we found that
+children's scalar implicature performance was strongly correlated with
+quantifier knowledge, even when controlling for age. While inhibitory
+control was strongly correlated with age, it was not related to
+children's performance on the scalar implicature task (Horowitz et al.,
+in prep.).
+
+Although we found a significant relationship between quantifier
+knowledge and scalar implicature comprehension, it is likely that
+children's difficulties in this task has more than one source.
+Importantly, in the course of conducting this individual differences
+study, we observed that children who succeeded both in making a scalar
+implicature and comprehending ``none'' displayed increased response
+latencies. This increase in reaction time may be an important indicator
+of how children are using and evaluting the salient alternatives.
 
 It is possible that children who have a fully-established quantifier
 scale must take additional time in using this information to process a
@@ -228,7 +220,7 @@ design.\footnote{All of our data, processing, experimental stimuli, and analysis
 
 \subsection{Participants}\label{participants}
 
-\begin{table}
+\begin{table}[ht]
 \centering
 \begin{tabular}{c c c c c } 
  \hline
@@ -280,12 +272,6 @@ item, and quantifier, were randomized for all participants.
 
 \subsection{Procedure}\label{procedure}
 
-\begin{CodeChunk}
-\begin{figure}[t]
-\includegraphics{figs/overall_acc-1} \caption[Children's overall accuracy for each quantifier type]{Children's overall accuracy for each quantifier type. Bars show mean performance for each age group. Error bars are 95 percent confidence intervals computed by non-parametric bootstrap.}\label{fig:overall_acc}
-\end{figure}
-\end{CodeChunk}
-
 Sessions took place individually in a small testing room away from
 either the museum or the classrooom. To familiarize children to the
 iPad, each session began with the ``dot game,'' which required them to
@@ -302,6 +288,12 @@ voice said ``On the cover of my book there's a TV.'' Once children
 correctly made their selection, a green box appeared around the
 selection. Children moved trials along at their own pace by pressing a
 green button that appeared after they had made their selection.
+
+\begin{CodeChunk}
+\begin{figure}[t]
+\includegraphics{figs/overall_acc-1} \caption[Children's overall accuracy for each quantifier type]{Children's overall accuracy for each quantifier type. Bars show mean performance for each age group. Error bars are 95 percent confidence intervals computed by non-parametric bootstrap.}\label{fig:overall_acc}
+\end{figure}
+\end{CodeChunk}
 
 Reaction times were measured from the onset of the target word. Each
 audio clip used the same three frames (e.g., ``On the cover of my book,
@@ -325,6 +317,8 @@ accuracy, reaction time, and fitting a drift diffusion model (Ratcliff
 \& Rouder, 1998) to our reaction time data.
 
 \subsection{Accuracy}\label{accuracy}
+
+\subsubsection{Overall accuracy}\label{overall-accuracy}
 
 In our first planned analysis, we explored children's overall patterns
 of accuracy for each quantifier type. Figure \ref{fig:overall_acc} shows
@@ -397,18 +391,6 @@ was quite low on these trials, there were a number of children who got
 the majority of these trials correct (``Some'': N = 28; ``None'': N =
 36).
 
-\subsubsection{Discussion}\label{discussion}
-
-In our accuracy analyses, we found decreased performance across all age
-groups for the quantifiers ``some'' and ``none,'' and lower performance
-in general for ``some'' (implicature) trials in comparison to previous
-results (Horowitz \& Frank, 2015; Horowitz et al., in prep.).
-Additionally, we also found bimodal and correlated performance in these
-two trial types. Finally, a statistical model revealed a main effects of
-age and trial type, as well as significant interactions between age and
-trial type, with children becoming more accurate on ``some'' and
-``none'' trials with age.
-
 \subsection{Reaction time analyses}\label{reaction-time-analyses}
 
 Response latencies are a largely-unexplored aspect of children's ability
@@ -429,7 +411,7 @@ quantifier, faceted by age group and trial type. Overall, we found that
 reaction time was negatively correlated with age (\emph{r} = -0.25,
 \emph{p} \textless{} .0001). In exploring the relationship between
 accuracy and reaction time, we found preliminary evidence of a
-speed-accuracy tradeoff across all trial types. Figure \ref{fig:density}
+speed-accuracy tradeoff across all trial types. Figure \ref{fig:dense}
 also shows evidence for increased response latencies associated with
 correct responses for the quantifiers ``some'' and ``none''. Overall, we
 found that children were largely consistent in their performance across
@@ -623,7 +605,8 @@ result in a speed-accuracy tradeoff.
 
 Special thanks to Bing Nursery School, the San Jose Children's Discovery
 Museum, Veronica Cristiano, Rachel Walker, and Tamara Mekler for their
-help with data collection.
+help with data collection, and to Kara Weisman and Ann Nordmeyer for
+their assistance creating stimuli.
 
 \section{References}\label{references}
 
@@ -690,10 +673,6 @@ implicatures. \emph{Language Acquisition}, \emph{12}, 71--82.
 Ratcliff, R., \& Rouder, J. (1998). Modeling response times for
 two-choice decisions. \emph{Psychologial Science}, \emph{9}(5),
 347--356.
-
-Stiller, A., Goodman, N., \& Frank, M. (2014). Ad-hoc implicature in
-preschool children. \emph{Language Learning and Development},
-\emph{11}(2), 176--190.
 
 Zelazo, P. D. (2006). The dimensional change card sort (dCCS): A method
 of assessing executive function in children. \emph{Nature Protocols},
