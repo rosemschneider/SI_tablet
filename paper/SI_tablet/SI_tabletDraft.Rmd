@@ -47,7 +47,7 @@ theme_set(theme_bw())
 ```
 
 ```{r data}
-df <- read.csv("tmp.csv")
+df <- read.csv("tmp_si.csv")
 ```
 
 ```{r data cleaning}
@@ -432,6 +432,8 @@ In exploring children's signficantly lower performance on "some" and "none" tria
 
 ###Correlation between "some" and "none"
 ```{r correlation}
+
+
 ms.acc <- df %>%
   dplyr::group_by(trial_type, agesplit, sub_id) %>%
   multi_boot_standard("correct", na.rm = TRUE) %>%
@@ -511,21 +513,87 @@ somenone_corr <- cor.test(ms.rt$Some, ms.rt$None)
 Figure \ref{fig:dense} shows the density of reaction times for each quantifier, faceted by age group and trial type. Overall, we found that reaction time was negatively correlated with age (*r* = `r round(age_corr$estimate, 2)`, *p* < .0001). In exploring the relationship between accuracy and reaction time, we found preliminary evidence of a speed-accuracy tradeoff across all trial types. Figure \ref{fig:dense} also shows evidence for increased response latencies associated with correct responses for the quantifiers "some" and "none". Overall, we found that children were largely consistent in their performance across the course of the study in reaction time correlations between reaction times for "all" and "some" (*r* = `r round(allsome_corr$estimate, 2)`, *p* < .0001), "all" and "none" (*r* = `r round(allnone_corr$estimate, 2)`, *p* < .0001), and "some" and "none" trials (*r* = `r round(somenone_corr$estimate, 2)`, *p* < .0001). 
 
 ```{r parameter estimates}
+# ms.acc <- df %>%
+#   group_by(sub_id, trial_type) %>%
+#   multi_boot_standard("correct", na.rm=TRUE)%>%
+#   select(-ci_lower, -ci_upper)%>%
+#   spread(trial_type, mean)%>%
+#   filter(Some >= .75)
+# 
+# tmp <- df %>%
+#   filter(accuracy == "high")%>%
+#   group_by(sub_id)%>%
+#   distinct()
+
+
+# for(i in df)
+#   df$accuracy <- NA
+#   
+# if(df$sub_id == "11016_4" || df$sub_id == "11316_11" || df$sub_id == "11316_4"
+#          || df$sub_id == "11316_8" || df$sub_id == "11716_1" || df$sub_id == "11716_12"
+#          || df$sub_id == "11716_2" || df$sub_id == "11716_7" || df$sub_id == "12016_3" 
+#          || df$sub_id == "12016_7" || df$sub_id == "12116_1" || df$sub_id == "12116_3" 
+#          || df$sub_id == "121815_3" || df$sub_id == "12216_5" 
+#          || df$sub_id == "12416_2" || df$sub_id == "12416_6" || df$sub_id == "12816_1"
+#          || df$sub_id == "12816_2" || df$sub_id == "12816_3" || df$sub_id == "1616_2" 
+#          || df$sub_id == "1616_5"
+#          ||df$sub_id == "Rs5" || df$sub_id == "Rs8" || df$sub_id == "TM002" || df$sub_id == "TM005" || df$sub_id == "TM009") {
+#     df$accuracy <- "high"
+# } else {
+#            df$accuracy <- "low"
+#          }
+
+# param.high <-subset(df, sub_id == "11016_4" | sub_id == "11316_11" | sub_id == "11316_4"
+#          | sub_id == "11316_8" | sub_id == "11716_1" | sub_id == "11716_12"
+#          | sub_id == "11716_2" | sub_id == "11716_7" | sub_id == "12016_3" | sub_id == "12016_7"
+#          | sub_id == "12116_1" | sub_id == "12116_3" | sub_id == "121815_3" | sub_id == "12216_5" 
+#          | sub_id == "12416_2" | sub_id == "12416_6" | sub_id == "12816_1"
+#          | sub_id == "12816_2" | sub_id == "12816_3" | sub_id == "1616_2" | sub_id == "1616_5"
+#          | sub_id == "Rs5" | sub_id == "Rs8" | sub_id == "TM002" | sub_id == "TM005" | sub_id == "TM009")
+
 trialtypes = c("All", "Some", "None")
 
-#create dataframe
-sub.pars <- data.frame(Separation = numeric(),
+# #create dataframe for high accuracy
+# sub.pars <- data.frame(Separation = numeric(),
+#                        Non.Decision = numeric(),
+#                        Bias = numeric(),
+#                        Drift = numeric(),
+#                        Trial.Type = character(),
+#                        SubID = character(), 
+#                        Age = character())
+# sub.pars$Trial.Type <- as.character(sub.pars$Trial.Type)
+# sub.pars$SubID <- as.character(sub.pars$SubID)
+# sub.pars$Age <- as.character(sub.pars$Age)
+# 
+# temp.pars <- sub.pars
+
+
+sub.pars.high <- data.frame(Separation = numeric(),
                        Non.Decision = numeric(),
                        Bias = numeric(),
                        Drift = numeric(),
                        Trial.Type = character(),
                        SubID = character(), 
                        Age = character())
-sub.pars$Trial.Type <- as.character(sub.pars$Trial.Type)
-sub.pars$SubID <- as.character(sub.pars$SubID)
-sub.pars$Age <- as.character(sub.pars$Age)
+sub.pars.high$Trial.Type <- as.character(sub.pars.high$Trial.Type)
+sub.pars.high$SubID <- as.character(sub.pars.high$SubID)
+sub.pars.high$Age <- as.character(sub.pars.high$Age)
 
-temp.pars <- sub.pars
+temp.pars.high <- sub.pars.high
+
+# now for low
+sub.pars.low <- data.frame(Separation = numeric(),
+                       Non.Decision = numeric(),
+                       Bias = numeric(),
+                       Drift = numeric(),
+                       Trial.Type = character(),
+                       SubID = character(), 
+                       Age = character())
+sub.pars.low$Trial.Type <- as.character(sub.pars.low$Trial.Type)
+sub.pars.low$SubID <- as.character(sub.pars.low$SubID)
+sub.pars.low$Age <- as.character(sub.pars.low$Age)
+
+temp.pars.low <- sub.pars.low
 
 df$resp <- as.character(df$resp)
 
@@ -535,48 +603,91 @@ df$resp <- as.character(df$resp)
 # df %<>%
 #   dplyr::filter(q > 0, na.rm = TRUE)
 
-subs <- unique(df$sub_id)
+param.high <- df %>%
+  filter(accuracy == "high")
 
-for (j in 1:length(subs)) {
-  sid <- as.character(subs[j]) 
+param.low <- df %>%
+  filter(accuracy == "low")
+
+subs.high <- unique(param.high$sub_id)
+subs.low <- unique(param.low$sub_id)
+
+# subs <- unique(df$sub_id)
+
+# for (j in 1:length(subs)) {
+#   sid <- as.character(subs[j]) 
+#   for (i in 1:length(trialtypes)) {
+#     ttype <- as.character(trialtypes[i])
+#     dat <- as.data.frame(subset(df, trial_type == ttype & sub_id == sid))
+#     opt <- optim(c(1, .1, .1, 1), wiener_deviance, 
+#                  dat=dplyr::select(dat, c(q, resp)), method="Nelder-Mead")
+#     pars <- c(opt$par, ttype, sid, dat$agesplit[1])
+#     temp.pars[i,] <- pars
+#   }
+#   sub.pars <- rbind(temp.pars, sub.pars)
+# } 
+
+
+# first estimate params for high accuracy kids
+for (j in 1:length(subs.high)) {
+  sid <- as.character(subs.high[j]) 
   for (i in 1:length(trialtypes)) {
     ttype <- as.character(trialtypes[i])
     dat <- as.data.frame(subset(df, trial_type == ttype & sub_id == sid))
     opt <- optim(c(1, .1, .1, 1), wiener_deviance, 
                  dat=dplyr::select(dat, c(q, resp)), method="Nelder-Mead")
     pars <- c(opt$par, ttype, sid, dat$agesplit[1])
-    temp.pars[i,] <- pars
+    temp.pars.high[i,] <- pars
   }
-  sub.pars <- rbind(temp.pars, sub.pars)
+  sub.pars.high <- rbind(temp.pars.high, sub.pars.high)
+} 
+# 
+# now for low
+for (j in 1:length(subs.low)) {
+  sid <- as.character(subs.low[j]) 
+  for (i in 1:length(trialtypes)) {
+    ttype <- as.character(trialtypes[i])
+    dat <- as.data.frame(subset(param.low, trial_type == ttype & sub_id == sid))
+    opt <- optim(c(1, .1, .1, 1), wiener_deviance, 
+                 dat=dplyr::select(dat, c(q, resp)), method="Nelder-Mead")
+    pars <- c(opt$par, ttype, sid, dat$agesplit[1])
+    temp.pars.low[i,] <- pars
+  }
+  sub.pars.low <- rbind(temp.pars.low, sub.pars.low)
 } 
 ```
 
 ```{r parameter df}
+#bind two param estimates together for high and low
+sub.pars <- rbind(sub.pars.low, sub.pars.high)
+# sub.pars <- sub.pars.high
+
+#high
 sub.pars$Separation <- as.numeric(sub.pars$Separation)
 sub.pars$Non.Decision <- as.numeric(sub.pars$Non.Decision)
 sub.pars$Bias <- as.numeric(sub.pars$Bias)
 sub.pars$Drift <- as.numeric(sub.pars$Drift)
-
 
 sub.pars <- select(sub.pars, -Age) %>%
   rename(sub_id = SubID) %>%
   left_join(df %>% 
               group_by(sub_id) %>% 
               distinct %>% 
-              select(sub_id, age_round, agesplit)) %>%
+              select(sub_id, age_round, accuracy)) %>%
   gather(Param, Value, Separation:Drift) 
 
 
 sub.pars.ms <- sub.pars %>%
-  group_by(agesplit) %>%
+  group_by(accuracy) %>%
   mutate(Age = mean(age_round)) %>%
-  group_by(agesplit, Age, Trial.Type, Param) %>%
+  group_by(accuracy, Trial.Type, Param) %>%
   multi_boot_standard("Value", na.rm = TRUE)
 ```
 
 ```{r param_plot, fig.env = "figure*", fig.pos = "t", fig.width=6.6, fig.height=1.45, fig.align='center', set.cap.width=T, num.cols.cap=2, fig.cap = "Parameter estimates for drift diffusion model, split by age and trial type. Error bars are 95 percent confidence intervals computed by nonparametric bootstrap."}
 
-ggplot(sub.pars.ms, aes(x=Age, y=mean, color=Trial.Type)) +
+quartz()
+ggplot(sub.pars.ms, aes(x=accuracy, y=mean, color=Trial.Type)) +
   geom_point(size = 1.2, position=position_dodge(.05)) + 
   geom_linerange(aes(ymin = ci_lower, ymax = ci_upper), 
                  position=position_dodge(.05)) +
@@ -590,7 +701,7 @@ ggplot(sub.pars.ms, aes(x=Age, y=mean, color=Trial.Type)) +
         legend.text = element_text(size = 6), 
         legend.title = element_text(size = 6.5)) + 
   langcog::scale_color_solarized(guide_legend(title="Trial Type")) + 
-  ylab("Mean") + xlab("Age (years)")
+  ylab("Mean") + xlab("Accuracy")
 ```
 
 ###Statistical modeling
@@ -606,34 +717,51 @@ We next turned to the relationship betwen age, reaction time, and accuracy. Our 
 This interaction is particularly intriguing because in our previous accuracy model, we found increased performance on these trial types. While we find that older children are taking longer to respond to these trial types, they are more likely to answer correctly, even though reaction time is negatively correlated with age. This seems to indicate that there is a speed-accuracy tradeoff for these quantifiers.
 
 ```{r}
-sep_lm <- summary(lmer(Value ~ age_round * Trial.Type + (1 | sub_id), 
+sep_lm <- summary(lmer(Value ~ accuracy * Trial.Type + (1 | sub_id), 
+             data = filter(sub.pars, Param=="Separation")))
+sep_lmage <- summary(lmer(Value ~ accuracy* Trial.Type *age_round + (1 | sub_id), 
              data = filter(sub.pars, Param=="Separation")))
 
-nd_lm <- summary(lmer(Value ~ age_round * Trial.Type + (1 | sub_id), 
+nd_lm <- summary(lmer(Value ~ accuracy * Trial.Type + (1 | sub_id), 
+             data = filter(sub.pars, Param=="Non.Decision")))
+nd_lm_age <- summary(lmer(Value ~ accuracy * Trial.Type *age_round + (1 | sub_id), 
              data = filter(sub.pars, Param=="Non.Decision")))
 
-bias_lm <- summary(lmer(Value ~ age_round * Trial.Type + (1 | sub_id), 
+bias_lm <- summary(lmer(Value ~ accuracy* Trial.Type + (1 | sub_id), 
+             data = filter(sub.pars, Param=="Bias")))
+bias_lmage <- summary(lmer(Value ~ accuracy * Trial.Type * age_round + (1 | sub_id), 
              data = filter(sub.pars, Param=="Bias")))
 
-drift_lm <- summary(lmer(Value ~ age_round * Trial.Type + (1 | sub_id), 
+drift_lm <- summary(lmer(Value ~ accuracy* Trial.Type + (1 | sub_id), 
+             data = filter(sub.pars, Param=="Drift")))
+drift_lmage <-summary(lmer(Value ~ accuracy* Trial.Type *age_round + (1 | sub_id), 
              data = filter(sub.pars, Param=="Drift")))
 ```
 
 ##Drift diffusion models
-Our preliminary analysis of children's reaction times in this task indicated greater response latencies associated with success on "some" and "none" trials. This suggests that children may be taking more time to actively compare and contrast scalar alternatives as they become more familiar with the quantifier scale. A drift diffusion model (DDM) can provide a more detailed view of the relationship between accuracy and reaction time in behavioral tasks [@milosavljevic2010; @ratcliff1998].
+Our preliminary analysis of children's reaction times in this task indicated greater response latencies associated with success on "some" and "none" trials. This suggests that children may be taking more time to actively compare and contrast scalar alternatives as they become more familiar with the quantifier scale. In an exploratory analysis, we fit a drift diffusion model (DDM) to our data. A DDM can be used in behavioral tasks to provide a more detailed view of the relationship between accuracy and reaction time [@milosavljevic2010; @ratcliff1998].
 
 ###Parameter estimation
-In DDM, a behavioral response (a correct or incorrect choice) is the result of noisy data accumulation through a diffusion process (operationalized by response time) [@ratcliff1998]. Responses have *separation boundaries* that are dependent on the amount of information needed to initate a response, and *drift rate* formalizes the rate of data accumulation [@ratcliff1998]. An additional parameter of DDM is *nondecision*, which is the amount of time between encoding the stimuli, and initiating response. Finally, different responses may have a *bias*, or different starting point in the diffusion process, dependent on the stimuli  [@ratcliff1998]. 
+In DDM, a behavioral response (a correct or incorrect choice) is the result of noisy data accumulation through a diffusion process (operationalized by response time) [@ratcliff1998]. Responses have *separation boundaries* that are dependent on the amount of information needed to initate a response, and *drift rate* formalizes the rate of data accumulation [@ratcliff1998]. An additional parameter of DDM is *nondecision*, which is the amount of time between stimuli offset, and initiating response. Finally, different responses may have a *bias*, or different starting point in the diffusion process, dependent on the stimuli [@ratcliff1998]. 
 
-Although a DDM is traditionally used in two-alternative forced-choice tasks, here we are estimating the drift process between a correct and incorrect choice, with two options in each trial being "incorrect," and only one being consistent with the target noun and quantifier. In fitting a DDM to our data in this way, we estimated parameters for each subject across all three trial types ("all", "some", and "none") using the RWiener package. We then aggregated across subjects to obtain means and confidence intervals for each age group. Figure \ref{fig:param_plot} shows the parameter estimates for each age group, split by trial type. 
+Although a DDM is traditionally used in two-alternative forced-choice tasks, here we are estimating the drift process between a correct and incorrect choice, with two options in each trial being "incorrect," and only one being consistent with the target noun and quantifier. In fitting a DDM to our data in this way, we split children by accuracy on scalar implicature trials (high or low), and then estimated parameters for each subject across all three trial types independently by accuracy group. High accuracy was defined as an average of 75\% performance on scalar implicature trials. Our goal in this exploratory analysis was to explore whether the drift process shows differences for children who succeed in this task versus children who fail, thus the need to estimate parameters for high and low accuracy groups separately. We estimate paramters using the RWiener package, and then aggregated across subjects to obtain means and confidence intervals for each accuracy group. Figure \ref{fig:param_plot} shows the paramter estimates for each accuracy group, split by trial type.
 
-Using the DDM, we can explore in more depth the speed-accuracy tradeoff we observed in our statistical models. In our separation boundary estimates, we did not see any significant effect of trial type on boundary estimates, indicating that roughly the same amount of information needs to be accumulated to make a decision in each trial type. We also did not find an effect of trial type on drift rate, although in a mixed effects model we did find a main of effect of age on drift rate ($\beta$ `r round(drift_lm$coefficients[2], 2)`, $p$ = .01).\footnote{The specifications for all parameter models are as follows: \texttt{Parameter Value ~ age * trial type + (1 | subject ID)}} We did not find that children accumulated data significantly faster for "some" and "none" trials.
+In our separation boundary parameter estimates, we did not find a significant difference of trial types for either accuracy group. This indicates that roughly the same amount of data must be accumulated for each trial to make a response. In nondecision estimates, "none" seems to have a higher nondecision time overall, which we found with a mixed effects model ($\beta$ = `r round(nd_lm$coefficients[3],2)`, $p$ = .006).\footnote{The specifications for all parameter models are as follows (age coefficient added when specified): \texttt{Parameter Value ~ age * trial type (* age) + (1 | subject ID)}}. 
 
-In our nondecision parameter estimates, we again did not find a significant effect of quantifier type, although in a mixed effects model we found a main effect of age ($\beta$ = `r round(nd_lm$coefficients[2], 2)`, $p$ < .00001), and a significant interaction between age and "none" trials ($\beta$ = `r round(nd_lm$coefficients[5], 2)`, $p$ = .01). Thus, the model predicts that although older children have lower nondecision times, these times are higher for older children on "none" trials (in comparison to "all") trials.
+While drift rates show a significant effect of accuracy, because we estimated parameters for high and low accuracy children separately, these are defined by the analysis. In our bias estimates, however, we found a significant interaction between accuracy group and trial type on "some" trials ($\beta$ = `r round(bias_lm$coefficients[6], 2)`, $p$ = .0013). This interaction suggests that bias (the starting point in the diffusion process) might be an important factor in successfully making a scalar implicature. As another exploratory analysis, however, we included an age coefficient in this model, and found that this interaction was no longer significant; instead, we found a significant interaction between age, trial type "some", and accuracy ($/beta$ = `r round(bias_lmage$coefficients[12], 2)`, $p$ = .024). While it seems that when accounting for age children's bias on "some" trials is not affected by scalar implicature accuracy, older children in the low accuracy group are significantly more likely to have a lower bias for "some." 
+```{r old param estimates}
+# In fitting a DDM to our data in this way, we estimated parameters for each subject across all three trial types ("all", "some", and "none") using the RWiener package. We then aggregated across subjects to obtain means and confidence intervals for each age group. Figure \ref{fig:param_plot} shows the parameter estimates for each age group, split by trial type. 
+```
 
-Finally, in our bias estimates, we found high bias across all age groups on "all" trials, and markedly lower estimates for "some" trials. Bias estimates for "none" trials increases over development, and we found a significant interaction between age and trial type on "none" trials ($\beta$ = `r round(bias_lm$coefficients[5],2)`, $p$ = .023). This higher bias for "none" versus "some" may be a result of the additional step that children must make in computing this quantifier. Additionally, previous research indicates that when making a scalar implicature, "none" is a particularly salient and compelling alternative [@franke2014].
-
-Taken together, the parameter estimates from our DDM indicate that as children develop (and become more familiar with the quantifier scale), they are more likely to respond correctly in our scalar implicature task (especially on "none"). Younger children are more likely to respond incorrectly, mostly due to a low rate of data accumulation and a high separation boundary. Children's bias to respond correctly for all trial types seems to increase with age, and nondecision appears to decrease. While these findings do not fully explain the interaction between response time and accuracy we observed in our behavioral data, they do indicate some developmental differences in processing underying children's development in computing implicatures.
+```{r old DDM exp}
+# Using the DDM, we can explore in more depth the speed-accuracy tradeoff we observed in our statistical models. In our separation boundary estimates, we did not see any significant effect of trial type on boundary estimates, indicating that roughly the same amount of information needs to be accumulated to make a decision in each trial type. We also did not find an effect of trial type on drift rate, although in a mixed effects model we did find a main of effect of age on drift rate ($\beta$ `r round(drift_lm$coefficients[2], 2)`, $p$ = .01).\footnote{The specifications for all parameter models are as follows: \texttt{Parameter Value ~ age * trial type + (1 | subject ID)}} We did not find that children accumulated data significantly faster for "some" and "none" trials.
+# 
+# In our nondecision parameter estimates, we again did not find a significant effect of quantifier type, although in a mixed effects model we found a main effect of age ($\beta$ = `r round(nd_lm$coefficients[2], 2)`, $p$ < .00001), and a significant interaction between age and "none" trials ($\beta$ = `r round(nd_lm$coefficients[5], 2)`, $p$ = .01). Thus, the model predicts that although older children have lower nondecision times, these times are higher for older children on "none" trials (in comparison to "all") trials.
+# 
+# Finally, in our bias estimates, we found high bias across all age groups on "all" trials, and markedly lower estimates for "some" trials. Bias estimates for "none" trials increases over development, and we found a significant interaction between age and trial type on "none" trials ($\beta$ = `r round(bias_lm$coefficients[5],2)`, $p$ = .023). This higher bias for "none" versus "some" may be a result of the additional step that children must make in computing this quantifier. Additionally, previous research indicates that when making a scalar implicature, "none" is a particularly salient and compelling alternative [@franke2014].
+# 
+# Taken together, the parameter estimates from our DDM indicate that as children develop (and become more familiar with the quantifier scale), they are more likely to respond correctly in our scalar implicature task (especially on "none"). Younger children are more likely to respond incorrectly, mostly due to a low rate of data accumulation and a high separation boundary. Children's bias to respond correctly for all trial types seems to increase with age, and nondecision appears to decrease. While these findings do not fully explain the interaction between response time and accuracy we observed in our behavioral data, they do indicate some developmental differences in processing underying children's development in computing implicatures.
+```
 
 #General Discussion
 Our primary question in this study centered on whether success in making scalar implicatures requires increased response latencies to make use of relevant scalar alternatives. We adapted a previously validated scalar implicature task [@horowitz2015;@horowitzInPrep] for the iPad to explore the relationship between reaction time and accuracy.
@@ -642,8 +770,10 @@ In our analyses, we replicated previous patterns of performance in @horowitz2015
 
 In our extension of this paradigm, we collected reaction time data for these quantifier types to investigate the relationship between reaction time and accuracy. In our reaction time analyses, we found evidence of a speed-accuracy tradeoff, as well as an interaction between reaction time and age, with older children taking a slightly longer time to respond to these trials, but ultimately being more accurate. These findings motivated our decision to fit our data to a Drift Diffusion Model. 
 
-Using a DDM, we explored reaction time and accuracy patterns in more depth. Overall, the model predicted that young children accumulate data quickly, but are more likely to make an incorrect response on "some" and "none" trials. With age, children do not accumulate data more quickly, but are more biased to make a correct response on these trials. Thus, it appears that success in making a scalar implicature is not only the result of being familiar with the quantifier scale, but also taking additional time to process and integrate in a pragmatic framework in order to make a response.  
-
+As an exploratory analysis, we fit a DDM to our data to prediction the relationship between reaction time and accuracy for children who succeed in making scalar implicatures versus children who fail. While the results are preliminary, we found some evidence that bias might be a critical factor in success in making a scalar implicature. Interestingly, this effect seems to be driven by age, such that older children who fail on these trials have significantly lower bias in comparison to "all" trials. It is very likely that the high variability and wide distribution of reaction times observed in this study contributed to the unclear findings observed in our DDM. Given that we did see indications that bias is a significant part of successfully making a scalar implicature, however, future work should explore this relationship.
+```{r old DDM conclusion}
+# Using a DDM, we explored reaction time and accuracy patterns in more depth. Overall, the model predicted that young children accumulate data quickly, but are more likely to make an incorrect response on "some" and "none" trials. With age, children do not accumulate data more quickly, but are more biased to make a correct response on these trials. Thus, it appears that success in making a scalar implicature is not only the result of being familiar with the quantifier scale, but also taking additional time to process and integrate in a pragmatic framework in order to make a response.
+```
 Our work contributes to the existing literature in utilizing a novel method to collect accurate and detailed reaction time data on a scalar implicature task. Response latencies are an important indicator of the pragmatic challenges that children face in processing implicatures. Additionally, our findings replicate previous work, providing evidence for the appropriateness of this paradigm in targeting scalar implicatures. Further, our larger sample size, increased number of trials, and randomized design strengthen our analytical power, and allow for more detailed inferences from the data. Our work supports not only the hypthesis that children must be familiar with the quantifier scale in order to make an implicature, but also provides preliminary evidence that doing correctly doing so may require additional processing time. 
 
 Taken together, our work suggests that there is a meaningful relationship between children's accuracy and reaction times in making scalar implicatures throughout development. From our results, the relationship between children's quantifier knowledge, processing speed, and scalar implicature computation is unclear, and future work should test these links more explicitly. Our work suggests, however, that comparing a speaker's statement to possible alternatives in order to make an implicature is an active process for children, and does seem to result in a speed-accuracy tradeoff.  
