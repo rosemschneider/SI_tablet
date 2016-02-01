@@ -4,22 +4,21 @@ bibliography: biblibrary.bib
 csl: apa6.csl
 document-params: "10pt, letterpaper"
 
-author-information: > 
-    \author{{\large \bf Rose M. Schneider} \\ \texttt{rschneid@stanford.edu} \\ Department of Psychology \\ Stanford University
-    \And {\large \bf Michael C. Frank} \\ \texttt{mcfrank@stanford.edu} \\ Department of Psychology \\ Stanford University}
+author-information:
+    \author{{\large \bf Rose M. Schneider} \\ \texttt{rschneid@stanford.edu} \\ Department of Psychology \\ Stanford University \And {\large \bf Michael C. Frank} \\ \texttt{mcfrank@stanford.edu} \\ Department of Psychology \\ Stanford University}
 
 abstract: 
-    Scalar implicatures---inferences from a weak description ("I ate some of the cookies") that a stronger alternative is not true (I didn't eat all)---are a paradigm case of pragmatic inference. Children's trouble with scalar implicatures are thus an important puzzle for theories of the development of pragmatics  Here, we explore children's reaction times in a new paradigm for measuring scalar implicature processing. Alongside falures on scalar implicature with "some," we replicate previous reports of failures on the quantifier "none" and find evidence of a speed-accuracy tradeoff for both "some" and "none." Motivated by these findings, we use a Drift Diffusion Model to explore the relationship between accuracy and reaction time in our task and find evidence consistent with the hypothesis that preschoolers lack access to the relevant alternatives for the scalar implicature computation. The set of relevant alternatives may be broader than has been previously assumed, however.
-    
+    Scalar implicatures---inferences from a weak description ("I ate some of the cookies") that a stronger alternative is not true ("I didn't eat all")---are a paradigm case of pragmatic inference. Children's trouble with scalar implicatures is thus an important puzzle for theories of the development of pragmatics, given their communicative competence in other domains.  Here, we explore children's reaction times in a new paradigm for measuring scalar implicature processing. Alongside falures on scalar implicature with "some," we replicate previous reports of failures on the quantifier "none" and find evidence of a speed-accuracy tradeoff for both "some" and "none." Motivated by these findings, we use a Drift Diffusion Model to explore the relationship between accuracy and reaction time in our task and find evidence consistent with the hypothesis that preschoolers lack access to the relevant alternatives for the scalar implicature computation. The set of relevant alternatives may be broader than has been previously assumed, however.
+  
 keywords:
-    Pragmatics; development; language.
-    
+    Pragmatics; development; scalar implicature; diffusion models.
+  
 output: cogsci2016::cogsci_paper
 ---
 ```{r global_options, include=FALSE}
 rm(list=ls())
 knitr::opts_chunk$set(fig.width=3, fig.height=3, fig.crop = F, fig.pos = "tb", fig.path='figs/',
-                      echo=F, warning=F, cache=TRUE, message=F, sanitize = T)
+        echo=F, warning=F, cache=TRUE, message=F, sanitize = T)
 ```
 
 ```{r, libraries}
@@ -60,20 +59,20 @@ num_subjects <- df %>%
 df %<>%
   dplyr::mutate(age = as.numeric(age))%>%
   dplyr::mutate(resp = factor(correct, levels=c("Y","N"), labels=c("upper","lower")), 
-         q = rt/1000)%>%
+   q = rt/1000)%>%
   dplyr::filter(selection_type != "someall" & 
-                  selection_type != "allall" & 
-                  selection_type != "allallall" & 
-                  selection_type != "allsome" & 
-                  selection_type != "somesome", na.rm=TRUE) %>% #this is filtering out the strange repeats
+      selection_type != "allall" & 
+      selection_type != "allallall" & 
+      selection_type != "allsome" & 
+      selection_type != "somesome", na.rm=TRUE) %>% #this is filtering out the strange repeats
   dplyr::filter(english >= 0.75, na.rm=TRUE) %>% # excluding less than 75% english exposure
   dplyr::filter(english != "NA", na.rm=TRUE)%>% #avoiding the missing value that snuck back in
   dplyr::mutate(age_round = round(age, digits = 2))%>% #for easier grouping
   dplyr::mutate(agesplit = cut(age_round, breaks=c(3, 3.5, 4, 4.5, 5, 6.5)),
-         agesplit = factor(agesplit,
-                           labels=c("3-3.5 years", "3.5-4 years", 
-                                    "4-4.5 years", "4.5-5 years", 
-                                    "5-6.5 years")))%>% 
+   agesplit = factor(agesplit,
+         labels=c("3-3.5 years", "3.5-4 years", 
+            "4-4.5 years", "4.5-5 years", 
+            "5-6.5 years")))%>% 
   dplyr::filter(agesplit != "NA", na.rm = TRUE) 
 
 #for computing means
@@ -99,10 +98,10 @@ df$selection_type %<>%
 ```{r exclusions}
 # Exclusions
 df1 <-  subset(df, sub_id != "11716_14" & sub_id != "11316_2" 
-               & sub_id != "121815_7" & sub_id != "1616_6" 
-               & sub_id != "TM001" & sub_id != "TM003" 
-               & sub_id != "TM004" & sub_id != "12416_9" 
-               & sub_id!= "TM011") #excluded due to consent, low number of trials, and parental interference
+     & sub_id != "121815_7" & sub_id != "1616_6" 
+     & sub_id != "TM001" & sub_id != "TM003" 
+     & sub_id != "TM004" & sub_id != "12416_9" 
+     & sub_id!= "TM011") #excluded due to consent, low number of trials, and parental interference
 
 #opaque missing data issue
 df <- df1
@@ -123,16 +122,16 @@ sdlog <- sd(log(df$clean.rt), na.rm=TRUE)
 # qplot(clean.rt, data=df)
 
 # qplot(log(clean.rt), 
-#       fill = log(clean.rt) > mlog + 3*sdlog | log(clean.rt) < mlog - 3*sdlog,
-#       data = df)
+#   fill = log(clean.rt) > mlog + 3*sdlog | log(clean.rt) < mlog - 3*sdlog,
+#   data = df)
 
 #Assign "NAs" to clean rts 3 sds outside of log of mean rt
 df$clean.rt[log(df$clean.rt) > mlog + 3*sdlog | 
-              log(df$clean.rt) < mlog - 3*sdlog] <- NA
+      log(df$clean.rt) < mlog - 3*sdlog] <- NA
 
-#filter df to exclude NAs (RT cleaned)
-df %<>%
-  filter(clean.rt != "NA")
+# #filter df to exclude NAs (RT cleaned)
+# df %<>%
+#   filter(clean.rt != "NA")
 
 #how much data do we lose in this data cleaning?
 total_loss <- as.numeric(nrow(pre_cut) - nrow(df))
@@ -141,35 +140,36 @@ percentage <- as.numeric((total_loss/nrow(df))*100)
 
 # Introduction
 
-Language comprehnsion in context is an inferetial process. Listeners are not limited to interpreting the literal meaning of speakers' utterances, but can also reason about what the speaker intended, based on other utterances the speaker *could* have said. In the case of *pragmatic implicatures* [@grice1975logic], a speaker employs a weaker literal description to imply that a stronger alternative is true. Thus, adult listeners tend to infer from the statement ``I enjoyed *some* of my winter break'' that some, but not all, of the break was pleasant. This *scalar implicature* (SI) relies heavily on a knowledge of the relevant lexical alternatives in the quantifier scale $<$*some -- all*$>$. On standard theories, a listener must be able to contrast "some" with the stronger descriptor "all" to compute the implicature. 
+Language comprehension in context is an inferetial process. Listeners are not limited to interpreting the literal meaning of speakers' utterances; they can also reason about what the speaker intended, based on other utterances the speaker could have said. In the case of *pragmatic implicatures* [@grice1975], a speaker employs a weaker literal description to imply that a stronger alternative is true. Adult listeners tend to infer from the statement "I enjoyed *some* of my winter break" that some, but not all, of the break was pleasant. This *scalar implicature* (SI) relies heavily on a knowledge of the relevant lexical alternatives in the quantifier scale $<$*some*, *all*$>$. On standard theories, a listener must be able to contrast "some" with the stronger descriptor "all" to compute the implicature [@grice1975,@levinson2000]. 
 
-SIs are challeinging for children until surprisingly late in development, however  [@noveck2001]. For example, when judging a scene in which three of three horses have jumped over a fence, five-year-olds are likely to endorse the statement "some of the horses jumped over the fence" as felicitous, despite the presence of a more informative alternative ["all"; @papafragou2003]. Children do seem to have some knowledge of these scalar terms, however; for example, they reward speakers based on the informativeness of their scalar descriptions [@katsos2011]. Given this early sensitivty, why do children still struggle to compute scalar implicatures until late in development? 
+SIs are challeinging for children until surprisingly late in development  [@noveck2001]. For example, when judging a scene in which three of three horses have jumped over a fence, five-year-olds are likely to endorse the statement "some of the horses jumped over the fence" as felicitous, despite the presence of a more informative alternative ["all"; @papafragou2003]. Children do seem to have some knowledge of these scalar terms, however; for example, they reward speakers based on the informativeness of their scalar descriptions [@katsos2011]. Given this early sensitivty, why do children still struggle to compute scalar implicatures until late in development? 
 
-One possibile cause of children's failures is that they might not have access to the relevant lexical alternatives [@barner2010]. This idea, which we will refer to as the *Alternatives Hypothesis*, predicts that if children cannot quickly and reliabily bring to mind the relevant alternative quantifiers (e.g., "all" in a situation where they hear "some") they will be unable to make the implicature computation. The alternatives hypothesis makes a number of predictions about children's abilities in reasoning about quantifier, some of which have been confirmed empirically. For example, consistent with the idea of inaccessible alternatives, @barner2011 showed that four-year-olds could not even resolve the quantifier expression "only some" (which should force alternatives to be negated semantically, rather than pragmatically). 
+One possibile cause of children's failures is that they might not have access to the relevant lexical alternatives [@barner2010]. This idea, which we will refer to as the *Alternatives Hypothesis*, predicts that if children cannot quickly and reliabily bring to mind the relevant alternative quantifiers (e.g., "all" in a situation where they hear "some") they will be unable to make the implicature computation. The alternatives hypothesis makes a number of predictions about children's abilities in reasoning about quantifiers, some of which have been confirmed empirically. For example, consistent with the idea of inaccessible alternatives, @barner2011 showed that four-year-olds could not even resolve the quantifier expression "only some" (which should force alternatives to be negated semantically, rather than pragmatically). But what are the proper alternatives for SIs? 
 
-What are the alternatives for SIs, though? And how do they interact (or fail to) in order to produce the observed pattern of developmental successes and failures? 
+With respect to the proper set of alternatives for SI, the empirical evidence has been changing rapidly. Although the conventional view on SI is that the primary inferential alternative is "all," a new body of evidence suggests that more alternatives may be necessary---in particular, "none." For example, @degen2015 found that  set size changes the felicity of quantifier SIs for adults: "some" is more felicitous when you couldn't say "one" or "two." In a computational reanalysis of these and other data, @franke2014 showed that a high weight on the alternative "none" was critical for fitting these data. And in a recent study with children, @skordos2016 found that exposing children to either "all" *or* "none" facilitated their computation of subsequent SIs. 
 
-With respect to the proper set of alternatives, the empirical evidence has been changing rapidly. Although the conventional view on SI is that the primary inferential alternative is "all", a new body of evidence suggests that more alternatives may be necessary---in particular, "none". In one study with adults, @degen2015 showed that the availability of small number descriptors appeared to modulate the felicity of quantifier SIs. And in a  computational reanalysis of these and other data, @franke2014 showed that a high weight on the alternative "none" was critical for capturing these data. And in a recent study with children, @skordos2016 found that exposing children to either "all" *or* "none" facilitated their computation of subsequent SIs. 
-
-This relationship to "none" is unexpected on classic Gricean theories [@grice1975,@horn1972] but is in fact predicted by recent probabilistic models of implicature. Under these models, all the relevant alternatives (not just those logically entailed by the original message, i.e. "all") compete with one another [@stuhlmuller2013,@franke2014]. But all of the evidence for this claim to date is relatively indirect, and such a substantial revision to theory requires further evidence. 
-
-One recent study supports the importance of "none" in SIs and provides the starting point for our current experiment. @horowitz2015 designed a referent selection paradigm that could be used across a broad age range (3--5 years) to explore both scalar and ad-hoc (context dependent) implicatures. In this task, children saw three book covers, each featuring four familiar objects (Figure \ref{fig:image}). On target trials, the experimenter described a book using a semantically ambiguous description (e.g., "On the cover of my book, some of the pictures are cats" [scalar] or "On the cover of my book are cats" [ad hoc]). Children succeded on ad-hoc trials but largely failed to make SIs. Interestingly, those same children who failed on SI also failed on "none" trials---in several samples, performance was highly correlated. This result would be predicted if "none" was in fact an inferential alternative and some children were not computing its semantics appropriately in an online fashion. 
+This relationship to "none" is unexpected on classic Gricean theories [@grice1975,@horn1972], where the only alternatives should be those logically entailed by the original message (i.e. "all"). But it *is* in fact predicted by recent probabilistic models of implicature. Under these models, all the relevant alternatives compete with one another [@frank2012,@goodman2013,@franke2014]. On the other hand, all of the evidence cited above for the claim of "none" as an alternative is relatively indirect, and such a substantial revision to standard theory requires further evidence. 
 
 ```{r image, fig.pos = "b", fig.align='center', fig.width=3, fig.height=3, fig.cap = "Example trial stimuli used in Horowitz and Frank (2015)."}
 img <- png::readPNG("figs/implicatures_demo_letters.png")
 grid::grid.raster(img)
 ```
 
-One further prediction of the alternatives hypothesis relates to processing time.  
-Perhaps children who have a fully-established quantifier scale---and hence can make correct SIs---take additional time in using this information, due to competition between alternatives. Congruent with this prediction, our intuition in the @horowitz2015 study described above and in pilot studies using this paradigm was that when children made correct SIs they appeared to be taking longer than when they failed. But although reaction time measures have been commonplace in studies of adults' SI processing, they have been almost entirely absent in the developmental literature [with the exception of @huang2009, whose data showed little evidence of SI computation]. Thus, in our current study, we explore children's behavioral response latencies in an iPad adaptation of the @horowitz2015 scalar implicature task. 
+One other recent developmental study further supports the importance of "none" in SIs and provides the starting point for our current experiment. @horowitz2015 designed a referent selection paradigm that could be used across a broad age range (3--5 years) to explore both scalar and ad-hoc (context dependent) implicatures. In this task, children saw three book covers, each featuring four familiar objects (Figure \ref{fig:image}). On target trials, the experimenter described a book using a semantically ambiguous description (e.g., "On the cover of my book, some of the pictures are cats" [scalar] or "On the cover of my book are cats" [ad hoc]). Children succeded on ad-hoc trials but largely failed to make SIs, suggesting they had the pragmatic competence necessary to compute the implicature. 
 
-In our analyses, we explore overall accuracy and patterns of performance, as in [@horowitz2015], and find that children not only struggle in making a scalar implicature, but replicate the finding that they also grapple with the quantifier "none" until fairly late in development. Congruent with our predictions, in examining reaction time patterns across all quantifier types, we find evidence of a speed-accuracy tradeoff for both quantifiers. Finally, we use a Drift Diffusion Model to explore the source of this increased reaction time. Overall, our findings are consistent with a version of the Alternatives Hypothesis under which "none" is an important inferential alternative in SI and its availability causes slower processing times but correct SIs. We consider this and alternative explanations in the Discussion. 
+Interestingly, in @horowitz2015, the same children who failed on SI also failed on unambiguous "none" control trials---and in several samples, performance was highly correlated between "none" and "some" trials. This result would be predicted if "none" was in fact an inferential alternative. If some children were not computing its semantics appropriately in an online fashion, they would be the children to fail in the SI computation as well. 
+
+One further prediction of the alternatives hypothesis relates to processing time.  
+Perhaps children who have a fully-established quantifier scale---and hence can make correct SIs---take additional time in using this information, due to competition between alternatives. Congruent with this prediction, our intuition in the @horowitz2015 study described above and in pilot studies using this same paradigm was that when children made correct SIs they appeared to be taking longer than when they failed. But although reaction time measures have been commonplace in studies of adults' SI processing, they have been almost entirely absent in the developmental literature [with the exception of @huang2009, whose data showed little evidence of SI computation]. 
+
+Thus, in our current study, we explore children's behavioral response latencies in an iPad adaptation of the @horowitz2015 scalar implicature task. In our analyses, we explore overall accuracy and patterns of performance, as in [@horowitz2015], and find that children not only struggle in making a scalar implicature, but replicate the finding that they also grapple with "none" until fairly late in development. Congruent with our predictions, in examining reaction time patterns across all quantifier types, we find evidence of a speed-accuracy tradeoff for both quantifiers. Finally, we use a Drift Diffusion Model to explore the source of this increased reaction time. Overall, our findings are consistent with a version of the Alternatives Hypothesis under which "none" is an important inferential alternative in SI and its availability causes slower processing times but correct SIs. We consider this and other alternative explanations in the Discussion. 
 
 # Method
 
-In this study, we adapted the scalar implicature paradigm developed by @horowitz2015 for the iPad.\footnote{The full experiment can be viewed online at \texttt{https://rosemschneider.github.io/tablet\_exp/si\_tablet.html}.} In addition to capturing detailed reaction time data, this version included more trials, and standardized prosody across all trials, in addition to a completely randomized design.\footnote{All of our data, processing, experimental stimuli, and analysis code can be viewed in the version control repository for this paper at: \texttt{https://github.com/rosemschneider/SI\_tablet}.} 
+In this study, we adapted the scalar implicature paradigm developed by @horowitz2015 for the iPad. In addition to capturing detailed reaction time data, this version included more trials, and standardized prosody across all trials, as well as a completely randomized design.\footnote{The full experiment can be viewed online at \texttt{https://rosemschneider.github.io/tablet\_exp/si\_tablet.html} and all of our data, processing, experimental stimuli, and analysis code can be viewed in the version control repository for this paper at: \texttt{https://github.com/rosemschneider/SI\_tablet}.} 
 
 ## Participants
+
 ```{r descriptives}
 num_gender <- df%>%
   select(sub_id, sex)%>%
@@ -188,11 +188,11 @@ num_trials <- df %>%
   summarise(n = n())
 
 num_kids <- df %>% 
-    dplyr::select(sub_id, agesplit, age) %>%
-    dplyr:: distinct()%>%
-    dplyr::group_by(agesplit)%>%
-    dplyr::summarize(n=n(), mean=mean(age), sd=sd(age), median=median(age))%>%
-    dplyr::mutate(total.n = sum(n))
+  dplyr::select(sub_id, agesplit, age) %>%
+  dplyr:: distinct()%>%
+  dplyr::group_by(agesplit)%>%
+  dplyr::summarize(n=n(), mean=mean(age), sd=sd(age), median=median(age))%>%
+  dplyr::mutate(total.n = sum(n))
 
 num_young3s <- num_kids %>%
   filter(agesplit == "3-3.5 years")
@@ -210,8 +210,8 @@ num_5s <- num_kids %>%
   filter(agesplit == "5-6.5 years")
 
 sstats <- df %>%
-    dplyr::group_by(agesplit)%>%
-    dplyr::summarise(mean = mean(age), median = median(age), sd = sd(age))
+  dplyr::group_by(agesplit)%>%
+  dplyr::summarise(mean = mean(age), median = median(age), sd = sd(age))
 
 s_young3 <- sstats %>%
   filter(agesplit == "3-3.5 years")
@@ -229,38 +229,34 @@ s_5s <- sstats %>%
   filter(agesplit == "5-6.5 years")
 ```
 
-\begin{table}[ht]
+\begin{table}[t]
 \centering
 \begin{tabular}{c c c c c } 
  \hline
  Age group & N & Mean & Median & SD \\
  \hline
  3--3.5 years & `r num_young3s$n` & `r round(s_young3$mean, 2)` & `r round(s_young3$median, 2)` & `r round(s_young3$sd, 2)`\\
- \hline
  3.5--4 years & `r num_old3s$n` & `r round(s_old3$mean, 2)` & `r round(s_old3$median, 2)` & `r round(s_old3$sd, 2)` \\ 
- \hline
  4--4.5 years & `r num_young4s$n` & `r round(s_young4$mean, 2)` & `r round(s_young4$median, 2)` & `r round(s_young4$sd, 2)`\\
- \hline
  4.5--5 years & `r num_old4s$n` & `r round(s_old4$mean, 2)` & `r round(s_old4$median, 2)` & `r round(s_old4$sd, 2)` \\
- \hline
  5--6.5 years & `r num_5s$n` & `r round(s_5s$mean, 2)` & `r round(s_5s$median, 2)` & `r round(s_5s$sd, 2)` \\
  \hline
 \end{tabular}
-\caption{Age demographic information for all participants.}
+\caption{Age information for all participants.}
 \label{tab:age}
 \end{table}
 
-Table \ref{tab:age} shows the breakdown of age information for all participants. Included in analyses are `r num_kids$total.n` children out of a planned sample of 120 participants. We ran `r num_english$n` additional children, who were excluded from analysis for low English language exposure or $<$50% of trials completed. Included in our sample were `r f$n` females and `r m$n` males. Based on [@horowitz2015; @horowitzInPrep], the initially planned sample size was 96 children from 3--5 years. After collecting data from 57 participants, however, we observed significantly lower performance on implicature trials across all age groups, indicating that the iPad adaptation of the scalar implicature task was slightly more challenging for all children, and included an older age group of 24 5--6.5-year-olds. 
+Table \ref{tab:age} shows the breakdown of age information for all participants. Included in analyses are `r num_kids$total.n` children out of a planned sample of 120 participants, recruited from both a local daycare and a local children's museum. We ran `r num_english$n` additional children, who were excluded from analysis based on planned exclusion criteria of low English language exposure ($\leq 50\%$) or $<50\%$ of trials completed. Included in our sample were `r f$n` females and `r m$n` males.\footnote{Based on @horowitz2015, we initially planned to collect data from children 3--5 years. After collecting data from 57 participants, however, we observed significantly lower performance on implicature trials across all age groups, indicating that the iPad adaptation of the scalar implicature task was slightly more challenging for all children, and included an older age group of 24 5--6.5-year-olds.}
 
-## Stimuli
+## Stimuli and design
 
-The general format of the task was identical to [@horowitz2015], with the exception of added items for additional trials. The study was programmed in HTML, CSS, and JavaScript, and displayed to children on a full-sized iPad. Each trial displayed three book covers, each containing a set of four familiar objects (Figure \ref{fig:image}). Each trial allowed 2.5s for children to visually inspect the three book covers, before the experiment played the trial prompt (e.g., "On the cover of my book, *none* of the pictures are cats."). Each trial was randomized, with the exception that similar items were displayed together (e.g., food, clothing). Each session involved 30 trials, with 10 trials per quantifier-type ("all", "some", and "none"). In our randomization, quantifier triad order, items (within category), target item, and quantifier, were randomized for all participants. 
+The general format of the task was identical to @horowitz2015, with the exception of added items for additional trials. The study was programmed in HTML, CSS, and JavaScript, and displayed to children on a full-sized iPad. Each trial displayed three book covers, each containing a set of four familiar objects (Figure \ref{fig:image}).  Each session involved 30 trials, with 10 trials per quantifier-type ("all", "some", and "none"). Each audio clip used the same three initial sentence frames (e.g., "On the cover of my book, *some* of the pictures...") so that prodosdy was emphasized equally across all trials. The average length of each audio clip (including target item phrase, e.g., "...are cats") was approximately 6s. In our randomization, quantifier triad order, items (within category), target item, and quantifier were randomized for all participants. In all, there were 270 different target items and audio clips. 
 
 ## Procedure
 
-Sessions took place individually in a small testing room away from either the museum or the classrooom. To familiarize children to the iPad, each session began with the "dot game," which required them to press dots on the screen as fast as possible.
+Sessions took place individually in a small testing room away from the museum floor or the classrooom of the daycare. To familiarize children with the iPad, each session began with a "dot game," which required them to press dots on the screen as fast as possible. After the dot game, the experimenter introduced them to "Hannah," a cartoon character who wanted to play a guessing game with her books. The experimenter explained that Hannah would show the child three books, and would give one hint about which book she had in mind, so they had to listen carefully. Children then saw a practice trial with an unambiguous noun referent. 
 
-After the dot game, the experimenter introduced them to "Hannah," a cartoon character who wanted to play a guessing game with her books. The experimenter explained that Hannah would show the child three books, and would give *one* hint about which book she had in mind. The experimenter emphasized that Hannah would only give one hint, so they had to listen carefully. Children then saw a practice trial with three books featuring a refrigerator, a TV, and a couch. After 2.5s, a female voice said "On the cover of my book there's a TV." Once children correctly made their selection, a green box appeared around the selection. Children moved trials along at their own pace by pressing a green button that appeared after they had made their selection. 
+Each trial allowed 2.5s for children to visually inspect the three book covers, before the experiment played the trial prompt (e.g., "On the cover of my book, *none* of the pictures are cats."). Reaction times were measured from the onset of the target word. Children could only make one selection. If a child was not paying attention, or if she did not hear Hannah's prompt, the experimenter repeated it, matching the original prosody. Once children correctly made their selection, a green box appeared around the chosen book. The experiment was self-paced, and children initiated each trial by pressing a button that appeared after they had made their selection in the previous trial.
 
 ```{r overall_acc, fig.pos = "t", fig.width=3.2, fig.height=2, fig.cap = "Children's overall accuracy for each quantifier type. Bars show mean performance for each age group. Error bars are 95 percent confidence intervals computed by non-parametric bootstrap."}
 ms <- df %>%
@@ -273,24 +269,23 @@ ms$trial_type %<>%
   str_replace("some", "Some")
 
 ggplot(data = ms, 
-       aes(x=trial_type, y=mean, fill= agesplit)) +
+   aes(x=trial_type, y=mean, fill= agesplit)) +
   geom_bar(stat="identity", position = position_dodge()) +
   geom_linerange(aes(ymin = ci_lower,
-                      ymax = ci_upper),
-                  size = .4,
-                  show.legend = FALSE,
-                 position=position_dodge(.9)) +
+        ymax = ci_upper),
+      size = .4,
+      show.legend = FALSE,
+       position=position_dodge(.9)) +
   ylab("Proportion correct") + 
   xlab("Trial Type") +
   theme_bw(base_size = 7) + theme(axis.title.x = element_text(size=7),
-           axis.title.y  = element_text(size=7)) + 
+     axis.title.y  = element_text(size=7)) + 
   scale_fill_solarized(name = "Age") + theme(legend.position=c(.8,.8)) + theme(legend.key.size=unit(.2, "cm")) + theme(legend.title=element_text(size=5)) + theme(legend.text=element_text(size=5))
 ```
-Reaction times were measured from the onset of the target word. Each audio clip used the same three frames (e.g., "On the cover of my book, *some* of the pictures...") so that prodosdy was emphasized equally across all trials. The average length of each audio clip (including target item phrase, e.g., "...are cats") was approximately 6s. In all, there were 270 different target items and audio clips. Children could only make one selection. If a child was not paying attention, or if she did not hear Hannah's prompt, the experimenter repeated it, matching the original prosody. 
 
 # Results
 
-In analyzing the results, we excluded any trials in which reaction time exceeded fifteen seconds, which indicated that the child had missed the prompt, or was not paying attention. After this initial cut, we excluded responses outside three standard deviations of the log of mean reaction time. This cleaning process resulted in a data loss of `r total_loss` trials (`r round(percentage, 2)`%). Our planned analyses for this study included explorations of accuracy, reaction time, and fitting a drift diffusion model [@ratcliff1998] to our reaction time data. 
+To exclude trials where the child had missed the prompt or was not paying attention, we excluded reaction times (RTs) longer than 15s. After this initial cut, we excluded RTs outside three standard deviations of the log of mean reaction time. This cleaning process resulted in a data loss of `r total_loss` trials (`r round(percentage, 2)`%). 
 
 ## Accuracy
 
@@ -327,9 +322,9 @@ fives_allsome <- t.test(subset(t_tests, agesplit=="5-6.5 years" & trial_type=="S
 fives_somenone <- t.test(subset(t_tests, agesplit=="5-6.5 years" & trial_type=="None")$correct, subset(t_tests, agesplit=="5-6.5 years" & trial_type=="Some")$correct)
 
 ```
-### Overall accuracy
 
-In our first planned analysis, we explored children's overall patterns of accuracy for each quantifier type. Figure \ref{fig:overall_acc} shows children's for each trial type, split by age group. For each age group, we saw significantly lower accuracy for the quantifiers "some" and "none" in comparison to "all" in independent t-tests within each age group ($p$ < .01 for all tests). These results replicate our previous findings using this paradigm [@horowitz2015; @horowitzInPrep], indicating that our iPad version was a successful and appropriate adaptation of the scalar implicature task. 
+Figure \ref{fig:overall_acc} shows children's for each trial type, split by age group. For each age group, we saw significantly lower accuracy for the quantifiers "some" and "none" in comparison to "all" (all $p$s $< .01$ in two-sample t-tests for each age group). These results generally replicate our previous findings using this paradigm [@horowitz2015], but one difference from the previous results was in implicature trials. Children aged 3--5 years performed significantly lower on "some" (implicature) trials in this task in comparison with data from @horowitzInPrep ($p < .01$ for all tests). Thus, while the iPad adaptation was generally successful, implicatures were more difficult, perhaps because of the non-social nature of the iPad interaction or the recorded audio stimuli. 
+
 ```{r comparison}
 d_si <- read.csv("experiment3.csv") #pull in aggregated data from previous analysis
 
@@ -353,9 +348,7 @@ t.test(subset(t_tests, agesplit=="4-4.5 years")$Some, subset(d_si, Age=="4-4.5 y
 t.test(subset(t_tests, agesplit=="4.5-5 years")$None, subset(d_si, Age=="4.5-5 years")$None, var.equal = TRUE),
 t.test(subset(t_tests, agesplit=="4.5-5 years")$Some, subset(d_si, Age=="4.5-5 years")$Some, var.equal = TRUE))
 ```
-One difference from the previous results was in implicature trials. We found that children aged 3--5 years performed significantly lower on "some" (implicature) trials in this task in comparison with [@horowitzInPrep] in independent t-tests ($p$ < .009 for all tests). This difference is most likely due to the fact that our adaptation relied strictly on verbal communication, rather than other social and nonverbal cues.
 
-###Statistical modeling
 ```{r diptest, fig.pos = "t", fig.width=3.2, fig.height=2, fig.cap = "Frequency histogram of correct responses for each trial type, across all participants."}
 ms <- df %>%
   group_by(sub_id, trial_type) %>%
@@ -409,28 +402,28 @@ df$resp1 <- factor(df$resp1, levels=c("Incorrect", "Correct"))
 ggplot(df, aes(x=q)) + 
   geom_density(aes(weight = sum(resp1=="Correct")/length(resp1), fill = resp1), alpha=0.3) +
   facet_grid(agesplit ~ trial_type) + 
-#   geom_vline(data = m_upper, aes(xintercept = m), col = "blue", lty = 2) + 
-#   geom_vline(data = m_lower, aes(xintercept = m), col = "red", lty = 2) + 
+# geom_vline(data = m_upper, aes(xintercept = m), col = "blue", lty = 2) + 
+# geom_vline(data = m_lower, aes(xintercept = m), col = "red", lty = 2) + 
   scale_fill_solarized(name = "Response") +
   xlab("Response time (s)") + 
   ylab("Density of responses") + 
   xlim(c(0,10)) + 
   theme_bw(base_size = 7) + 
   theme(axis.title.x = element_text(size=7),
-        axis.title.y  = element_text(size=7),
-        legend.key.size=unit(.3, "cm"),
-        legend.title=element_text(size=5.5),
-        legend.text=element_text(size=5)) 
+    axis.title.y  = element_text(size=7),
+    legend.key.size=unit(.3, "cm"),
+    legend.title=element_text(size=5.5),
+    legend.text=element_text(size=5)) 
 ```
 
 ```{r accuracy model}
 lm <- summary(glmer(correct ~ age * trial_type + 
-               (trial_type | sub_id), 
-             family = "binomial", data = df))
+     (trial_type | sub_id), 
+     family = "binomial", data = df))
 ```
-In exploring children's signficantly lower performance on "some" and "none" trials, we ran a logistic mixed effects model predicting correct response as an interaction of age and trial type, with random effects of trial type and participant.\footnote{Mixed effects model fit in R using the lme4 package. The model specifications were as follows: \texttt{correct ~ age * trial type + (trial type | subject id)}.} We found that performance was significantly lower on "some" ($\beta$ = `r round(lm$coefficients[4], 2)`, $p$ < .0001) and "none" trials ($\beta$ = `r round(lm$coefficients[3], 2)`, $p$ < .0001). We also found a signficant interaction between age and trial type on "none" trials($\beta$ = `r round(lm$coefficients[5], 2)`, $p$ < .0001), indicating that children's performance with this difficult quantifier increased with age. 
 
-###Correlation between "some" and "none"
+We next fit a logistic mixed effects model predicting correct response as an interaction of age and trial type, with random effects of trial type and participant.\footnote{All mixed effects models were fit in \texttt{R} using the \texttt{lme4} package. The model specification was: \texttt{correct ~ age * trial type + (trial type | subject id)}.} Performance was significantly lower on "some" ($\beta = `r round(lm$coefficients[4], 2)`$, $p < .0001$) and "none" trials ($\beta = `r round(lm$coefficients[3], 2)`$, $p < .0001$). There was also a signficant interaction between age and trial type on "none" trials ($\beta$ = `r round(lm$coefficients[5], 2)`, $p$ < .0001), indicating that children's performance with this difficult quantifier increased with age. 
+
 ```{r correlation}
 
 
@@ -440,22 +433,11 @@ ms.acc <- df %>%
   dplyr::select(-ci_lower, -ci_upper)%>%
   spread(trial_type, mean)
 
-# ms.acc.p <- df %>%
-#   dplyr::group_by(trial_type, age, sub_id) %>%
-#   multi_boot_standard("correct", na.rm = TRUE) %>%
-#   dplyr::select(-ci_lower, -ci_upper)%>%
-#   spread(trial_type, mean)%>%
-#   dplyr::filter(Some != "NA" & None != "NA")%>%
-#   dplyr::mutate(age = as.numeric(age))
-
-#ggcorplot(ms.acc %>% filter(complete.cases(ms.acc)) %>% dplyr::select(None, Some, All))
-
 #correlation test
 sn_cor <- cor.test(ms.acc$Some, ms.acc$None)
 
 r_corr <- round(sn_cor$estimate, digits = 2)
 p_corr <- round(sn_cor$p.value, digits = 6)
-# sn_pcor <- pcor.test(ms.acc.p$Some, ms.acc.p$None, ms.acc.p$age)
 ```
 
 ```{r trials correct}
@@ -473,23 +455,20 @@ none_perc <- perc %>%
 some_perc <- perc %>%
   filter(trial_type == "Some")
 ```
-In previous research, a strong correlation has been found on children's performance with the quantifiers "some" and "none" [@horowitz2015; @horowitzInPrep]. Figure \ref{fig:diptest} shows distributions of correct responses for all trial types. Once again, we found correlated performance between these two quantifiers ($r$ = `r r_corr`, $p$ < .0001). In running Hartigan's diptest for bimodality on these two quantifiers, we found significant bimodal distributions for "some" ($D$ = `r round(diptest_some$statistic, 2)`, $p$ < .0001) and "none" trials ($D$ = `r round(diptest_none$statistic, 2)`, $p$ < .0001). While the diptest also signficantly rejected unimodality for "all" trials, this is most likely due to the distribution's long tail. The observed significantly bimodal performance on "some" and "none" trials, however, indicate that while children's accuracy is significantly worse for these quantifiers, they make responses in meaningful manner over the course of the study. In fact, although children's performance in general was quite low on these trials, there were a number of children who got the majority of these trials correct ("Some": N = `r nrow(some_perc)`; "None": N = `r nrow(none_perc)`). 
 
-##Reaction time analyses
+Figure \ref{fig:diptest} shows distributions of correct responses for all trial types. Performance on "some" and "none" trials was bimodal (Hartigan's $D$ = `r round(diptest_some$statistic, 2)`, $p$ < .0001) and "none" trials ($D$ = `r round(diptest_none$statistic, 2)`, $p$ < .0001). While children's average accuracy was low for these quantifiers, there were some children who were correct on the majority of these trials ("Some": N = `r nrow(some_perc)`; "None": N = `r nrow(none_perc)`) and the others were typically incorrect on the majority of trials. Children did not appear to be responding randomly. As in previous work, we found a strong correlation between children's accuracy on "some" and "none" trials ($r$ = `r r_corr`, $p$ < .0001). 
 
-Response latencies are a largely-unexplored aspect of children's ability to compute scalar implicatures. We hypothesized that children's reaction times on this task may reflect processing of a scalar prompt, and weighing quantifier alternatives. It is possible that this measure may provide a clue as to the nature of children's correlated struggles with these terms. In recording reaction times, we began recording from the onset of the target nouns. Here, we explore overall trends in reaction times across this task, and the relationship between response latencies and accuracy on this task.
-
-###Developmental reaction time distribution
+## Reaction time
 
 ```{r rt summary stats}
 rt_sstats <- df %>%
   gather(measure, rt, rt, clean.rt) %>%
   group_by(trial_type, measure) %>%
   summarise(mean = mean(rt, na.rm=TRUE), 
-            sd = sd(rt, na.rm=TRUE), 
-            max = max(rt, na.rm=TRUE), 
-            min = min(rt, na.rm=TRUE), 
-            median=median(rt, na.rm=TRUE)) 
+    sd = sd(rt, na.rm=TRUE), 
+    max = max(rt, na.rm=TRUE), 
+    min = min(rt, na.rm=TRUE), 
+    median=median(rt, na.rm=TRUE)) 
 ```
 
 ```{r rt corr}
@@ -510,71 +489,16 @@ allnone_corr <- cor.test(ms.rt$All, ms.rt$None)
 somenone_corr <- cor.test(ms.rt$Some, ms.rt$None)
 ```
 
-Figure \ref{fig:dense} shows the density of reaction times for each quantifier, faceted by age group and trial type. Overall, we found that reaction time was negatively correlated with age (*r* = `r round(age_corr$estimate, 2)`, *p* < .0001). In exploring the relationship between accuracy and reaction time, we found preliminary evidence of a speed-accuracy tradeoff across all trial types. Figure \ref{fig:dense} also shows evidence for increased response latencies associated with correct responses for the quantifiers "some" and "none". Overall, we found that children were largely consistent in their performance across the course of the study in reaction time correlations between reaction times for "all" and "some" (*r* = `r round(allsome_corr$estimate, 2)`, *p* < .0001), "all" and "none" (*r* = `r round(allnone_corr$estimate, 2)`, *p* < .0001), and "some" and "none" trials (*r* = `r round(somenone_corr$estimate, 2)`, *p* < .0001). 
-
 ```{r parameter estimates}
-# ms.acc <- df %>%
-#   group_by(sub_id, trial_type) %>%
-#   multi_boot_standard("correct", na.rm=TRUE)%>%
-#   select(-ci_lower, -ci_upper)%>%
-#   spread(trial_type, mean)%>%
-#   filter(Some >= .75)
-# 
-# tmp <- df %>%
-#   filter(accuracy == "high")%>%
-#   group_by(sub_id)%>%
-#   distinct()
-
-
-# for(i in df)
-#   df$accuracy <- NA
-#   
-# if(df$sub_id == "11016_4" || df$sub_id == "11316_11" || df$sub_id == "11316_4"
-#          || df$sub_id == "11316_8" || df$sub_id == "11716_1" || df$sub_id == "11716_12"
-#          || df$sub_id == "11716_2" || df$sub_id == "11716_7" || df$sub_id == "12016_3" 
-#          || df$sub_id == "12016_7" || df$sub_id == "12116_1" || df$sub_id == "12116_3" 
-#          || df$sub_id == "121815_3" || df$sub_id == "12216_5" 
-#          || df$sub_id == "12416_2" || df$sub_id == "12416_6" || df$sub_id == "12816_1"
-#          || df$sub_id == "12816_2" || df$sub_id == "12816_3" || df$sub_id == "1616_2" 
-#          || df$sub_id == "1616_5"
-#          ||df$sub_id == "Rs5" || df$sub_id == "Rs8" || df$sub_id == "TM002" || df$sub_id == "TM005" || df$sub_id == "TM009") {
-#     df$accuracy <- "high"
-# } else {
-#            df$accuracy <- "low"
-#          }
-
-# param.high <-subset(df, sub_id == "11016_4" | sub_id == "11316_11" | sub_id == "11316_4"
-#          | sub_id == "11316_8" | sub_id == "11716_1" | sub_id == "11716_12"
-#          | sub_id == "11716_2" | sub_id == "11716_7" | sub_id == "12016_3" | sub_id == "12016_7"
-#          | sub_id == "12116_1" | sub_id == "12116_3" | sub_id == "121815_3" | sub_id == "12216_5" 
-#          | sub_id == "12416_2" | sub_id == "12416_6" | sub_id == "12816_1"
-#          | sub_id == "12816_2" | sub_id == "12816_3" | sub_id == "1616_2" | sub_id == "1616_5"
-#          | sub_id == "Rs5" | sub_id == "Rs8" | sub_id == "TM002" | sub_id == "TM005" | sub_id == "TM009")
-
 trialtypes = c("All", "Some", "None")
 
-# #create dataframe for high accuracy
-# sub.pars <- data.frame(Separation = numeric(),
-#                        Non.Decision = numeric(),
-#                        Bias = numeric(),
-#                        Drift = numeric(),
-#                        Trial.Type = character(),
-#                        SubID = character(), 
-#                        Age = character())
-# sub.pars$Trial.Type <- as.character(sub.pars$Trial.Type)
-# sub.pars$SubID <- as.character(sub.pars$SubID)
-# sub.pars$Age <- as.character(sub.pars$Age)
-# 
-# temp.pars <- sub.pars
-
-
 sub.pars.high <- data.frame(Separation = numeric(),
-                       Non.Decision = numeric(),
-                       Bias = numeric(),
-                       Drift = numeric(),
-                       Trial.Type = character(),
-                       SubID = character(), 
-                       Age = character())
+         Non.Decision = numeric(),
+         Bias = numeric(),
+         Drift = numeric(),
+         Trial.Type = character(),
+         SubID = character(), 
+         Age = character())
 sub.pars.high$Trial.Type <- as.character(sub.pars.high$Trial.Type)
 sub.pars.high$SubID <- as.character(sub.pars.high$SubID)
 sub.pars.high$Age <- as.character(sub.pars.high$Age)
@@ -583,12 +507,12 @@ temp.pars.high <- sub.pars.high
 
 # now for low
 sub.pars.low <- data.frame(Separation = numeric(),
-                       Non.Decision = numeric(),
-                       Bias = numeric(),
-                       Drift = numeric(),
-                       Trial.Type = character(),
-                       SubID = character(), 
-                       Age = character())
+         Non.Decision = numeric(),
+         Bias = numeric(),
+         Drift = numeric(),
+         Trial.Type = character(),
+         SubID = character(), 
+         Age = character())
 sub.pars.low$Trial.Type <- as.character(sub.pars.low$Trial.Type)
 sub.pars.low$SubID <- as.character(sub.pars.low$SubID)
 sub.pars.low$Age <- as.character(sub.pars.low$Age)
@@ -601,7 +525,7 @@ df$resp <- as.character(df$resp)
 #Note that this is with excluded reaction time data, but it's possible that we shouldn't be excluding any rts...
 
 # df %<>%
-#   dplyr::filter(q > 0, na.rm = TRUE)
+# dplyr::filter(q > 0, na.rm = TRUE)
 
 param.high <- df %>%
   filter(accuracy == "high")
@@ -612,46 +536,30 @@ param.low <- df %>%
 subs.high <- unique(param.high$sub_id)
 subs.low <- unique(param.low$sub_id)
 
-# subs <- unique(df$sub_id)
-
-# for (j in 1:length(subs)) {
-#   sid <- as.character(subs[j]) 
-#   for (i in 1:length(trialtypes)) {
-#     ttype <- as.character(trialtypes[i])
-#     dat <- as.data.frame(subset(df, trial_type == ttype & sub_id == sid))
-#     opt <- optim(c(1, .1, .1, 1), wiener_deviance, 
-#                  dat=dplyr::select(dat, c(q, resp)), method="Nelder-Mead")
-#     pars <- c(opt$par, ttype, sid, dat$agesplit[1])
-#     temp.pars[i,] <- pars
-#   }
-#   sub.pars <- rbind(temp.pars, sub.pars)
-# } 
-
-
 # first estimate params for high accuracy kids
 for (j in 1:length(subs.high)) {
   sid <- as.character(subs.high[j]) 
   for (i in 1:length(trialtypes)) {
-    ttype <- as.character(trialtypes[i])
-    dat <- as.data.frame(subset(df, trial_type == ttype & sub_id == sid))
-    opt <- optim(c(1, .1, .1, 1), wiener_deviance, 
-                 dat=dplyr::select(dat, c(q, resp)), method="Nelder-Mead")
-    pars <- c(opt$par, ttype, sid, dat$agesplit[1])
-    temp.pars.high[i,] <- pars
+  ttype <- as.character(trialtypes[i])
+  dat <- as.data.frame(subset(df, trial_type == ttype & sub_id == sid))
+  opt <- optim(c(1, .1, .1, 1), wiener_deviance, 
+       dat=dplyr::select(dat, c(q, resp)), method="Nelder-Mead")
+  pars <- c(opt$par, ttype, sid, dat$agesplit[1])
+  temp.pars.high[i,] <- pars
   }
   sub.pars.high <- rbind(temp.pars.high, sub.pars.high)
 } 
-# 
+
 # now for low
 for (j in 1:length(subs.low)) {
   sid <- as.character(subs.low[j]) 
   for (i in 1:length(trialtypes)) {
-    ttype <- as.character(trialtypes[i])
-    dat <- as.data.frame(subset(param.low, trial_type == ttype & sub_id == sid))
-    opt <- optim(c(1, .1, .1, 1), wiener_deviance, 
-                 dat=dplyr::select(dat, c(q, resp)), method="Nelder-Mead")
-    pars <- c(opt$par, ttype, sid, dat$agesplit[1])
-    temp.pars.low[i,] <- pars
+  ttype <- as.character(trialtypes[i])
+  dat <- as.data.frame(subset(param.low, trial_type == ttype & sub_id == sid))
+  opt <- optim(c(1, .1, .1, 1), wiener_deviance, 
+       dat=dplyr::select(dat, c(q, resp)), method="Nelder-Mead")
+  pars <- c(opt$par, ttype, sid, dat$agesplit[1])
+  temp.pars.low[i,] <- pars
   }
   sub.pars.low <- rbind(temp.pars.low, sub.pars.low)
 } 
@@ -671,9 +579,9 @@ sub.pars$Drift <- as.numeric(sub.pars$Drift)
 sub.pars <- select(sub.pars, -Age) %>%
   rename(sub_id = SubID) %>%
   left_join(df %>% 
-              group_by(sub_id) %>% 
-              distinct %>% 
-              select(sub_id, age_round, accuracy)) %>%
+      group_by(sub_id) %>% 
+      distinct %>% 
+      select(sub_id, age_round, accuracy)) %>%
   gather(Param, Value, Separation:Drift) 
 
 
@@ -686,56 +594,67 @@ sub.pars.ms <- sub.pars %>%
 
 ```{r param_plot, fig.env = "figure*", fig.pos = "t", fig.width=6.6, fig.height=1.45, fig.align='center', set.cap.width=T, num.cols.cap=2, fig.cap = "Parameter estimates for drift diffusion model, split by age and trial type. Error bars are 95 percent confidence intervals computed by nonparametric bootstrap."}
 
-quartz()
+# quartz()
 ggplot(sub.pars.ms, aes(x=accuracy, y=mean, color=Trial.Type)) +
   geom_point(size = 1.2, position=position_dodge(.05)) + 
   geom_linerange(aes(ymin = ci_lower, ymax = ci_upper), 
-                 position=position_dodge(.05)) +
+       position=position_dodge(.05)) +
   geom_line(aes(colour = Trial.Type, group=Trial.Type)) + 
   facet_wrap(~Param, scales="free", ncol = 4) + 
   theme_bw(base_size = 7.7) + 
   theme(axis.text.x = element_text(size = 7),
-        axis.title.x = element_text(size = 7.5),
-        axis.title.y = element_text(size = 7.5),
-        axis.text.y = element_text(size = 7),
-        legend.text = element_text(size = 6), 
-        legend.title = element_text(size = 6.5)) + 
+    axis.title.x = element_text(size = 7.5),
+    axis.title.y = element_text(size = 7.5),
+    axis.text.y = element_text(size = 7),
+    legend.text = element_text(size = 6), 
+    legend.title = element_text(size = 6.5)) + 
   langcog::scale_color_solarized(guide_legend(title="Trial Type")) + 
   ylab("Mean") + xlab("Accuracy")
 ```
 
-###Statistical modeling
-```{r rt model}
-rt_lm <- summary(lmer(log(rt) ~ scale(age, scale=FALSE) * log(trial_num) + 
-               scale(age, scale=FALSE) * trial_type + 
-               (trial_type | sub_id), 
-             data = df))
+Figure \ref{fig:dense} shows the distribution of RTs for each quantifier, split by age group and trial type. Overall, RTs were faster for older children, and substantially slower for "some" and "none" compared with "all."
+
+```{r rt_model}
+rt_lm <- summary(lmer(log(clean.rt) ~ log(trial_num) + 
+     scale(age, scale=FALSE) * trial_type + 
+     (trial_type | sub_id), 
+     data = filter(df, correct==1)))
 ```
 
-We next turned to the relationship betwen age, reaction time, and accuracy. Our initial hypothesis was that successfully computing quantifiers might require additional processing time to contrast salient alternatives. In exploring this, we ran a planned linear mixed effects model predicting the log of reaction time as an interaction of age, trial number, and trial type with a random effect of trial type.^[Mixed effects model fit in R using the lme4 package. The model specifications were as follows: \texttt{log(reaction time) ~ scale(age) * log(trial number) + scale(age) * trial type + (trial type | subject id)}. We calculated \emph{p} values by treating the \emph{t} statistic as if it were a \emph{z} statistic @barr2013.] We found a main effect of trial number, with reaction times decreasing over the course of the study (($\beta$ = `r round(rt_lm$coefficients[3], 2)`, $p$ < .00001)), but found longer reaction times on "none" ($\beta$ = `r round(rt_lm$coefficients[4], 2)`, $p$ < .00001), and "some" trials ($\beta$ = `r round(rt_lm$coefficients[5], 2)`, $p$ < .00001). Interestingly, we also found an interaction between age and trial type, such that reaction times on "none" trials increased with age relative to "all" trials ($\beta$ = `r round(rt_lm$coefficients[6], 2)`, $p$ < .02), and marginally (but not significantly) increased on "some" trials ($\beta$ = `r round(rt_lm$coefficients[7], 2)`, $p$ = .38). 
+We fit a linear mixed effects model predicting log RT on correct trials as a function of log trial number, the interaction of age and trial type, and random effects of trial type by subject.^[Model specification: \texttt{log(reaction time) ~ log(trial number) + age * trial type + (trial type | subject id)}. Age was centered for ease of interpretation of coefficients, and we calculated \emph{p} values via the $t=z$ approximation.] Reaction times were longer on "none" ($\beta = `r round(rt_lm$coefficients[4], 2)`$, $p < .0001$) and "some" trials ($\beta = `r round(rt_lm$coefficients[5], 2)`$, $p < .0001$), and reaction times decreased with age ($\beta = `r round(rt_lm$coefficients[3], 2)`$, $p < .0001$). There were no significant interactions between age and trial type. The model also showed a main effect of trial number, with reaction times decreasing over the course of the study ($\beta$ = `r round(rt_lm$coefficients[2], 2)`, $p$ < .00001). 
 
-This interaction is particularly intriguing because in our previous accuracy model, we found increased performance on these trial types. While we find that older children are taking longer to respond to these trial types, they are more likely to answer correctly, even though reaction time is negatively correlated with age. This seems to indicate that there is a speed-accuracy tradeoff for these quantifiers.
+```{r rt_acc_model}
+rt_acc_lm <- summary(lmer(log(clean.rt) ~ log(trial_num) + 
+     scale(age, scale=FALSE) * trial_type * correct + 
+     (trial_type | sub_id), 
+     data = df))
+```
+
+Examination of the pattern in Figure \ref{fig:dense} suggests that accuracy and reaction time may be interacting, however. In particular, while correct responses on "all" trials appear to be faster than the (few) incorrect responses, the opposite is true for "none" and "some" trials: Errors have faster RTs, potentially indicating a speed-accuracy tradeoff. To test for this effect, we fit another mixed effects model, this time including accuracy and its interactions with age and trial type as predictors. This model revealed that correcvt trials overall had faster RTs ($\beta = `r round(rt_acc_lm$coefficients[6], 2)`$, $p = .0002$), but that this accuracy term interacted negatively with trial type such that both "none" and "some" trials had slower RTs for correct trials ($\beta = `r round(rt_acc_lm$coefficients[10], 2)`$, $p < .0001$; $\beta = `r round(rt_acc_lm$coefficients[11], 2)`$, $p < .0001$). There were no three-way interactions of trial-type and age. This model thus provides evidence of a speed-accuracy tradeoff for "some" and "none" trials. 
+
+
+
 
 ```{r}
 sep_lm <- summary(lmer(Value ~ accuracy * Trial.Type + (1 | sub_id), 
-             data = filter(sub.pars, Param=="Separation")))
+     data = filter(sub.pars, Param=="Separation")))
 sep_lmage <- summary(lmer(Value ~ accuracy* Trial.Type *age_round + (1 | sub_id), 
-             data = filter(sub.pars, Param=="Separation")))
+     data = filter(sub.pars, Param=="Separation")))
 
 nd_lm <- summary(lmer(Value ~ accuracy * Trial.Type + (1 | sub_id), 
-             data = filter(sub.pars, Param=="Non.Decision")))
+     data = filter(sub.pars, Param=="Non.Decision")))
 nd_lm_age <- summary(lmer(Value ~ accuracy * Trial.Type *age_round + (1 | sub_id), 
-             data = filter(sub.pars, Param=="Non.Decision")))
+     data = filter(sub.pars, Param=="Non.Decision")))
 
 bias_lm <- summary(lmer(Value ~ accuracy* Trial.Type + (1 | sub_id), 
-             data = filter(sub.pars, Param=="Bias")))
+     data = filter(sub.pars, Param=="Bias")))
 bias_lmage <- summary(lmer(Value ~ accuracy * Trial.Type * age_round + (1 | sub_id), 
-             data = filter(sub.pars, Param=="Bias")))
+     data = filter(sub.pars, Param=="Bias")))
 
 drift_lm <- summary(lmer(Value ~ accuracy* Trial.Type + (1 | sub_id), 
-             data = filter(sub.pars, Param=="Drift")))
+     data = filter(sub.pars, Param=="Drift")))
 drift_lmage <-summary(lmer(Value ~ accuracy* Trial.Type *age_round + (1 | sub_id), 
-             data = filter(sub.pars, Param=="Drift")))
+     data = filter(sub.pars, Param=="Drift")))
 ```
 
 ##Drift diffusion models
@@ -780,7 +699,7 @@ Taken together, our work suggests that there is a meaningful relationship betwee
 
 # Acknowledgements
 
-Special thanks to Bing Nursery School, the San Jose Children's Discovery Museum, Veronica Cristiano, Rachel Walker, and Tamara Mekler for their help with data collection, and to Kara Weisman and Ann Nordmeyer for their assistance creating stimuli.
+Thanks to Bing Nursery School and the San Jose Children's Discovery Museum. Thanks also to Veronica Cristiano, Rachel Walker, and Tamara Mekler for their help with data collection, and to Kara Weisman and Ann Nordmeyer for their assistance creating stimuli.
 
 # References 
 
