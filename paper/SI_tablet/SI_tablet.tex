@@ -6,6 +6,7 @@
 \usepackage{cogsci}
 \usepackage{pslatex}
 \usepackage{float}
+\usepackage{caption}
 
 % amsmath package, useful for mathematical formulas
 \usepackage{amsmath}
@@ -140,11 +141,10 @@ This relationship to ``none'' is unexpected on classic Gricean theories
 logically entailed by the original message (i.e. ``all''). But it
 \emph{is} in fact predicted by recent probabilistic models of
 implicature. Under these models, all the relevant alternatives compete
-with one another (M. C. Frank \& Goodman, 2012, Goodman \& Stuhlm{ü}ller
-(2013), Franke (2014)). On the other hand, all of the evidence cited
-above for the claim of ``none'' as an alternative is relatively
-indirect, and such a substantial revision to standard theory requires
-further evidence.
+with one another (Goodman \& Stuhlm{ü}ller, 2013, Franke (2014)). On the
+other hand, all of the evidence cited above for the claim of ``none'' as
+an alternative is relatively indirect, and such a substantial revision
+to standard theory requires further evidence.
 
 \begin{CodeChunk}
 \begin{figure}[b]
@@ -426,35 +426,6 @@ thus provides evidence of a speed-accuracy tradeoff for ``some'' and
 
 \subsection{Drift diffusion models}\label{drift-diffusion-models}
 
-Our preliminary analysis of children's reaction times in this task
-indicated greater response latencies associated with success on ``some''
-and ``none'' trials. Motivated by these patterns, we explored the
-interaction between reaction time and accuracy in more depth with a DDM.
-A DDM can be used in behavioral tasks to provide a more detailed view of
-the relationship between accuracy and reaction time (Milosavljevic,
-Malmaud, Huth, Koch, \& Rangel, 2010; Ratcliff \& Rouder, 1998).
-
-In DDM, a behavioral response (a correct or incorrect choice) is the
-result of noisy data accumulation through a diffusion process (Ratcliff
-\& Rouder, 1998). Responses have \emph{separation boundaries} that are
-dependent on the amount of information needed to initate a response, and
-\emph{drift rate} formalizes the rate of data accumulation (Ratcliff \&
-Rouder, 1998). \emph{Nondecision} is the amount of time between stimuli
-offset, and initiating the diffusion process. Finally, different
-responses may have a \emph{bias}, or different starting point in the
-diffusion process, dependent on the stimuli (Ratcliff \& Rouder, 1998).
-
-Although a DDM is traditionally fit to data from two-alternative
-forced-choice tasks, here we estimate the drift process between a
-correct and incorrect choice, with two options in each trial being
-``incorrect,'' and only one being consistent with the target noun and
-quantifier. In fitting a DDM to our data in this way, we estimated
-parameters for each subject across all three trial types (``all'',
-``some'', and ``none'') using the RWiener package. We then aggregated
-across subjects to obtain means and confidence intervals for each age
-group. Figure \ref{fig:devo_param_plot} shows the parameter estimates
-for each age group, split by trial type.
-
 \begin{CodeChunk}
 \begin{figure*}[t]
 
@@ -466,42 +437,64 @@ for each age group, split by trial type.
 \end{figure*}
 \end{CodeChunk}
 
+Motivated by the evidence of a speed-accuracy tradeoff we observed, we
+further explored the interaction between reaction time and accuracy in
+more depth using drift diffusion modeling. DDM can be used in behavioral
+tasks to provide a more detailed view of the relationship between
+accuracy and reaction time (Ratcliff \& Rouder, 1998). In DDM, a
+behavioral response (a correct or incorrect choice) is the result of
+noisy data accumulation through a diffusion process. Responses have
+\emph{separation boundaries} that are dependent on the amount of
+information needed to initate a response, and \emph{drift rate}
+formalizes the rate of data accumulation. \emph{Nondecision} is the
+amount of time between stimuli offset, and initiating the diffusion
+process. Finally, different responses may have a \emph{bias}, or
+different starting point in the diffusion process, dependent on the
+stimuli.
+
+\subsubsection{Developmental analyses}\label{developmental-analyses}
+
+Although DDMs are traditionally fit to data from two-alternative
+forced-choice tasks, here we estimate the drift process between a
+correct and incorrect choice, with two options in each trial being
+``incorrect,'' and only one being consistent with the target noun and
+quantifier. We estimated parameters for each subject for each trial type
+using the \texttt{RWiener} package. We then aggregated across subjects
+to obtain means and confidence intervals for each age group. Figure
+\ref{fig:devo_param_plot} shows the parameter estimates for each age
+group, split by trial type.
+
 For each estimate, we ran a mixed effects model, predicting parameter
 value as an interaction of age and trial
 type.\footnote{The specifications for all parameter models are as follows: \texttt{Parameter Value ~ age * trial type + (1 | subject ID)}}
-In our separation boundary estimates, there was no significant effect of
-trial type on boundary estimates, indicating that roughly the same
-amount of information needs to be accumulated to make a decision in each
-trial type. In our nondecision parameter estimates, we found a
-significant main effect of age (\(\beta\) = -0.28, \(p\) \textless{}
-.00001), as well as a interaction between age and ``none'' trials
-(\(\beta\) = 0.24, \(p\) = .01).
+For boundary separation, there was no significant effect of trial type,
+indicating that roughly the same amount of information needs to be
+accumulated to make a decision in each trial type. For nondecision time,
+we found a significant main effect of age (\(\beta\) = -0.28, \(p\)
+\textless{} .00001), as well as a interaction between age and ``none''
+trials (\(\beta\) = 0.24, \(p\) = .01). As expected in drift rate, there
+was a negative main effect of trial type (``None'': \(\beta\) = -1.3,
+\(p\) = .0185; ``Some'': \(\beta\) = -1.18, \(p\) = .03). Interestingly,
+for bias there was a significant negative effect of ``none'' trials
+(\(\beta\) = -0.5, \(p\) = .0005), and ``some'' trials showed a trend
+towards significance (\(\beta\) = -0.28, \(p\) = .0503), as well as a
+significant interaction between age and ``none'' trials (\(\beta\) =
+0.07, \(p\) = .023). The parameter estimates from our DDM align with the
+analyses presented above: Older children, who are more familiar with the
+quantifier scale, are more likely to respond correctly in our scalar
+implicature task, while younger children's failures appear to be due to
+a low rate of data accumulation and a high separation boundary.
 
-As expected in drift rate, there was negative main effect of trial type
-(``None'': \(\beta\) = -1.3, \(p\) = .0185; ``Some'': \(\beta\) = -1.18,
-\(p\) = .03) Interestingly, in our bias estimates the model revealed a
-significant negative effect of ``none'' trials (\(\beta\) = -0.5, \(p\)
-= .0005), and ``some'' trials showed borderline significance (\(\beta\)
-= -0.28, \(p\) = .0503), as well as a significant interaction between
-age and ``none'' trials (\(\beta\) = 0.07, \(p\) = .023).
+\subsubsection{Exploratory analyses}\label{exploratory-analyses}
 
-Taken together, the parameter estimates from our DDM indicate that as
-children develop (and become more familiar with the quantifier scale),
-they are more likely to respond correctly in our scalar implicature
-task, while younger children fail, due to a low rate of data
-accumulation and a high separation boundary. Interestingly, children's
-bias increases across development for ``none,'' but not for ``some,''
-possibly because ``none'' strength as a competitor for ``some''
-increases with increased access to alternatives.
-
-It is possible that meaningful differences in the diffusion process
-might be revealed by accounting for accuracy. In an exploratory
-analysis, we use accuracy on scalar implicature trials to independently
-estimate parameters for participants. We split children by accuracy on
-scalar implicature trials, and then estimated parameters by accuracy
-group. High accuracy was defined as an average of 75\% performance on
-scalar implicature trials. Figure \ref{fig:param_plot} shows the
-paramter estimates for each accuracy group, split by trial type.
+In addition to examining effects of age on the dyiffusion process, we
+additionally conducted an exploratory analysis, examining differences in
+the decision-making process for children who consistently made SIs
+compared with those who did not. We split children by accuracy on scalar
+implicature trials, and then estimated parameters by accuracy group.
+High accuracy was defined as an average of 75\% or higher performance on
+scalar implicature trials. Figure \ref{fig:param_plot} shows parameter
+estimates for each accuracy group, split by trial type.
 
 \begin{CodeChunk}
 \begin{figure*}[t]
@@ -514,92 +507,60 @@ paramter estimates for each accuracy group, split by trial type.
 \end{figure*}
 \end{CodeChunk}
 
-As in our developmental DDM, we did not find any significant effects of
-separation or nondecision. While drift rates show a significant effect
-of accuracy, because we estimated parameters for high and low accuracy
-children separately, these are defined by the analysis.
-
-In our bias estimates, however, we found a significant interaction
-between accuracy group and trial type on ``some'' trials (\(\beta\) =
--0.18, \(p\) = .0013). This interaction suggests that bias (the starting
-point in the diffusion process) might be an important factor in
-successfully making a scalar implicature. When we included an age
-coefficient in this model, this interaction was no longer significant;
-instead, we found a significant interaction between age, trial type
-``some'', and accuracy (\(/beta\) = -0.18, \(p\) = .024).
-
-While it seems that when accounting for age children's bias on ``some''
-trials is not affected by scalar implicature accuracy, older children in
-the low accuracy group are significantly more likely to have a lower
-bias for ``some.'' This observed interaction, together with the findings
-of our previous accuracy models, does provide evidence for the
-availability of ``none'' providing a salient alternative that results in
-a speed-accuracy tradeoff in making a scalar implicature.
+We again used mixed-effects models to predict DDM coefficients across
+participants. As in the developmental DDM analysis, there were no
+significant effects of separation or nondecision. And while drift rates
+showed a significant effect of accuracy, because we estimated parameters
+for high- and low-accuracy children separately, these differences are
+expected. In our bias estimates, however, we found a significant
+interaction between accuracy group and trial type on ``some'' trials
+(\(\beta\) = -0.18, \(p = .0013\)). This interaction suggests that bias
+(the starting point in the diffusion process) might be an important
+factor in successfully making a scalar implicature: More successful
+children were less biased towards incorrect response alternatives.
 
 \section{General Discussion}\label{general-discussion}
 
-Our primary question in this study centered on whether success in making
-scalar implicatures requires increased response latencies to make use of
-relevant scalar alternatives. We adapted a previously validated scalar
-implicature task (Horowitz \& Frank, 2015; Horowitz et al., in prep.)
-for the iPad to explore the relationship between reaction time and
-accuracy.
+What makes scalar implicatures using quantifiers so hard for children?
+The best current hypothesis posits that children do not have access to
+the appropriate inferential alternatives and hence fail to consider them
+in their pragmatic computation (D. Barner \& Bachrach, 2010; David
+Barner et al., 2011). But what are those alternatives? A variety of
+recent work has suggested that the negative alternative ``none'' may
+compete with ``some'' and ``all.'' Our findings here are consistent with
+this account and provide some additional support. We replicated the
+pattern found in previous studies that those children who succeed in
+comprehending the quantifier ``none'' also make SIs (Horowitz \& Frank,
+2015; Horowitz et al., in prep.). In addition, our data revealed a
+speed-accuracy tradeoff, such that reaction times in those trials in
+which children succeeded in making SIs were slower overall.
 
-In our analyses, we replicated previous patterns of performance in
-Horowitz \& Frank (2015) and Horowitz et al. (in prep.). We found that
-children were overall less accurate when evaluting the quantifiers
-``some'' and ``none'' in comparison to ``all,'' but that their
-performance increased over development. We again found evidence of
-bimodal and correlated performance on these two quantifier types,
-suggesting a common source of difficulty. Additionally, we discovered in
-a statistical model that although children were more likely make an
-incorrect response on ``some'' and ``none'' trial, their performance on
-these trials signficantly increased with age.
+One interpretation of this speed-accuracy tradeoff is that children who
+have more inferential alternatives accessible to them (e.g.~are
+considering ``none,'' ``some,'' and ``all'' together) are both better at
+making SIs and slower to make them due to the processing cost of making
+the inference. Our data are consistent with this account, and we also
+found some evidence in favor of it from an exploratory drift diffusion
+model analysis. We fit a DDM to our data for children who succeeded in
+making scalar implicatures versus children who fail. The model suggested
+that bias in ``some'' and ``none'' trials might be a key factor related
+to success---that is, children who were considering ``some'' and ``all''
+responses equally in their decision were more likely to make the SI.
+This finding again is consistent with the idea that weighing
+alternatives appropriately in the SI computation is critical to success.
 
-In our extension of this paradigm, we collected reaction time data for
-these quantifier types to investigate the relationship between reaction
-time and accuracy. In our reaction time analyses, we found evidence of a
-speed-accuracy tradeoff, as well as an interaction between reaction time
-and age, with older children taking a slightly longer time to respond to
-these trials, but ultimately being more accurate. These findings
-motivated our decision to fit our data to a Drift Diffusion Model.
-
-As an exploratory analysis, we fit a DDM to our data to prediction the
-relationship between reaction time and accuracy for children who succeed
-in making scalar implicatures versus children who fail. While the
-results are preliminary, we found some evidence that bias might be a
-critical factor in success in making a scalar implicature.
-Interestingly, this effect seems to be driven by age, such that older
-children who fail on these trials have significantly lower bias in
-comparison to ``all'' trials. It is very likely that the high
-variability and wide distribution of reaction times observed in this
-study contributed to the unclear findings observed in our DDM. Given
-that we did see indications that bias is a significant part of
-successfully making a scalar implicature, however, future work should
-explore this relationship.
-
-Our work contributes to the existing literature in utilizing a novel
-method to collect accurate and detailed reaction time data on a scalar
-implicature task. Response latencies are an important indicator of the
-pragmatic challenges that children face in processing implicatures.
-Additionally, our findings replicate previous work, providing evidence
-for the appropriateness of this paradigm in targeting scalar
-implicatures. Further, our larger sample size, increased number of
-trials, and randomized design strengthen our analytical power, and allow
-for more detailed inferences from the data. Our work supports not only
-the hypthesis that children must be familiar with the quantifier scale
-in order to make an implicature, but also provides preliminary evidence
-that doing correctly doing so may require additional processing time.
-
-Taken together, our work suggests that there is a meaningful
-relationship between children's accuracy and reaction times in making
-scalar implicatures throughout development. From our results, the
-relationship between children's quantifier knowledge, processing speed,
-and scalar implicature computation is unclear, and future work should
-test these links more explicitly. Our work suggests, however, that
-comparing a speaker's statement to possible alternatives in order to
-make an implicature is an active process for children, and does seem to
-result in a speed-accuracy tradeoff.
+The speed-accuracy patterns we report are correlational, however, and
+other accounts are consistent with them as well. For example, some third
+factor (say inhibitory control) could underly the ability to succeed in
+``some'' and ``none'' trials and also explain why some children are able
+to inhibit their response long enough to complete the SI computation.
+Horowitz et al. (in prep.) did not find evidence of correlations between
+individuals' SI abilities and their executive function using one popular
+measure (the dimensional change card sort). Other versions of this
+account (or other accounts entirely) are still possible, however.
+Nevertheless, our work here suggests that there is a meaningful
+relationship between children's accuracy and processing times in making
+scalar implicatures.
 
 \section{Acknowledgements}\label{acknowledgements}
 
@@ -623,9 +584,6 @@ role of scalar alternatives in childrens pragmatic inference.
 Degen, J., \& Tanenhaus, M. K. (2015). Processing scalar implicature: A
 constraint-based approach. \emph{Cognitive Science}, \emph{39}(4),
 667--710.
-
-Frank, M. C., \& Goodman, N. D. (2012). Predicting pragmatic reasoning
-in language games. \emph{Science}, \emph{336}(6084), 998--998.
 
 Franke, M. (2014). Typical use of quantifiers: A probabilistic speaker
 model. In \emph{Proceedings of the 36th annual conference of the
@@ -658,11 +616,6 @@ the acquisition of informativeness and implicature. \emph{Cognition},
 
 Levinson, S. C. (2000). \emph{Presumptive meanings: The theory of
 generalized conversational implicature}. MIT Press.
-
-Milosavljevic, M., Malmaud, J., Huth, A., Koch, A., \& Rangel, A.
-(2010). Drift diffusion model can account for accuracy and reaction time
-of value-based choices under high and low time pressure. \emph{Judgment
-and Decision Making}, \emph{5}(6), 437--449.
 
 Noveck, I. (2001). When children are more logical than adults:
 Experimental investigations of scalar implicature. \emph{Cognition},
