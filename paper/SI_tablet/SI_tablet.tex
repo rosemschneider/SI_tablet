@@ -6,7 +6,6 @@
 \usepackage{cogsci}
 \usepackage{pslatex}
 \usepackage{float}
-\usepackage{caption}
 
 % amsmath package, useful for mathematical formulas
 \usepackage{amsmath}
@@ -67,13 +66,13 @@ trouble with scalar implicatures is thus an important puzzle for
 theories of the development of pragmatics, given their communicative
 competence in other domains. Here, we explore children's reaction times
 in a new paradigm for measuring scalar implicature processing. Alongside
-falures on scalar implicature with ``some,'' we replicate previous
+falures on scalar implicatures with ``some,'' we replicate previous
 reports of failures on the quantifier ``none'' and find evidence of a
 speed-accuracy tradeoff for both ``some'' and ``none.'' Motivated by
 these findings, we use a Drift Diffusion Model to explore the
 relationship between accuracy and reaction time in our task and find
 evidence consistent with the hypothesis that preschoolers lack access to
-the relevant alternatives for the scalar implicature computation. The
+the relevant alternatives for the scalar implicature computation. This
 set of relevant alternatives may be broader than has been previously
 assumed, however.
 
@@ -86,9 +85,9 @@ Pragmatics; development; scalar implicature; diffusion models.
 Language comprehension in context is an inferetial process. Listeners
 are not limited to interpreting the literal meaning of speakers'
 utterances; they can also reason about what the speaker intended, based
-on other utterances the speaker could have said. In the case of
-\emph{pragmatic implicatures} (Grice, 1975), a speaker employs a weaker
-literal description to imply that a stronger alternative is true. Adult
+on other potential utterances. In the case of \emph{pragmatic
+implicatures} (Grice, 1975), a speaker employs a weaker literal
+description to imply that a stronger alternative is true. Adult
 listeners tend to infer from the statement ``I enjoyed \emph{some} of my
 winter break'' that some, but not all, of the break was pleasant. This
 \emph{scalar implicature} (SI) relies heavily on a knowledge of the
@@ -109,19 +108,19 @@ speakers based on the informativeness of their scalar descriptions
 still struggle to compute scalar implicatures until late in development?
 
 One possibile cause of children's failures is that they might not have
-access to the relevant lexical alternatives (D. Barner \& Bachrach,
-2010). This idea, which we will refer to as the \emph{Alternatives
-Hypothesis}, predicts that if children cannot quickly and reliabily
-bring to mind the relevant alternative quantifiers (e.g., ``all'' in a
-situation where they hear ``some'') they will be unable to make the
-implicature computation. The alternatives hypothesis makes a number of
-predictions about children's abilities in reasoning about quantifiers,
-some of which have been confirmed empirically. For example, consistent
-with the idea of inaccessible alternatives, David Barner, Brooks, \&
-Bale (2011) showed that four-year-olds could not even resolve the
-quantifier expression ``only some'' (which should force alternatives to
-be negated semantically, rather than pragmatically). But what are the
-proper alternatives for SIs?
+access to the relevant lexical alternatives (Barner \& Bachrach, 2010).
+This idea, which we will refer to as the \emph{Alternatives Hypothesis},
+predicts that if children cannot quickly and reliabily bring to mind the
+relevant alternative quantifiers (e.g., ``all'' in a situation where
+they hear ``some'') they will be unable to make the implicature
+computation. The alternatives hypothesis makes a number of predictions
+about children's abilities in reasoning about quantifiers, some of which
+have been confirmed empirically. For example, consistent with the idea
+of inaccessible alternatives, Barner, Brooks, \& Bale (2011) showed that
+four-year-olds could not even resolve the quantifier expression ``only
+some'' (which should force alternatives to be negated semantically,
+rather than pragmatically). But what are the proper alternatives for
+SIs?
 
 With respect to the proper set of alternatives for SI, the empirical
 evidence has been changing rapidly. Although the conventional view on SI
@@ -129,7 +128,7 @@ is that the primary inferential alternative is ``all,'' a new body of
 evidence suggests that more alternatives may be necessary---in
 particular, ``none.'' For example, Degen \& Tanenhaus (2015) found that
 set size changes the felicity of quantifier SIs for adults: ``some'' is
-more felicitous when you couldn't say ``one'' or ``two.'' In a
+more felicitous when you could not say ``one'' or ``two.'' In a
 computational reanalysis of these and other data, Franke (2014) showed
 that a high weight on the alternative ``none'' was critical for fitting
 these data. And in a recent study with children, Skordos \& Papafragou
@@ -168,7 +167,8 @@ described a book using a semantically ambiguous description (e.g., ``On
 the cover of my book, some of the pictures are cats'' {[}scalar{]} or
 ``On the cover of my book are cats'' {[}ad hoc{]}). Children succeded on
 ad-hoc trials but largely failed to make SIs, suggesting they had the
-pragmatic competence necessary to compute the implicature.
+pragmatic competence necessary to compute the implicature, but failed to
+do so for scalar descriptors.
 
 Interestingly, in Horowitz \& Frank (2015), the same children who failed
 on SI also failed on unambiguous ``none'' control trials---and in
@@ -223,7 +223,7 @@ design.\footnote{The full experiment can be viewed online at \texttt{https://ros
  \hline
  Age group & N & Mean & Median & SD \\
  \hline
- 3--3.5 years & 24 & 3.27 & 3.27 & 0.14\\
+ 3--3.5 years & 24 & 3.27 & 3.27 & 0.15\\
  3.5--4 years & 35 & 3.78 & 3.73 & 0.15 \\ 
  4--4.5 years & 25 & 4.28 & 4.28 & 0.15\\
  4.5--5 years & 30 & 4.76 & 4.76 & 0.15 \\
@@ -298,11 +298,11 @@ they had made their selection in the previous trial.
 
 \section{Results}\label{results}
 
-To exclude trials where the child had missed the prompt or was not
-paying attention, we excluded reaction times (RTs) longer than 15s.
-After this initial cut, we excluded RTs outside three standard
-deviations of the log of mean reaction time. This cleaning process
-resulted in a data loss of 85 trials (2.14\%).
+In trials where the child had missed the prompt or was not paying
+attention, we excluded reaction times (RTs) longer than 15s. After this
+initial cut, we excluded RTs outside three standard deviations of the
+log of mean reaction time. This cleaning process resulted in a data loss
+of 3976 trials (2.09\%).
 
 \subsection{Accuracy}\label{accuracy}
 
@@ -341,20 +341,20 @@ We next fit a logistic mixed effects model predicting correct response
 as an interaction of age and trial type, with random effects of trial
 type and
 participant.\footnote{All mixed effects models were fit in \texttt{R} using the \texttt{lme4} package. The model specification was: \texttt{correct ~ age * trial type + (trial type | subject id)}.}
-Performance was significantly lower on ``some'' (\(\beta = -6.98\),
-\(p < .0001\)) and ``none'' trials (\(\beta = -9.55\), \(p < .0001\)).
+Performance was significantly lower on ``some'' (\(\beta = -6.38\),
+\(p < .0001\)) and ``none'' trials (\(\beta = -8.98\), \(p < .0001\)).
 There was also a signficant interaction between age and trial type on
-``none'' trials (\(\beta\) = 1.53, \(p\) \textless{} .0001), indicating
-that children's performance with this difficult quantifier increased
-with age.
+``none'' trials (\(\beta\) = 1.41, \(p\) = .0005), indicating that
+children's performance with this difficult quantifier increased with
+age.
 
 Figure \ref{fig:diptest} shows distributions of correct responses for
 all trial types. Performance on ``some'' and ``none'' trials was bimodal
 (Hartigan's \(D\) = 0.08, \(p\) \textless{} .0001) and ``none'' trials
 (\(D\) = 0.11, \(p\) \textless{} .0001). While children's average
 accuracy was low for these quantifiers, there were some children who
-were correct on the majority of these trials (``Some'': N = 28;
-``None'': N = 36) and the others were typically incorrect on the
+were correct on the majority of these trials (``Some'': N = 30;
+``None'': N = 37) and the others were typically incorrect on the
 majority of trials. Children did not appear to be responding randomly.
 As in previous work, we found a strong correlation between children's
 accuracy on ``some'' and ``none'' trials (\(r\) = 0.49, \(p\)
@@ -369,13 +369,13 @@ type, and random effects of trial type by subject.\footnote{Model
   \texttt{log(reaction time) ~ log(trial number) + age * trial type + (trial type | subject id)}.
   Age was centered for ease of interpretation of coefficients, and we
   calculated \emph{p} values via the \(t=z\) approximation.} Reaction
-times were longer on ``none'' (\(\beta = 0.22\), \(p < .0001\)) and
-``some'' trials (\(\beta = 0.1\), \(p < .0001\)), and reaction times
-decreased with age (\(\beta = -0.1\), \(p < .0001\)). There were no
-significant interactions between age and trial type. The model also
-showed a main effect of trial number, with reaction times decreasing
-over the course of the study (\(\beta\) = -0.27, \(p\) \textless{}
-.00001).
+times were longer on ``none'' (\(\beta = 0.38\), \(p\) \textless{}
+.0001) and ``some'' trials (\(\beta = 0.22\), \(p\) \textless{} .0001),
+and reaction times decreased with age (\(\beta = -0.29\), \(p\)
+\textless{} .0001). There were no significant interactions between age
+and trial type. The model also showed a main effect of trial number,
+with reaction times decreasing over the course of the study (\(\beta\) =
+-0.1, \(p\) \textless{} .00001).
 
 Examination of the pattern in Figure \ref{fig:dense} suggests that
 accuracy and reaction time may be interacting, however. In particular,
@@ -385,37 +385,6 @@ while correct responses on ``all'' trials appear to be faster than the
 speed-accuracy tradeoff. To test for this effect, we fit another mixed
 effects model, this time including accuracy and its interactions with
 age and trial type as predictors. This model revealed that correct
-trials overall had faster RTs (\(\beta = -0.16\), \(p = .0002\)), but
-that this accuracy term interacted negatively with trial type such that
-both ``none'' and ``some'' trials had slower RTs for correct trials
-(\(\beta = 0.34\), \(p < .0001\); \(\beta = 0.27\), \(p < .0001\)).
-There were no three-way interactions of trial-type and age. This model
-thus provides evidence of a speed-accuracy tradeoff for ``some'' and
-``none'' trials.
-
-We fit a linear mixed effects model predicting log RT on correct trials
-as a function of log trial number, the interaction of age and trial
-type, and random effects of trial type by subject.\footnote{Model
-  specification:
-  \texttt{log(reaction time) ~ log(trial number) + age * trial type + (trial type | subject id)}.
-  Age was centered for ease of interpretation of coefficients, and we
-  calculated \emph{p} values via the \(t=z\) approximation.} Reaction
-times were longer on ``none'' (\(\beta = 0.38\), \(p < .0001\)) and
-``some'' trials (\(\beta = 0.22\), \(p < .0001\)), and reaction times
-decreased with age (\(\beta = -0.29\), \(p < .0001\)). There were no
-significant interactions between age and trial type. The model also
-showed a main effect of trial number, with reaction times decreasing
-over the course of the study (\(\beta\) = -0.1, \(p\) \textless{}
-.00001).
-
-Examination of the pattern in Figure \ref{fig:dense} suggests that
-accuracy and reaction time may be interacting, however. In particular,
-while correct responses on ``all'' trials appear to be faster than the
-(few) incorrect responses, the opposite is true for ``none'' and
-``some'' trials: Errors have faster RTs, potentially indicating a
-speed-accuracy tradeoff. To test for this effect, we fit another mixed
-effects model, this time including accuracy and its interactions with
-age and trial type as predictors. This model revealed that correcvt
 trials overall had faster RTs (\(\beta = -0.16\), \(p = .0002\)), but
 that this accuracy term interacted negatively with trial type such that
 both ``none'' and ``some'' trials had slower RTs for correct trials
@@ -462,7 +431,8 @@ quantifier. We estimated parameters for each subject for each trial type
 using the \texttt{RWiener} package. We then aggregated across subjects
 to obtain means and confidence intervals for each age group. Figure
 \ref{fig:devo_param_plot} shows the parameter estimates for each age
-group, split by trial type.
+group, split by trial type. To fit the model, we excluded 85 trials with
+outlier RTs.
 
 For each estimate, we ran a mixed effects model, predicting parameter
 value as an interaction of age and trial
@@ -487,7 +457,7 @@ a low rate of data accumulation and a high separation boundary.
 
 \subsubsection{Exploratory analyses}\label{exploratory-analyses}
 
-In addition to examining effects of age on the dyiffusion process, we
+In addition to examining effects of age on the diffusion process, we
 additionally conducted an exploratory analysis, examining differences in
 the decision-making process for children who consistently made SIs
 compared with those who did not. We split children by accuracy on scalar
@@ -524,16 +494,16 @@ children were less biased towards incorrect response alternatives.
 What makes scalar implicatures using quantifiers so hard for children?
 The best current hypothesis posits that children do not have access to
 the appropriate inferential alternatives and hence fail to consider them
-in their pragmatic computation (D. Barner \& Bachrach, 2010; David
-Barner et al., 2011). But what are those alternatives? A variety of
-recent work has suggested that the negative alternative ``none'' may
-compete with ``some'' and ``all.'' Our findings here are consistent with
-this account and provide some additional support. We replicated the
-pattern found in previous studies that those children who succeed in
-comprehending the quantifier ``none'' also make SIs (Horowitz \& Frank,
-2015; Horowitz et al., in prep.). In addition, our data revealed a
-speed-accuracy tradeoff, such that reaction times in those trials in
-which children succeeded in making SIs were slower overall.
+in their pragmatic computation (Barner \& Bachrach, 2010; Barner et al.,
+2011). But what are those alternatives? A variety of recent work has
+suggested that the negative alternative ``none'' may compete with
+``some'' and ``all.'' Our findings here are consistent with this account
+and provide some additional support. We replicated the pattern found in
+previous studies that those children who succeed in comprehending the
+quantifier ``none'' also make SIs (Horowitz \& Frank, 2015; Horowitz et
+al., in prep.). In addition, our data revealed a speed-accuracy
+tradeoff, such that reaction times in those trials in which children
+succeeded in making SIs were slower overall.
 
 One interpretation of this speed-accuracy tradeoff is that children who
 have more inferential alternatives accessible to them (e.g.~are

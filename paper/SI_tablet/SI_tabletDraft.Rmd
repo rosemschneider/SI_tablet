@@ -481,6 +481,15 @@ rt_sstats <- df %>%
 age_corr <- cor.test(df$age, df$rt)
 ```
 
+Figure \ref{fig:dense} shows the distribution of RTs for each quantifier, split by age group and trial type. Overall, RTs were faster for older children, and substantially slower for "some" and "none" compared with "all."
+
+```{r rt lm model}
+rt_lm <- summary(lmer(log(clean.rt) ~ log(trial_num) + 
+              (trial_type | sub_id), 		 +     scale(age, scale=FALSE) * trial_type + 
+            data = df))		 +     (trial_type | sub_id), 
+ +     data = filter(df, correct==1)))
+```
+
 ```{r rt corr_1}
 ms.rt <- df %>%
   dplyr::group_by(trial_type, agesplit, sub_id) %>%
