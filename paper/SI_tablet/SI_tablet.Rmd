@@ -133,7 +133,7 @@ percentage <- as.numeric((total_loss/nrow(df))*100)
 
 Language comprehension in context is an inferential process. Listeners are not limited to interpreting the literal meaning of speakers' utterances; they can also reason about what the speaker intended, based on alternative utterances. In the case of *pragmatic implicatures* [@grice1975], a speaker employs a weaker literal description to imply that a stronger alternative is true. Adult listeners tend to infer from the statement "I ate *some* of the cookies" that some, but not all, of the cookies remain. This *scalar implicature* (SI) relies heavily on a knowledge of the relevant lexical alternatives in the quantifier scale $<$*some*, *all*$>$. On standard theories, a listener must be able to contrast "some" with the stronger descriptor "all" to compute the implicature [@grice1975; @levinson2000]. 
 
-SIs are challenging for children until surprisingly late in development  [@noveck2001]. For example, when judging a scene in which three of three horses have jumped over a fence, five-year-olds are likely to endorse the statement "some of the horses jumped over the fence" as felicitous, despite the availability of a more informative alternative ["all"; @papafragou2003]. Children do seem to have some knowledge of these scalar terms, however; for example, they reward speakers based on the informativeness of their scalar descriptions [@katsos2011]. Given this early sensitivity, why do children still struggle to compute scalar implicatures until late in development? 
+SIs are challenging for children until surprisingly late in development  [@noveck2001]. For example, when judging a scene in which three of three horses have jumped over a fence, five-year-olds are likely to endorse the statement "some of the horses jumped over the fence" as felicitous, despite the availability of a more informative alternative ["all"; @papafragou2003]. Children do seem to have some knowledge of these scalar terms, however; for example, they differntially reward speakers based on the informativeness of their scalar descriptions [@katsos2011]. Given this early sensitivity, why do children still struggle to compute scalar implicatures until fairly late in development? 
 
 One possible cause of children's failures is that they may not have access to the relevant lexical alternatives [@barner2010]. This idea, which we will refer to as the *Alternatives Hypothesis*, predicts that if children cannot quickly and reliably bring to mind the relevant alternative quantifiers (e.g., "all" in a situation where they hear "some") they will be unable to make the implicature computation. The alternatives hypothesis makes a number of predictions about children's abilities in reasoning about quantifiers, some of which have been confirmed empirically. For example, consistent with the idea of inaccessible alternatives, @barner2011 showed that four-year-olds could not compute the quantifier expression "only some" (which should force alternatives to be negated semantically, rather than pragmatically). In light of this hypothesis, what are the proper alternatives for SIs? 
 
@@ -150,9 +150,9 @@ One other recent developmental study further supports the importance of "none" i
 
 Interestingly, in @horowitz2015, the same children who failed on SI also failed on unambiguous "none" control trials (e.g., "On the cover of my book, *none* of the pictures are cats"")---and in several samples, performance was highly correlated between "none" and "some" trials. This result would be predicted if "none" were in fact an inferential alternative to "some." If children were not computing its semantics appropriately in an online fashion, they would fail in the "some" SI computation as well, leading to a correlation.
 
-One further prediction of the alternatives hypothesis relates to processing time. Perhaps children who have a fully-established quantifier scale---and hence can make correct SIs---take additional time in using this information, due to competition between alternatives. Congruent with this prediction, our intuition in @horowitz2015 and @horowitzInPrep was that when children made correct SIs they appeared to be taking longer than when they failed. But although reaction time measures have been commonplace in studies of adults' SI processing, they have been almost entirely absent in the developmental literature [with the exception of @huang2009, whose data showed little evidence of SI computation]. 
+One further prediction of the alternatives hypothesis relates to processing time. Perhaps children who have a fully-established quantifier scale---and hence can make correct SIs---take additional time in using this information, due to competition between alternatives. Congruent with this prediction, our intuition in @horowitz2015 and @horowitzInPrep was that when children made correct SIs they appeared to be taking longer than when they failed. Motivated by this observation, we adapted our SI task for the iPad to collect detailed and accurate developmental reaction time data. Although reaction time measures have been commonplace in studies of adults' SI processing, they have been almost entirely absent in the developmental literature [with the exception of @huang2009, whose data showed little evidence of SI computation]. 
 
-Thus, in our current study, we explore children's behavioral response latencies in an iPad adaptation of the @horowitz2015 scalar implicature task. In our analyses, we examine overall accuracy and patterns of performance, as in @horowitz2015, and find that children not only struggle in making a scalar implicature, but replicate the finding that they have difficulty with "none" until fairly late in development. Congruent with our predictions, in examining reaction time patterns across all quantifier types, we find evidence of a speed-accuracy trade-off for both quantifiers, such that children who succeed exhibit longer response latencies. Finally, we use a Drift Diffusion Model [@ratcliff1978; @ratcliff1998] to explore the source of this increased reaction time. Overall, our findings are consistent with a version of the Alternatives Hypothesis under which "none" is an important inferential alternative in SI and its availability causes slower processing times but correct SIs.
+Thus, in our current study, we explore children's behavioral response latencies in an iPad adaptation of the @horowitz2015 scalar implicature task. Due to the large sample size and number of trials per participant in @horowitz2015 and @horowitzInPrep, manually coding video of previous trials was prohibitive. In our analyses, we examine overall accuracy and patterns of performance, as in @horowitz2015, and find that children not only struggle in making a scalar implicature, but replicate the finding that they have difficulty with "none" until fairly late in development. Congruent with our predictions, in examining reaction time patterns across all quantifier types, we find evidence of a speed-accuracy trade-off for both quantifiers, such that children who succeed exhibit longer response latencies. Finally, we use a Drift Diffusion Model [@ratcliff1978; @ratcliff1998] to explore the source of this increased reaction time. Overall, our findings are consistent with a version of the Alternatives Hypothesis under which "none" is an important inferential alternative in SI and its availability causes slower processing times but correct SIs.
 
 # Method
 
@@ -246,7 +246,7 @@ The general format of the task was identical to @horowitz2015, with the exceptio
 
 Sessions took place individually in a small testing room away from the museum floor or the classroom of the daycare. To familiarize children with the iPad, each session began with a "dot game," which required them to press dots on the screen as fast as possible. After the dot game, the experimenter introduced them to "Hannah," a cartoon character who wanted to play a guessing game with her books. The experimenter explained that Hannah would show the child three books, and would give one hint about which book she had in mind, so they had to listen carefully. Children then saw a practice trial with an unambiguous noun referent. 
 
-Each trial allowed 2.5s for children to visually inspect the three book covers, before the experiment played the trial prompt (e.g., "On the cover of my book, *none* of the pictures are cats."). Reaction times were measured from the onset of the target word. Children could only make one selection. If a child was not paying attention, or if she did not hear Hannah's prompt, the experimenter repeated it, matching the original prosody. Once children made their selection, a green box appeared around the chosen book. The experiment was self-paced, and children initiated each trial by pressing a button that appeared after they had made their selection in the previous trial.
+Each trial allowed 2.5s for children to visually inspect the three book covers before the experiment played the trial prompt (e.g., "On the cover of my book, *none* of the pictures are cats."). Reaction times were measured from the onset of the target word. Children could only make one selection. If a child was not paying attention, or if she did not hear Hannah's prompt, the experimenter repeated it, matching the original prosody. Once children made their selection, a green box appeared around the chosen book. The experiment was self-paced, and children initiated each trial by pressing a button that appeared after they had made their selection in the previous trial.
 
 ```{r overall_acc, fig.pos = "t", fig.width=3.2, fig.height=2, fig.cap = "Children's overall accuracy for each quantifier type. Bars show mean performance for each age group. Error bars are 95 percent confidence intervals computed by non-parametric bootstrap."}
 ms <- df %>%
@@ -258,8 +258,11 @@ ms$trial_type %<>%
   str_replace("none", "None")%>%
   str_replace("some", "Some")
 
+ms %<>%
+  rename(Age = agesplit)
+
 ggplot(data = ms, 
-   aes(x=trial_type, y=mean, fill= agesplit)) +
+   aes(x=trial_type, y=mean, fill=trial_type, alpha = Age)) +
   geom_bar(stat="identity", position = position_dodge()) +
   geom_linerange(aes(ymin = ci_lower,
         ymax = ci_upper),
@@ -268,9 +271,18 @@ ggplot(data = ms,
        position=position_dodge(.9)) +
   ylab("Proportion correct") + 
   xlab("Trial Type") +
-  theme_bw(base_size = 7) + theme(axis.title.x = element_text(size=7),
-     axis.title.y  = element_text(size=7)) + 
-  scale_fill_solarized(name = "Age") + theme(legend.position=c(.8,.8)) + theme(legend.key.size=unit(.2, "cm")) + theme(legend.title=element_text(size=5)) + theme(legend.text=element_text(size=5))
+  theme_bw(base_size = 7) + 
+  scale_fill_solarized(name = "Age") + 
+  scale_alpha_manual(values=c(.4, .5,.625,.75,1)) +
+  theme(axis.title.x = element_text(size=7),
+        legend.position=c(.8,.8), 
+        legend.key.size=unit(.2, "cm"),
+        axis.title.y  = element_text(size=7),
+        legend.title=element_text(size=5), 
+        legend.text=element_text(size=5), 
+        panel.grid.minor = element_blank(),
+        panel.grid.major = element_blank()) +
+  guides(fill = FALSE)
 ```
 
 # Results
