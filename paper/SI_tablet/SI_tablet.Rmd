@@ -16,12 +16,15 @@ keywords:
 output: cogsci2016::cogsci_paper
 ---
 ```{r global_options, include=FALSE}
+#knitr setup
+#cache chunks to run more quickly; if you make any changes to the df however, reknit with cache = FALSE to incorporate those changes
 rm(list=ls())
 knitr::opts_chunk$set(fig.width=3, fig.height=3, fig.crop = F, fig.pos = "tb", fig.path='figs/',
-        echo=F, warning=F, cache=TRUE, message=F, sanitize = T)
+        echo=F, warning=F, cache=FALSE, message=F, sanitize = T)
 ```
 
 ```{r, libraries}
+#load necessary libraries
 library(png)
 library(grid)
 library(ggplot2)
@@ -42,46 +45,47 @@ theme_set(theme_bw())
 ```
 
 ```{r data}
+#load main dataframe
 df <- read.csv("tmp_si.csv")
 ```
 
 ```{r data cleaning}
+#for demographics - number of children with < 75% English exposure
 num_english <- df %>%
-  filter(english < 0.75)%>%
+  filter(english <= 0.75)%>%
   select(sub_id)%>%
   distinct()%>%
   summarise(n = n())
 
+#overall number of subjects
 num_subjects <- df %>%
   select(sub_id)%>%
   distinct()
 
+#cleaning up the main df
 df %<>%
   dplyr::mutate(age = as.numeric(age))%>%
   dplyr::mutate(resp = factor(correct, levels=c("Y","N"), labels=c("upper","lower")), 
-   q = rt/1000)%>%
+   q = rt/1000)%>% #factoring responses for RT density analyses
   dplyr::filter(selection_type != "someall" & 
       selection_type != "allall" & 
       selection_type != "allallall" & 
       selection_type != "allsome" & 
       selection_type != "somesome", na.rm=TRUE) %>% #this is filtering out the strange repeats
-  dplyr::filter(english >= 0.75, na.rm=TRUE) %>% # excluding less than 75% english exposure
+  dplyr::filter(english >= 0.75, na.rm=TRUE) %>% # excluding less than or equal to 75% english exposure
   dplyr::filter(english != "NA", na.rm=TRUE)%>% #avoiding the missing value that snuck back in
   dplyr::mutate(age_round = round(age, digits = 2))%>% #for easier grouping
   dplyr::mutate(agesplit = cut(age_round, breaks=c(3, 3.5, 4, 4.5, 5, 6.5)),
    agesplit = factor(agesplit,
          labels=c("3-3.5 years", "3.5-4 years", 
             "4-4.5 years", "4.5-5 years", 
-            "5-6.5 years")))%>% 
-  dplyr::filter(agesplit != "NA", na.rm = TRUE) 
+            "5-6.5 years")))%>% #for better-looking graphs
+  dplyr::filter(agesplit != "NA", na.rm = TRUE) #just in case any NAs popped up
 
 #for computing means
 df$correct %<>%
   str_replace("Y", 1)%>%
   str_replace("N", 0)
-
-df %<>%
-  dplyr::mutate(correct = as.numeric(correct))
 
 #renaming for better graphs at the start
 df$trial_type %<>%
@@ -161,6 +165,7 @@ We adapted the scalar implicature paradigm developed by @horowitz2015 for the iP
 ## Participants
 
 ```{r descriptives}
+#sex information
 num_gender <- df%>%
   select(sub_id, sex)%>%
   distinct()%>%
@@ -173,10 +178,12 @@ f <- num_gender %>%
 m <- num_gender %>%
   filter(sex == "M")
 
+#number of trials for each participant in each agegroup
 num_trials <- df %>%
   group_by(sub_id, agesplit)%>%
   summarise(n = n())
 
+#age information - summary statistics, broken down by age
 num_kids <- df %>% 
   dplyr::select(sub_id, agesplit, age) %>%
   dplyr:: distinct()%>%
@@ -198,25 +205,6 @@ num_old4s <- num_kids %>%
 
 num_5s <- num_kids %>%
   filter(agesplit == "5-6.5 years")
-
-sstats <- df %>%
-  dplyr::group_by(agesplit)%>%
-  dplyr::summarise(mean = mean(age), median = median(age), sd = sd(age))
-
-s_young3 <- sstats %>%
-  filter(agesplit == "3-3.5 years")
-
-s_old3 <- sstats %>%
-  filter(agesplit == "3.5-4 years")
-
-s_young4 <- sstats %>%
-  filter(agesplit == "4-4.5 years")
-
-s_old4 <- sstats %>%
-  filter(agesplit == "4.5-5 years")
-
-s_5s <- sstats %>%
-  filter(agesplit == "5-6.5 years")
 ```
 
 \begin{table}[t]
@@ -225,11 +213,11 @@ s_5s <- sstats %>%
  \hline
  Age group & N & Mean & Median & SD \\
  \hline
- 3--3.5 years & `r num_young3s$n` & `r round(s_young3$mean, 2)` & `r round(s_young3$median, 2)` & `r round(s_young3$sd, 2)`\\
- 3.5--4 years & `r num_old3s$n` & `r round(s_old3$mean, 2)` & `r round(s_old3$median, 2)` & `r round(s_old3$sd, 2)` \\ 
- 4--4.5 years & `r num_young4s$n` & `r round(s_young4$mean, 2)` & `r round(s_young4$median, 2)` & `r round(s_young4$sd, 2)`\\
- 4.5--5 years & `r num_old4s$n` & `r round(s_old4$mean, 2)` & `r round(s_old4$median, 2)` & `r round(s_old4$sd, 2)` \\
- 5--6.5 years & `r num_5s$n` & `r round(s_5s$mean, 2)` & `r round(s_5s$median, 2)` & `r round(s_5s$sd, 2)` \\
+ 3--3.5 years & `r num_young3s$n` & `r round(num_young3s$mean, 2)` & `r round(num_young3s$median, 2)` & `r round(num_young3s$sd, 2)`\\
+ 3.5--4 years & `r num_old3s$n` & `r round(num_old3s$mean, 2)` & `r round(num_old3s$median, 2)` & `r round(num_old3s$sd, 2)` \\ 
+ 4--4.5 years & `r num_young4s$n` & `r round(num_young4s$mean, 2)` & `r round(num_young4s$median, 2)` & `r round(num_young4s$sd, 2)`\\
+ 4.5--5 years & `r num_old4s$n` & `r round(num_old4s$mean, 2)` & `r round(num_old4s$median, 2)` & `r round(num_old4s$sd, 2)` \\
+ 5--6.5 years & `r num_5s$n` & `r round(num_5s$mean, 2)` & `r round(num_5s$median, 2)` & `r round(num_5s$sd, 2)` \\
  \hline
 \end{tabular}
 \caption{Age information for all participants.}
@@ -249,18 +237,18 @@ Sessions took place individually in a small testing room away from the museum fl
 Each trial allowed 2.5s for children to visually inspect the book covers before the prompt played (e.g., "On the cover of my book, *none* of the pictures are cats."). Reaction times were measured from the onset of the target word. Children could only make one selection. If a child did not hear Hannah's prompt, the experimenter repeated it, matching the original prosody. Once children made their selection, a green box appeared around the chosen book. The experiment was self-paced, and children initiated each trial by pressing a button that appeared after they made their selection.
 
 ```{r overall_acc, fig.pos = "t", fig.width=3.2, fig.height=2, fig.cap = "Children's overall accuracy for each quantifier type. Bars show mean performance for each age group. Error bars are 95-percent confidence intervals."}
+#get mean performance for each trial type, along with 95% CIs
+df %<>%
+  dplyr::mutate(correct = as.numeric(correct))
+
 ms <- df %>%
   group_by(trial_type, agesplit)%>%
   multi_boot_standard("correct", na.rm=TRUE)
 
-ms$trial_type %<>%
-  str_replace("all", "All")%>%
-  str_replace("none", "None")%>%
-  str_replace("some", "Some")
-
 ms %<>%
   rename(Age = agesplit)
 
+#Plot bar graph of mean performance, with 95% CIs for trial type split by age
 ggplot(data = ms, 
    aes(x=trial_type, y=mean, fill=trial_type, alpha = Age)) +
   geom_bar(stat="identity", position = position_dodge()) +
@@ -290,40 +278,43 @@ For trials where the child had missed the prompt or was not paying attention, we
 ## Accuracy
 
 ```{r t tests}
+#Tests of performance
+#aggrgate 
 t_tests <- aggregate(correct ~ trial_type + agesplit +  sub_id, data=df, mean)
 
-#tests against quantifiers
+#tests against quantifiers by age and quantifier type
 
 #3-3.5s all and none
-young3_allnone <- t.test(subset(t_tests, agesplit=="3-3.5 years" & trial_type=="None")$correct, subset(t_tests, agesplit=="3-3.5 years" & trial_type=="All")$correct)
+young3_allnone <- t.test(subset(t_tests, agesplit=="3-3.5 years" & trial_type=="None")$correct, subset(t_tests, agesplit=="3-3.5 years" & trial_type=="All")$correct, var.equal = TRUE)
 #all and some
-young3_allsome <- t.test(subset(t_tests, agesplit=="3-3.5 years" & trial_type=="Some")$correct, subset(t_tests, agesplit=="3-3.5 years" & trial_type=="All")$correct)
+young3_allsome <- t.test(subset(t_tests, agesplit=="3-3.5 years" & trial_type=="Some")$correct, subset(t_tests, agesplit=="3-3.5 years" & trial_type=="All")$correct, var.equal = TRUE)
 #some and none
-young3_somenone <- t.test(subset(t_tests, agesplit=="3-3.5 years" & trial_type=="None")$correct, subset(t_tests, agesplit=="3-3.5 years" & trial_type=="Some")$correct)
+young3_somenone <- t.test(subset(t_tests, agesplit=="3-3.5 years" & trial_type=="None")$correct, subset(t_tests, agesplit=="3-3.5 years" & trial_type=="Some")$correct, var.equal = TRUE)
 
 #3.5s-4s 
-old3_allnone <- t.test(subset(t_tests, agesplit=="3.5-4 years" & trial_type=="None")$correct, subset(t_tests, agesplit=="3.5-4 years" & trial_type=="All")$correct)
-old3_allsome <- t.test(subset(t_tests, agesplit=="3.5-4 years" & trial_type=="Some")$correct, subset(t_tests, agesplit=="3.5-4 years" & trial_type=="All")$correct)
-old3_somenone <- t.test(subset(t_tests, agesplit=="3.5-4 years" & trial_type=="None")$correct, subset(t_tests, agesplit=="3.5-4 years" & trial_type=="Some")$correct)
+old3_allnone <- t.test(subset(t_tests, agesplit=="3.5-4 years" & trial_type=="None")$correct, subset(t_tests, agesplit=="3.5-4 years" & trial_type=="All")$correct, var.equal = TRUE)
+old3_allsome <- t.test(subset(t_tests, agesplit=="3.5-4 years" & trial_type=="Some")$correct, subset(t_tests, agesplit=="3.5-4 years" & trial_type=="All")$correct, var.equal = TRUE)
+old3_somenone <- t.test(subset(t_tests, agesplit=="3.5-4 years" & trial_type=="None")$correct, subset(t_tests, agesplit=="3.5-4 years" & trial_type=="Some")$correct, var.equal = TRUE)
 
 #4-4.5s
-young4_allnone <- t.test(subset(t_tests, agesplit=="4-4.5 years" & trial_type=="None")$correct, subset(t_tests, agesplit=="4-4.5 years" & trial_type=="All")$correct)
-young4_allsome <- t.test(subset(t_tests, agesplit=="4-4.5 years" & trial_type=="Some")$correct, subset(t_tests, agesplit=="4-4.5 years" & trial_type=="All")$correct)
-young4_somenone <- t.test(subset(t_tests, agesplit=="4-4.5 years" & trial_type=="None")$correct, subset(t_tests, agesplit=="4-4.5 years" & trial_type=="Some")$correct)
+young4_allnone <- t.test(subset(t_tests, agesplit=="4-4.5 years" & trial_type=="None")$correct, subset(t_tests, agesplit=="4-4.5 years" & trial_type=="All")$correct, var.equal = TRUE)
+young4_allsome <- t.test(subset(t_tests, agesplit=="4-4.5 years" & trial_type=="Some")$correct, subset(t_tests, agesplit=="4-4.5 years" & trial_type=="All")$correct, var.equal = TRUE)
+young4_somenone <- t.test(subset(t_tests, agesplit=="4-4.5 years" & trial_type=="None")$correct, subset(t_tests, agesplit=="4-4.5 years" & trial_type=="Some")$correct, var.equal = TRUE)
 
 #4.5-5s
-old4_allnone <- t.test(subset(t_tests, agesplit=="4.5-5 years" & trial_type=="None")$correct, subset(t_tests, agesplit=="4.5-5 years" & trial_type=="All")$correct)
-old4_allsome <- t.test(subset(t_tests, agesplit=="4.5-5 years" & trial_type=="Some")$correct, subset(t_tests, agesplit=="4.5-5 years" & trial_type=="All")$correct)
-old4_somenone <- t.test(subset(t_tests, agesplit=="4.5-5 years" & trial_type=="None")$correct, subset(t_tests, agesplit=="4.5-5 years" & trial_type=="Some")$correct)
+old4_allnone <- t.test(subset(t_tests, agesplit=="4.5-5 years" & trial_type=="None")$correct, subset(t_tests, agesplit=="4.5-5 years" & trial_type=="All")$correct, var.equal = TRUE)
+old4_allsome <- t.test(subset(t_tests, agesplit=="4.5-5 years" & trial_type=="Some")$correct, subset(t_tests, agesplit=="4.5-5 years" & trial_type=="All")$correct, var.equal = TRUE)
+old4_somenone <- t.test(subset(t_tests, agesplit=="4.5-5 years" & trial_type=="None")$correct, subset(t_tests, agesplit=="4.5-5 years" & trial_type=="Some")$correct, var.equal = TRUE)
 
 #5s
-fives_allnone <- t.test(subset(t_tests, agesplit=="5-6.5 years" & trial_type=="None")$correct, subset(t_tests, agesplit=="5-6.5 years" & trial_type=="All")$correct)
-fives_allsome <- t.test(subset(t_tests, agesplit=="5-6.5 years" & trial_type=="Some")$correct, subset(t_tests, agesplit=="5-6.5 years" & trial_type=="All")$correct)
-fives_somenone <- t.test(subset(t_tests, agesplit=="5-6.5 years" & trial_type=="None")$correct, subset(t_tests, agesplit=="5-6.5 years" & trial_type=="Some")$correct)
+fives_allnone <- t.test(subset(t_tests, agesplit=="5-6.5 years" & trial_type=="None")$correct, subset(t_tests, agesplit=="5-6.5 years" & trial_type=="All")$correct, var.equal = TRUE)
+fives_allsome <- t.test(subset(t_tests, agesplit=="5-6.5 years" & trial_type=="Some")$correct, subset(t_tests, agesplit=="5-6.5 years" & trial_type=="All")$correct, var.equal = TRUE)
+fives_somenone <- t.test(subset(t_tests, agesplit=="5-6.5 years" & trial_type=="None")$correct, subset(t_tests, agesplit=="5-6.5 years" & trial_type=="Some")$correct, var.equal = TRUE)
 
 ```
 
 ```{r incorrect choices}
+#for incorrect selection analyses
 wrong <- df %>%
   filter(correct == "0")%>%
   group_by(trial_type, selection_type, agesplit)%>%
@@ -334,6 +325,7 @@ wrong <- df %>%
 Figure \ref{fig:overall_acc} shows children's mean performance for each trial type, split by age group. For each age group, we saw significantly lower accuracy for the quantifiers "some" and "none" in comparison to "all" (all $p$s $< .01$ in two-sample t-tests for each age group). These results generally replicate our previous findings using this paradigm [@horowitz2015]; one difference from previous results was in implicature trials. Children aged 3--5 years performed significantly lower on "some" (implicature) trials in this task in comparison to @horowitzInPrep ($p < .01$ for all tests). Thus, while the iPad adaptation was generally successful, implicatures were more difficult, perhaps because of the non-social nature of the iPad interaction. 
 
 ```{r comparison}
+#Testing this data against data from Horowitz, Schneider, & Frank (in prep.) exp. 3 SI task
 d_si <- read.csv("experiment3.csv") #pull in aggregated data from previous analysis
 
 t_tests %<>%
@@ -358,6 +350,8 @@ t.test(subset(t_tests, agesplit=="4.5-5 years")$Some, subset(d_si, Age=="4.5-5 y
 ```
 
 ```{r diptest, fig.pos = "t", fig.width=3.2, fig.height=2, fig.cap = "Frequency histogram of participant totals for each trial type, across all participants."}
+#Diptest for bimodal performance on quantifiers
+#mean performance and 95% cis
 ms <- df %>%
   group_by(sub_id, trial_type) %>%
   multi_boot_standard("correct", na.rm=TRUE)
@@ -366,6 +360,7 @@ diptest_all <- diptest::dip.test(filter(ms, trial_type == "All")$mean)
 diptest_some <- diptest::dip.test(filter(ms, trial_type == "Some")$mean)
 diptest_none <- diptest::dip.test(filter(ms, trial_type == "None")$mean)
 
+#Frequency histogram of selections on trials
 ms <- df %>%
   group_by(sub_id, trial_type) %>%
   summarise(correct = sum(correct))
@@ -495,6 +490,7 @@ somenone_corr <- cor.test(ms.rt$Some, ms.rt$None)
 ```
 
 ```{r rt_acc_model}
+#predicting rt as an interaction of trial numb, age, type, accuracy, with random effects of trial type and subject 
 rt_acc_lm <- summary(lmer(log(clean.rt) ~ log(trial_num) + 
      scale(age, scale=FALSE, center = TRUE) * trial_type * correct + 
     (trial_type | sub_id), 
@@ -502,6 +498,7 @@ rt_acc_lm <- summary(lmer(log(clean.rt) ~ log(trial_num) +
 ```
 
 ```{r rt_model}
+#predicting RTs as interaction of trial number, age, trial type, with random effects of trial type and subject
 rt_lm <- summary(lmer(log(clean.rt) ~ log(trial_num) + 
      scale(age, scale=FALSE, center = TRUE) * trial_type + 
      (trial_type | sub_id), 
@@ -555,6 +552,7 @@ for (j in 1:length(subs)) {
 ```
 
 ```{r developmental parameter df}
+#create df for parameter estimates
 sub.pars$Separation <- as.numeric(sub.pars$Separation)
 sub.pars$Non.Decision <- as.numeric(sub.pars$Non.Decision)
 sub.pars$Bias <- as.numeric(sub.pars$Bias)
@@ -581,15 +579,17 @@ sub.pars.ms.dev <- sub.pars.ms
 ```
 
 ```{r devo param models}
+#models - predicting parameter value as interaction of age, trial type
+#separation boundary
 devo_sep_lm <- summary(lmer(Value ~ age_round * Trial.Type + (1 | sub_id), 
              data = filter(sub.pars.dev, Param=="Separation")))
-
+#non-decision
 devo_nd_lm <- summary(lmer(Value ~ age_round * Trial.Type + (1 | sub_id), 
              data = filter(sub.pars.dev, Param=="Non.Decision")))
-
+#bias
 devo_bias_lm <- summary(lmer(Value ~ age_round * Trial.Type + (1 | sub_id), 
              data = filter(sub.pars.dev, Param=="Bias")))
-
+#drift
 devo_drift_lm <- summary(lmer(Value ~ age_round * Trial.Type + (1 | sub_id), 
              data = filter(sub.pars.dev, Param=="Drift")))
 ```
