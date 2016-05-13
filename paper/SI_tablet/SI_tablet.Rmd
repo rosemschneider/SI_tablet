@@ -20,7 +20,7 @@ output: cogsci2016::cogsci_paper
 #cache chunks to run more quickly; if you make any changes to the df however, reknit with cache = FALSE to incorporate those changes
 rm(list=ls())
 knitr::opts_chunk$set(fig.width=3, fig.height=3, fig.crop = F, fig.pos = "tb", fig.path='figs/',
-        echo=F, warning=F, cache=FALSE, message=F, sanitize = T)
+        echo=F, warning=F, cache=TRUE, message=F, sanitize = T)
 ```
 
 ```{r, libraries}
@@ -273,7 +273,7 @@ ggplot(data = ms,
   guides(fill = FALSE)
 ```
 # Results
-For trials where the child had missed the prompt or was not paying attention, we excluded reaction times (RTs) longer than 15s. After this initial cut, we excluded RTs outside three standard deviations of the log of mean reaction time. This cleaning resulted in RT data loss for `r total_loss` trials (`r round(percentage, 2)`%). We observed a fairly wide RT distribution for all trial types. These variability in children's RTs may have been exaggerated by testing in a museum environment, on in the motoric demands associated with making a response on a tablet [@franktablet]. "Success" is defined as choosing the image consistent with the scalar description (e.g., selecting the book with two cats and two birds in response to the prompt "On the cover of my book, *some* of the pictures are cats.").
+For trials where the child had missed the prompt or was not paying attention, we excluded reaction times (RTs) longer than 15s. After this initial cut, we excluded RTs outside three standard deviations of the log of mean reaction time. This cleaning resulted in RT data loss for `r total_loss` trials (`r round(percentage, 2)`%). We observed a fairly wide RT distribution for all trial types. This variability in children's RTs may have been exaggerated by testing in a museum environment, on in the motoric demands associated with making a response on a tablet [@franktablet]. "Success" is defined as choosing the image consistent with the scalar description (e.g., selecting the book with two cats and two birds in response to the prompt "On the cover of my book, *some* of the pictures are cats.").
 
 ## Accuracy
 
@@ -594,7 +594,7 @@ devo_drift_lm <- summary(lmer(Value ~ age_round * Trial.Type + (1 | sub_id),
              data = filter(sub.pars.dev, Param=="Drift")))
 ```
 
-Motivated by the evidence of a speed-accuracy trade-off, we further explored the interaction between reaction time and accuracy in more depth using drift diffusion modeling (DDM). RTs associated with "some" and "none" indicated that longer RTs were associated with higher accuracy, but where does the decision processes in these trials break down? DDM can be used in behavioral tasks to provide a more detailed view of the relationship between accuracy and reaction time [@ratcliff1998]. In DDM, a behavioral response (a correct or incorrect choice) is the result of noisy data accumulation through a diffusion process. Responses have *separation boundaries* that are dependent on the amount of information needed to initiate a response, and *drift rate* formalizes the rate of data accumulation. *Nondecision* is the amount of time between stimuli offset and initiating the diffusion process (i.e., encoding). Finally, different responses may be *biased* in their starting point in the diffusion process. Thus, a DDM can reveal more differences in the SI decision-making process, and provide clues about the causes underlying this speed-accuracy trade-off.
+Motivated by the evidence of a speed-accuracy trade-off, we further explored the interaction between reaction time and accuracy in more depth using drift diffusion modeling (DDM). RTs associated with "some" and "none" indicated that longer RTs were associated with higher accuracy, but what components of the decision process contribute to this? DDM can be used in behavioral tasks to provide a more detailed view of the relationship between accuracy and reaction time [@ratcliff1998]. In DDM, a behavioral response (a correct or incorrect choice) is the result of noisy data accumulation through a diffusion process. Responses have *separation boundaries* that are dependent on the amount of information needed to initiate a response, and *drift rate* formalizes the rate of data accumulation. *Nondecision* is the amount of time between stimuli offset and initiating the diffusion process (i.e., encoding). Finally, different responses may be *biased* in their starting point in the diffusion process. Thus, a DDM can reveal more differences in the SI decision-making process, and provide clues about the causes underlying this speed-accuracy trade-off.
 
 ### Developmental analyses
 
@@ -630,12 +630,27 @@ We also conducted an exploratory analysis, examining differences in the decision
 ```{r acc param}
 #Finding out who has high performance on SI trials
 #Manually added in csv
+df %<>%
+  dplyr::mutate(correct = as.integer(correct))
+
 ms.acc <- df %>%
   group_by(sub_id, trial_type) %>%
   multi_boot_standard("correct", na.rm=TRUE)%>%
   select(-ci_lower, -ci_upper)%>%
   spread(trial_type, mean)%>%
-  filter(Some >= .75)
+  filter(Some >= .75)%>%
+  arrange(sub_id)
+
+#check to make sure that data entered manually equals above
+ms.check <- df %>%
+  filter(accuracy == "high")%>%
+  distinct(sub_id)%>%
+  select(sub_id)%>%
+  arrange(sub_id)
+
+library(compare)
+comparison <- compare(ms.acc$sub_id, ms.check$sub_id, allowAll = TRUE)
+#compare shows all sub_ids in common
 
 trialtypes = c("All", "Some", "None")
 
