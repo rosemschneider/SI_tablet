@@ -71,16 +71,16 @@ df %<>%
       selection_type != "allall" & 
       selection_type != "allallall" & 
       selection_type != "allsome" & 
-      selection_type != "somesome", na.rm=TRUE) %>% #this is filtering out the strange repeats
-  dplyr::filter(english >= 0.75, na.rm=TRUE) %>% # excluding less than or equal to 75% english exposure
-  dplyr::filter(english != "NA", na.rm=TRUE)%>% #avoiding the missing value that snuck back in
+      selection_type != "somesome") %>% #this is filtering out the strange repeats
+  dplyr::filter(english >= 0.75) %>% # excluding less than or equal to 75% english exposure
+  dplyr::filter(english != "NA")%>% #avoiding the missing value that snuck back in
   dplyr::mutate(age_round = round(age, digits = 2))%>% #for easier grouping
   dplyr::mutate(agesplit = cut(age_round, breaks=c(3, 3.5, 4, 4.5, 5, 6.5)),
    agesplit = factor(agesplit,
          labels=c("3-3.5 years", "3.5-4 years", 
             "4-4.5 years", "4.5-5 years", 
-            "5-6.5 years")))%>% #for better-looking graphs
-  dplyr::filter(agesplit != "NA", na.rm = TRUE) #just in case any NAs popped up
+            "5-6.5 years"))) %>% #for better-looking graphs
+  dplyr::filter(agesplit != "NA") #just in case any NAs popped up
 
 #for computing means
 df$correct %<>%
@@ -563,7 +563,7 @@ sub.pars <- select(sub.pars, -Age) %>%
   rename(sub_id = SubID) %>%
   left_join(df %>% 
               group_by(sub_id) %>% 
-              distinct %>% 
+              distinct(age_round, agesplit) %>% 
               select(sub_id, age_round, agesplit)) %>%
   gather(Param, Value, Separation:Drift) 
 
@@ -740,7 +740,7 @@ sub.pars <- select(sub.pars, -Age) %>%
   rename(sub_id = SubID) %>%
   left_join(df %>% 
       group_by(sub_id) %>% 
-      distinct %>% 
+      distinct(age_round, agesplit, accuracy) %>% 
       select(sub_id, age_round, accuracy)) %>%
   gather(Param, Value, Separation:Drift) 
 
@@ -759,7 +759,7 @@ ggplot(sub.pars.ms, aes(x=accuracy, y=mean, color=Trial.Type)) +
   geom_linerange(aes(ymin = ci_lower, ymax = ci_upper), 
        position=position_dodge(.05)) +
   geom_line(aes(colour = Trial.Type, group=Trial.Type)) + 
-  facet_wrap(~Param, scales="free", ncol = 4) + 
+  facet_wrap(~Param, scales="free", ncol = 2) + 
   theme_bw(base_size = 7.7) + 
   theme(axis.text.x = element_text(size = 7),
     axis.title.x = element_text(size = 7.5),
